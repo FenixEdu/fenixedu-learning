@@ -1,0 +1,128 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% block content %}
+
+{% set noEvaluations = onlineTests is empty and adHocEvaluations is empty and projects is empty and publishedExams is empty and writtenTests is empty %}
+{% if noEvaluations  %}
+    <h4>Currently there are no evaluations scheduled.</h4>
+{% else %}
+    {% if comment is not empty %}
+        <h4>*) {{ comment }}</h4>
+    {% endif %}
+
+    {% if onlineTests is not empty %}
+        <table class="onlineTests table">
+            <tr>
+                <th>{{ i18n('resources.ApplicationResources', 'label.online.test') }}</th>
+            </tr>
+            {% for onlineTest in onlineTests %}
+            <tr>
+                <td>
+                    {{ i18n('resources.ApplicationResources', 'label.online.test') }}: {{ onlineTest.distributedTest.evaluationTitle }}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    {% if adHocEvaluations is not empty %}
+        <table class="adHocEvaluations table">
+            <tr>
+                <th>{{ i18n('resources.ApplicationResources', 'label.adHocEvaluations') }}</th>
+                <th>{{ i18n('resources.ApplicationResources', 'label.description') }}</th>
+            </tr>
+            {% for adHocEvaluation in adHocEvaluations %}
+                <tr>
+                    <td>{{ adHocEvaluation.name }}</td>
+                    <td>{{ adHocEvaluation.description }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    {% if projects is not empty %}
+        <table class="projects table">
+            <tr>
+                <th>{{ i18n('resources.ApplicationResources', 'label.projects') }}</th>
+                <th>{{ i18n('resources.ApplicationResources', 'label.beginning') }}</th>
+                <th>{{ i18n('resources.ApplicationResources', 'label.end') }}</th>
+            </tr>
+            {% for project in projects %}
+                <tr>
+                    <td>{{ i18n('resources.ApplicationResources', 'label.project') }}: {{ project.name }}</td>
+                    <td>{{ project.begin | date("dd/MM/yyyy HH:mm") }}</td>
+                    <td>{{ project.end | date("dd/MM/yyyy HH:mm") }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    {% if publishedExams is not empty or writtenTests is not empty %}
+
+    <table class="exams table">
+        <tr>
+            <th>{{ i18n('resources.ApplicationResources', 'label.testsAndExams') }}</th>
+            <th>{{ i18n('resources.ApplicationResources', 'label.day') }}</th>
+            <th>{{ i18n('resources.ApplicationResources', 'label.beginning') }}</th>
+            <th>{{ i18n('resources.ApplicationResources', 'label.end') }}</th>
+            <th>{{ i18n('resources.ApplicationResources', 'label.evaluation.enrolment.period') }}</th>
+            <th>{{ i18n('resources.ApplicationResources', 'label.rooms') }}</th>
+        </tr>
+        {% for exam in publishedExams %}
+            <tr>
+                <td>{{ i18n('resources.ApplicationResources', 'label.exam') }}: {{ exam.season }} {{exam.comment is empty ? "" : "'*"}}</td>
+                <td>{{ exam.dayDate | date("dd/MM/yyyy")}}</td>
+                <td>
+                    {% if exam.beginningDate is not empty %}
+                        {{ exam.beginningDate | date("HH:mm") }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if exam.endDate is not empty %}
+                        {{ exam.endDate | date("HH:mm") }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if exam.enrollmentBeginDayDate is not empty %}
+                         {{ exam.enrollmentBeginDayDate | date("dd/MM/yyyy HH:mm") }} - {{ exam.enrollmentEndTimeDate | date("dd/MM/yyyy HH:mm") }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% for roomOccupation in exam.writtenEvaluationSpaceOccupations %}
+                        {{ roomOccupation.room.name }}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+
+        {% for test in writtenTests %}
+            <tr>
+                <td>{{ i18n('resources.ApplicationResources', 'label.written.test') }}: {{ test.description }}</td>
+                <td>{{ test.dayDate | date("dd/MM/yyyy")}}</td>
+                <td>
+                    {% if test.beginningDate is not empty %}
+                        {{ test.beginningDate | date("HH:mm") }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if test.endDate is not empty %}
+                        {{ test.endDate | date("HH:mm") }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if test.enrollmentBeginDayDate is not empty %}
+                         {{ test.enrollmentBeginDayDate | date("dd/MM/yyyy HH:mm") }} - {{ test.enrollmentEndTimeDate | date("dd/MM/yyyy HH:mm") }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% for roomOccupation in test.writtenEvaluationSpaceOccupations %}
+                        {{ roomOccupation.room.name }}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+{% endif %}
+
+{% endblock content %}

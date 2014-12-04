@@ -1,0 +1,74 @@
+{% macro menuChildren(menuItems) %}
+  {% if menuItems is not empty %}
+    <ul class="nav nav-pills nav-stacked list-unstyled children">
+      {% lazyFor item in menuItems %}
+          {% if item.isFolder %}
+            {{ menuFolder(item) }}
+          {% else %}
+            {{ menuItem(item) }}
+          {% endif %}
+      {% endLazyFor %}
+    </ul>
+  {% endif %}
+{% endmacro %}
+
+{% macro menuItem(item) %}
+  <li class="menuItem {{ item.isActive equals true ? 'open' : '' }} {{ item.isOpen equals true ? 'active' : '' }}">
+    <a href="{{ item.address }}">
+      {{ item.name.content }}
+    </a>
+    {{ menuChildren(item.children) }}
+  </li>
+{% endmacro %}
+
+{% macro menuFolder(folder) %}
+    {% if folder.children is not empty %}
+    <li class="menuFolder {{ folder.isOpen equals true ? 'active' : '' }}">
+      <p>{{ folder.name.content }}</p>
+      {{ menuChildren(folder.children)}}
+    </li>   
+    {% endif %}
+{% endmacro %}
+
+<nav class="col-sm-3 blog-sidebar">
+  <!-- REGULAR MENU -->
+    {% for menu in menus %}
+        <div class="sidebar-module">
+            <h4>{{ menu.name.content }}</h4>
+            {{ menuChildren(menu.children) }}
+        </div>
+    {% endfor %}
+
+    <div class="sidebar-module">
+        <h4>Subscribe</h4>
+
+        <p><a href="{{site.rssUrl}}"><img src="{{staticDir}}/images/rss.svg" height="16"/> RSS for {{site.name.content}}</a></p>
+        {% if category != null %}
+            <a href="{{category.rssUrl}}"><img src="{{staticDir}}/images/rss.svg" height="16"/> RSS for {{category.name.content}}</a>
+        {% endif %}
+    </div>
+</nav>
+
+<script type="text/javascript">
+  $('.menuFolder:not(.open)>.children').hide();
+  $('.menuFolder>p').click(function(event){
+    $(this).parent().toggleClass('open');
+    $(this).parent().children('.children').slideToggle();
+    event.preventDefault();
+  });
+</script>
+
+<style>
+    .menuItem>.children {
+        display: none;
+    }
+    .menuItem.open>.children {
+        display: block;
+    }
+    .menuItem.active a {
+        background-color: #f5f6f7;
+    }
+    .menuItem.open > .children {
+        padding-left: 8px;
+    }
+</style>

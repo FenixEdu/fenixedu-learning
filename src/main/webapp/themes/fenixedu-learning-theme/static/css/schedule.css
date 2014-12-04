@@ -1,0 +1,17 @@
+.hover-end{padding:0;margin:0;font-size:75%;text-align:center;position:absolute;bottom:0;width:100%;opacity:.8}
+
+.fc-event-inner {
+	text-align: center;
+}
+.fc-event-title {
+	padding-top: 3px;
+}
+.fc-event-inner {
+	font-size: 11px;
+}
+.fc-event-time {
+	font-size: 9px !important;
+}
+.fc-today {
+	background: transparent;
+}

@@ -1,0 +1,195 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% block header %}
+	<script src="{{staticDir}}/js/bootstrap.min.js"></script>
+{% endblock header %}
+
+{% macro viewCurricularCourses(curricularCoursesStream) %}
+	{% set applicationBundle = 'resources.ApplicationResources' %}
+	{% lazyFor curricularCourse in curricularCoursesStream %}
+		<div class="row">
+			<!-- NAME -->
+			<div class="col-md-4">
+				<a href="{{ curricularCourse.url }}">{{ curricularCourse.name.content }} </a>
+			</div>
+
+			<!-- INFO -->
+			<div class="col-md-2">
+				<p><span class="context-info">{{ curricularCourse.contextInformation }}</span></p>
+			</div>
+
+			<!-- REGIME -->
+			<div class="col-md-1">
+				<p><span class="regime">
+				{% if curricularCourse.isOptional %}
+					{{ i18n(applicationBundle, 'label.degreeCurricularPlan.renderer.option') }}
+				{% else %}
+					{{ curricularCourse.regimeAcronym }}
+				{% endif %}
+				</span></p>
+			</div>
+
+			<!-- LOAD -->
+			<div class="col-md-3">
+
+				<p>
+					{{ i18n(applicationBundle, 'label.degreeCurricularPlan.renderer.acronym.contact.load') }}
+					-
+					{{ curricularCourse.contactLoad }}
+					-
+					{{ i18n(applicationBundle, 'label.degreeCurricularPlan.renderer.acronym.autonomous.work') }}
+					-
+					{{ curricularCourse.autonomousWork }}
+					-
+					{{ i18n(applicationBundle, 'label.degreeCurricularPlan.renderer.acronym.total.load') }}
+					-
+					{{ curricularCourse.totalLoad }}
+				</p>
+			</div>
+			
+			<!-- ECTS -->
+			<div class="col-md-1">
+				<p><span class="ects">
+					{{ curricularCourse.ECTS }}
+					{{ i18n(applicationBundle, 'label.credits.abbreviation') }}
+				</span></p>
+			</div>
+			
+			<!-- FREQUENCY -->
+			<div class="col-md-1">
+				{% if curricularCourse.isSemestrial %}
+					<p>Semestrial</p>
+				{% else %}
+					<p>Anual</p>
+				{% endif %}
+			</div>
+		</div>
+
+		{% if curricularCourse.rules.count > 0 %}
+			<div class="rules">
+				<div class="level">
+					{% lazyFor rule in curricularCourse.rules %}
+						<p><span class="rule">{{ rule }}</span></p>
+					{% endLazyFor %}
+				</div>
+			</div>
+		{% endif %}
+		<hr />
+
+	{% endLazyFor %}
+{% endmacro %}
+
+{% macro viewCourseGroups(courseGroups) %}
+	{% set bundle = 'resources.ApplicationResources' %}
+	{% lazyFor courseGroup in courseGroups %}
+
+		<h4>{{ courseGroup.name.content }}</h4>
+		<hr />
+		<div class="level">
+			<!-- RULES -->
+			<div class="rules">
+				{% if courseGroup.rules.count > 0 %}
+					{% lazyFor rule in courseGroup.rules %}
+						<p><span class="rule">{{ rule }}</span></p>
+					{% endLazyFor %}
+					<hr />
+				{% endif %}
+			</div>
+			<!-- CHILDS -->
+			{{ viewCurricularCourses(courseGroup.curricularCourses) }}
+			{{ viewCourseGroups(courseGroup.courseGroups) }}
+		</div>
+	{% endLazyFor %}
+
+
+{% endmacro %}
+
+
+{% macro viewCurricularCoursesBySemester(coursesByCurricularSemester) %}
+	{% for entry in entries(coursesByCurricularSemester) %}
+		{% set curricularPeriod = entry.key %}
+		{% set courses = entry.value %}
+
+		<h4>{{ curricularPeriod.fullLabel }}</h4>
+		<br />
+		{{ viewCurricularCourses(courses.stream) }}
+	{% endfor %}
+{% endmacro %}
+
+{% block content %}
+
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+        	<a href="#byGroups" role="tab" data-toggle="tab">
+        		Grupos
+        	</a>
+    	</li>
+
+        <li>
+        	<a href="#bySemesters" role="tab" data-toggle="tab">
+        		Ano/Semestre
+        	</a>
+    	</li>
+    </ul>
+
+	<br />
+	
+		<div class="dropdown">
+			<button class="btn btn-sm btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+				{{ selectedYear.year }} 
+				<span class="caret"></span>
+			</button>
+		
+			<ul class="dropdown-menu" role="menu">
+				{% for year in years %}
+					<li><a href="#">{{ year.year }}</a></li>
+				{% endfor %}
+			</ul>
+		<button class="btn btn-sm btn-default" type="button" id="rules_button">
+			Show Rules
+		</button>
+
+		</div>
+
+
+    <div class="tab-content">
+		<div class="tab-pane fade in" id="bySemesters">
+			{{viewCurricularCoursesBySemester(coursesByCurricularSemester)}}
+		</div>
+        <div class="tab-pane fade in active" id="byGroups">
+			{{ viewCourseGroups(courseGroups) }}
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$('.rules').hide();
+		var names = ['Show Rules', 'Hide Rules'];
+		var selectedNamePosition = 0;
+		$('#rules_button').click(function(){
+			selectedNamePosition = (selectedNamePosition + 1) % names.length;
+			$('.rules').fadeToggle();
+			$('#rules_button').html(names[selectedNamePosition]);
+		});	
+	</script>
+
+	<style type="text/css">
+		.level {
+			margin-left: 20px;
+		}
+		p {
+			font-size: 85%;
+		}
+		a {
+			font-size: 110%;
+		}
+		.rule {
+			color: #888;
+			margin-top: 0px;
+		}
+		hr {
+			margin-top: 5px;
+			margin-bottom: 5px;
+		}
+	</style>	
+
+{% endblock content %}

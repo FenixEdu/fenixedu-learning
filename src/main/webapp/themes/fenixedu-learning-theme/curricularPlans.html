@@ -1,0 +1,34 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% block content %}
+	{% set bundle = 'resources.PublicDegreeInformation' %}
+	<!-- CURRICULAR PLAN -->
+	{% if degreeCurricularPlan is not empty %}
+		<h2>
+			{{ degreeCurricularPlan.name }} 
+			<small>
+				{% if degreeCurricularPlan.initialDate is not empty and degreeCurricularPlan.endDate is not empty %}
+						{{ i18n(bundle, 'public.degree.information.label.of') }} 
+						{{ degreeCurricularPlan.initialDate | date('yyyy') }} 
+						{{ i18n(bundle, 'public.degree.information.label.to') }} 
+						{{ degreeCurricularPlan.endDate | date('yyyy')}} 
+					
+				{% elseif degreeCurricularPlan.initialDate is not empty and degreeCurricularPlan.endDate is empty %}
+					{{ i18n(bundle, 'public.degree.information.label.since') }} {{ degreeCurricularPlan.initialDate | date("yyyy") }}
+				{% endif %}
+			</small>
+		</h2>
+		
+		{% if degreeCurricularPlan.description is not empty %}
+			<p>{{ degreeCurricularPlan.description | raw }}</p>
+		{% else %}
+			<p><i>{{ i18n(bundle, 'not.available') }}</i></p>
+		{% endif %}
+
+	{% endif %}
+
+<br />
+
+<p class="text-center"><small><em>{{ i18n('resources.PublicDegreeInformation','public.degree.information.label.responsability.information.degree') }}</em></small></p>
+
+{% endblock %}

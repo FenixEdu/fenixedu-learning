@@ -1,0 +1,58 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% macro evaluationMethod(evaluation) %}
+	{% set evaluationClass = evaluation.class.name %}
+
+	{% if evaluation.publishmentMessage is not empty %}
+		<th nowrap>
+			{% if evaluationClass equals "net.sourceforge.fenixedu.domain.onlineTests.OnlineTest" %}
+				{{ evaluation.distributedTest.evaluationTitle }}
+			{% elseif evaluationClass equals "net.sourceforge.fenixedu.domain.Project" %}
+				{{ evaluation.name }}
+			{% elseif evaluationClass equals "net.sourceforge.fenixedu.domain.WrittenTest" %}
+				{{ evaluation.description }}
+			{% elseif evaluationClass equals "net.sourceforge.fenixedu.domain.Exam" %}
+				{{ evaluation.season }}
+			{% elseif evaluationClass equals "net.sourceforge.fenixedu.domain.FinalEvaluation" %}
+				{{ i18n('resources.ApplicationResources', 'label.final.evaluation') }}
+			{% elseif evaluationClass equals "net.sourceforge.fenixedu.domain.AdHocEvaluation" %}
+				{{ evaluation.name }}
+			{% endif %}
+		</th>
+	{% endif %}
+
+{% endmacro %}
+
+{% block content %}
+
+    {% if attendsMap is not empty and entries(attendsMap) is not empty %}
+        <table class="table">
+            <tr>
+                <th nowrap>{{ i18n('resources.ApplicationResources', 'label.number') }}</th>
+                <th nowrap>{{ i18n('resources.ApplicationResources', 'label.name') }}</th>
+                <th nowrap>{{ i18n('resources.ApplicationResources', 'label.Degree') }}</th>
+                {% for eval in evaluations %}
+                    {{ evaluationMethod(eval) }}
+                {% endfor %}
+            </tr>
+            {% for attendEntry in entries(attendsMap) %}
+                {% set attends = attendEntry.key %}
+                {% set evaluations = attendEntry.value %}
+                <tr>
+                    <td nowrap>{{ attends.registration.number }}</td>
+                    <td nowrap>{{ attends.registration.person.name }}</td>
+                    <td nowrap>{{ attends.registration.degreeCurricularPlanName }}</td>
+                    {% for evaluationEntry in entries(evaluations) %}
+                        {% set mark = evaluationEntry.value %}
+                        <td nowrap>{{ mark is not empty ? mark.publishedMark : ""}}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+
+        <p>{{ i18n('resources.ApplicationResources', 'classification.nonOfficial.information') }}</p>
+    {% else %}
+        <h4>Ainda nao existem notas publicadas.</h4>
+    {% endif %}
+
+{% endblock content %}

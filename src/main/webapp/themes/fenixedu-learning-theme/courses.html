@@ -1,0 +1,13 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% block content %}
+
+	{% set unit = site.siteObject %}
+
+	{% for competence in unit.competenceCourseGroupUnits %}
+		<p>
+			<h3>{{competence.name}}</h3>
+		</p>
+	{% endfor %}
+
+{% endblock content %}

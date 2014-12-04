@@ -1,0 +1,47 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% block content %}
+
+<table class="table">
+	<thead>
+		<tr>
+			<th rowspan="2">{{ i18n('resources.ApplicationResources', 'property.turno') }}</th>
+			<th colspan="5">{{ i18n('resources.ApplicationResources', 'label.lesson') }}</th>
+			<th rowspan="2">{{ i18n('resources.ApplicationResources', 'label.classOrClasses') }}</th>
+		</tr>
+		<tr>
+			<th>{{ i18n('resources.ApplicationResources', 'label.weeks') }}</th>
+			<th>{{ i18n('resources.ApplicationResources', 'label.day') }}</th>
+			<th>{{ i18n('resources.ApplicationResources', 'property.lesson.beginning') }}</th>
+			<th>{{ i18n('resources.ApplicationResources', 'property.lesson.end') }}</th>
+			<th>{{ i18n('resources.ApplicationResources', 'property.lesson.room') }}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for shift in executionCourse.associatedShifts %}
+			{% for lesson in shift.associatedLessons %}
+				<tr>
+					<td>{{ shift.nome }}</td>
+					<td>{{ lesson.occurrenceWeeksAsString }}</td>
+					<td>{{ lesson.diaSemana }}</td>
+					<td>{{ lesson.inicio.time | date("HH:mm") }}
+					<td>{{ lesson.fim.time | date("HH:mm") }}
+					<td>
+						{% if lesson.sala is not empty %}
+							<a href="{{ request.contextPath }}/spaces-view/view/{{ lesson.sala.externalId }}">{{ lesson.sala.name }}</a>
+						{% else %}
+							-
+						{% endif %}
+					</td>
+					<td>
+						{% for schoolClass in shift.associatedClasses %}
+							<a href="#">{{ schoolClass.nome }}<br/></a>
+						{% endfor %}
+					</td>
+				</tr>
+			{% endfor %}
+		{% endfor %}
+	</tbody>
+</table>	
+
+{% endblock content %}

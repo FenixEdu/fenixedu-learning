@@ -1,0 +1,41 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% block content %}
+
+	{% if degreeInfo.degree.mostRecentDegreeCurricularPlan is empty %}
+		<p>
+			<em>
+				{{ i18n('resources.PublicDegreeInformationApplication', 'error.curricularPlanHasNoExecutionDegreesInNotClosedYears') }}
+			</em>
+		</p>
+	{% else %}
+		{% set curricularPlanLabel = i18n('resources.PublicDegreeInformation', 'public.degree.information.label.curricularPlan') %}
+		{% set periodLabel = i18n('resources.PublicDegreeInformation', 'public.execution.period') %}
+		{% set curricularYearLabel = i18n('resources.PublicDegreeInformation', 'public.curricular.years.all') %}
+
+		{% for classesByCurricularYearAndSemester in entries(classesByCurricularYearAndSemesters) %}
+			{% set semester = classesByCurricularYearAndSemester.key %}
+			{% set classesByYears = classesByCurricularYearAndSemester.value %}
+			<h3>{{ semester.qualifiedName }}</h3>
+			<div class="row">
+				{% for classesByYear in entries(classesByYears) %}
+					{% set year = classesByYear.key %}
+					{% set classes = classesByYear.value %}
+					<div class="col-md-4">
+						<h4>{{ i18n('resources.BolonhaManagerResources', 'year') }} {{ year }}</h4>
+						{% for class in classes %}
+							<p><a href="timetable/{{ class.externalId }}">{{ class.nome }}</a></p>
+
+						{% endfor %}
+					</div>
+				{% else %}
+					<div class="col-md-12">
+						<p><em>There are no classes defined for the current execution period.</em></p>
+					</div>
+				{% endfor %}
+			</div>
+		{% endfor %}
+
+	{% endif %}
+
+{% endblock content %}

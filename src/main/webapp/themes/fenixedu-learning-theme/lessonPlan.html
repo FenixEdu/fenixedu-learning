@@ -1,0 +1,38 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% block content %}
+
+	{% if lessonPlanningsMap is empty %}
+	
+		<h4>{{ i18n('resources.ApplicationResources', 'label.lessonPlannings.not.available') }}</h4>
+	
+	{% else %}
+
+		{% for lessonPlannings in entries(lessonPlanningsMap) %}
+			
+			{% if lessonPlannings.value is not empty %}
+				<h3>
+					{{ i18n('resources.ApplicationResources', 'label.lessons') }}
+					{{ i18n('resources.ApplicationResources', lessonPlannings.key.name) }}
+				</h3>
+			{% endif %}
+
+			{% for lessonPlanning in lessonPlannings.value %}
+
+				<div class="blog-post">
+				  <h2 class="blog-post-title">
+				  	{{ lessonPlanning.title }}
+				  </h2>
+				  <p class="small blog-post-meta">
+					{{ i18n('resources.ApplicationResources', 'label.lesson') }} {{ lessonPlanning.orderOfPlanning }}
+				  </p>
+				  <p>{{ lessonPlanning.planning }}</p>
+				</div>
+
+			{% endfor %}
+
+		{% endfor %}
+
+	{% endif %}
+			
+{% endblock content %}

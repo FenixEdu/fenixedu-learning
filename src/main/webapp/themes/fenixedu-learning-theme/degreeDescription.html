@@ -1,0 +1,127 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% import "fenixedu-learning-theme/personCard.html" %}
+
+{% macro deadline(key, description) %}
+	 {% if description is not empty %}
+	 	<tr>
+			<td>
+				<p>	{{ i18n('resources.PublicDegreeInformation',key) }} 
+					<em>
+						{{ description.content }}
+					</em>
+				</p>
+			</td>
+		</tr>
+	 {% endif %}
+{% endmacro %}
+
+
+{% macro titleRow(key) %}
+	<tr>
+ 		<td>
+			<strong>{{ i18n('resources.PublicDegreeInformation',key) }}</strong>
+       	</td>
+	</tr>
+{% endmacro %}
+
+{% macro descriptionSection(key, localizedContent) %}
+	 {% if localizedContent is not empty %}
+	 	<h2>{{ i18n('resources.PublicDegreeInformation',key) }}</h2>
+		<p>{{ localizedContent.content | raw }}</p>
+	 {% endif %}
+{% endmacro %}
+
+{% block content %}
+
+{% if degreeInfo is null %}
+	<p><em> {{ i18n('resources.ApplicationResources','error.public.DegreeInfoNotPresent') }}</em></p>
+{% else %}
+		<!-- ANNOUNCEMENTS and DEADLINES -->
+		{% set deadlines =  degreeInfo.schoolCalendar is not empty or 
+							degreeInfo.candidacyPeriod is not empty or 
+							degreeInfo.selectionResultDeadline is not empty or 
+							degreeInfo.enrolmentPeriod is not empty %}
+		{% if deadlines or announcements is not empty or degreeInfo.additionalInfo is not empty or degreeInfo.links is not empty %}
+        	<table cellspacing="0" style="float: right;">
+        		{% if announcements is not empty %}
+        			{{ titleRow('public.degree.information.label.latestAnnouncements') }}
+					<tr>
+                    	<td>
+                    		{% for announcement in announcements %}
+                    			<p style="padding-bottom: 0.9em;">
+                    				{{ announcement.modificationDate | formatDate('dd-MM-yyyy') }}
+                    				<br/>
+                    				<a href="{{ announcement.address }}">{{ announcement.name.content }}</a>
+                               	</p>
+                    		{% endfor %}
+                           	<p>
+                           		<a href="{{ announcementsPage }}">{{ i18n('resources.PublicDegreeInformation','public.degree.information.label.latestAnnouncements.showAll') }}</a>
+                        	</p>
+                    	</td>
+               		</tr>
+        		{% endif %}
+        		{% if deadlines %}
+        			{{ titleRow('public.degree.information.label.deadlines') }}
+				{% endif %}
+				{{ deadline('public.degree.information.label.schoolCalendar',degreeInfo.schoolCalendar) }}
+				{{ deadline('public.degree.information.label.candidacyPeriod', degreeInfo.candidacyPeriod) }}
+				{{ deadline('public.degree.information.label.selectionResultDeadline'. degreeInfo.selectionResultDeadline) }}
+				{{ deadline('public.degree.information.label.enrolmentPeriod',degreeInfo.enrolmentPeriod) }}
+        		{% if degreeInfo.additionalInfo is not empty %}
+        			{{ titleRow('public.degree.information.label.additionalInfo') }}
+					<tr>
+        				<td>
+        					{{ degreeInfo.additionalInfo.content | raw}}
+						</td>
+					</tr>
+				{% endif %}
+        		{% if degreeInfo.links is not empty %}
+        			{{ titleRow('public.degree.information.label.links') }}
+					<tr>
+        				<td>
+        					{{ degreeInfo.links.content | raw }}
+						</td>
+					</tr>
+				{% endif %}
+        	</table>
+		{% endif %}
+		
+		{{ descriptionSection('public.degree.information.label.overview', degreeInfo.description) }}
+		{{ descriptionSection('public.degree.information.label.history', degreeInfo.history) }}
+		{{ descriptionSection('public.degree.information.label.objectives', degreeInfo.objectives) }}
+		{{ descriptionSection('public.degree.information.label.designedFor', degreeInfo.designedFor) }}
+		{{ descriptionSection('public.degree.information.label.professionalExits', degreeInfo.professionalExits) }}
+		{{ descriptionSection('public.degree.information.label.operationalRegime', degreeInfo.operationalRegime) }}
+		{{ descriptionSection('public.degree.information.label.gratuity', degreeInfo.gratuity) }}
+		
+		
+		{% if 	degreeInfo.description is empty and
+				degreeInfo.history is empty and
+				degreeInfo.objectives is empty and
+				degreeInfo.designedFor is empty and
+				degreeInfo.professionalExits is empty and
+				degreeInfo.operationalRegime is empty and
+				degreeInfo.gratuity is empty and
+				degreeInfo.additionalInfo is empty and
+				degreeInfo.links is empty and
+				not deadlines %}
+			<p><i>{{ i18n('resources.PublicDegreeInformation','not.available') }}</i></p>
+		{% endif %}
+		
+{% endif %}
+
+
+<!-- COORDINATORS -->
+{% if coordinators is not empty %}
+	<h2>{{ i18n('resources.PublicDegreeInformation','public.degree.information.label.coordinators') }}<small> {{ year }}</small></h2>
+	{% for coordinator in coordinators %}
+		{{ personCard(coordinator.person) }}
+	{% endfor %}
+{% endif %}
+
+<br />
+
+<p class="text-center"><small><em>{{ i18n('resources.PublicDegreeInformation','public.degree.information.label.responsability.information.degree') }}</em></small></p>
+
+{% endblock content %}

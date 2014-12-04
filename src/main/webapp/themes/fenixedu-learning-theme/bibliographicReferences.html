@@ -1,0 +1,38 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% macro referencesList(refs) %}
+  {% if refs is not empty %}
+    {% for ref in refs %}
+		<li>{{ reference(ref) }}</li>
+	{% endfor %}
+  {% endif %}
+{% endmacro %}
+
+{% macro reference(ref) %}
+	<a href="{{ ref.url is empty ? "'#'" : ref.url }}"><span>{{ ref.title | raw }}</span></a>
+	<span>{{ ref.authors | raw }}</span>
+	<span>{{ ref.year | raw }}</span>
+	<span>{{ ref.reference | raw }}</span>
+{% endmacro %}
+
+{% block content %}
+    <h3>{{ i18n('resources.ApplicationResources', 'message.recommendedBibliography') }}</h3>
+    {% if (mainReferences is not empty) or (nonOptionalReferences is not empty) %}
+        <ul>
+            {{ referencesList(mainReferences) }}
+            {{ referencesList(nonOptionalReferences) }}
+        </ul>
+    {% else %}
+        <h4>{{ i18n('resources.ApplicationResources', 'label.noPrimaryBibliographicReference') }}</h4>
+    {% endif %}
+
+    <h3>{{ i18n('resources.ApplicationResources', 'message.optionalBibliography') }}</h3>
+    {% if (secondaryReferences is not empty) or (optionalReferences is not empty) %}
+        <ul>
+            {{ referencesList(secondaryReferences) }}
+            {{ referencesList(optionalReferences) }}
+        </ul>
+    {% else %}
+        <h4>{{ i18n('resources.ApplicationResources', 'label.noSecondaryBibliographicReference') }}</h4>
+    {% endif %}
+{% endblock content %}

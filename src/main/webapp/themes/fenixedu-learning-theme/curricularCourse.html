@@ -1,0 +1,75 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+{% block content %}
+
+	{% set htmlAltBundle = "resources/HtmlaltResources" %}
+	{% set bolonhaBundle = "resources/BolonhaManagerResources" %}
+	{% set enumerationBundle = "resources/EnumerationResources" %}
+	{% set globalBundle = "resources/GlobalResources" %}
+	{% set publicDegreeInfoBundle = "resources/PublicDegreeInformation" %}
+	
+	<h1>{{ curricularCourse.name.content }} 
+		<small>{{ curricularCourse.acronym is not empty ?  curricularCourse.acronym : '' }}</small>
+	</h1>
+	
+	<p><small>{{ curricularCourse.degreeCurricularPlanName }}</small></p>
+	
+	<!-- Optional CurricularCourse -->
+	{% if curricularCourse.isOptional %}
+		<h2>{{ i18n(bolonhaBundle, 'label.description') | raw }}</h2>
+		<p>{{ i18n(bolonhaBundle, 'label.optionalCurricularCourse.description') | raw }}</p>
+	{% else %}
+
+		<!-- CONTEXT -->
+		{% if curricularCourse.parentContexts is not empty %}
+			<h3>{{ i18n(publicDegreeInfoBundle, 'public.degree.information.label.scope') }}</h3>
+			{% for context in curricularCourse.parentContexts %}
+			<div>
+				<p>{{ i18n(publicDegreeInfoBundle, 'public.group') }}: {{ context.parentCourseGroup.oneFullName }}</p>
+				<p>{{ i18n(publicDegreeInfoBundle, 'public.curricular.period') }}: {{ context.parentCourseGroup.fullLabel }}</p>
+			</div>
+			{% endfor %}
+		{% endif %}
+		
+		<!-- WEIGHT -->
+		{% if curricularCourse.weight is not empty and curricularCourse.weight != 0.0 %}
+			<h3>{{ i18n(bolonhaBundle, 'weight') }}</h3>
+			<p>{{ curricularCourse.weight }} ({{ i18n(bolonhaBundle, 'for.average.grade.calculus') }})</p>
+		{% endif %}
+
+		<!-- PRE-REQUISITES -->
+		{% if curricularCourse.prerequisites is not empty and curricularCourse.prerequisites.content is not empty %}
+			<h3>{{ i18n(bolonhaBundle, 'prerequisites') }}</h3>
+			<p>{{ curricularCourse.prequisites.content }}</p>
+		{% endif %}
+		
+		<!-- OBJECTIVES -->
+		{% if curricularCourse.objectives is not empty and curricularCourse.objectives.content is not empty %}
+			<h3>{{ i18n(bolonhaBundle, 'objectives') }}</h3>
+			<p>{{ curricularCourse.objectives.content | raw }}</p>
+		{% endif %}
+		
+		<!-- PROGRAM -->
+		{% if curricularCourse.program is not empty and  curricularCourse.program.content is not empty%}
+			<h3>{{ i18n(bolonhaBundle, 'program') }}</h3>
+			<p>{{ curricularCourse.program.content | raw }}</p>
+		{% endif %}
+		
+		<!-- EVALUATION METHOD -->
+		{% if curricularCourse.evaluationMethod is not empty and curricularCourse.evaluationMethod.content is not empty %}
+			<h3>{{ i18n(bolonhaBundle, 'evaluationMethod') }}</h3>
+			<p>{{ curricularCourse.evaluationMethod.content | raw }}</p>
+		{% endif %}
+
+		<!-- EXECUTION COURSES -->
+		<h3>{{ i18n(publicDegreeInfoBundle, 'public.degree.information.label.courses') }}</h3>
+		{% for executionCourse in curricularCourse.executionCourses %}
+			<p>
+				<a href="{{ executionCourse.url }}">
+					{{ executionCourse.executionYear }} - {{ executionCourse.executionPeriod }}
+				</a>
+			</p>
+		{% endfor %}
+
+	{% endif %}
+	
+{% endblock content %}

@@ -1,0 +1,148 @@
+{
+    "type": "fenixedu-learning-theme",
+    "name": "FenixEDU Learning Theme",
+    "description": "This is the theme for FenixEdu Learning",
+    "extends": "cms-default-theme",
+    "templates": {
+        "posts": {
+            "name": "Posts Page",
+            "description": "A page listing a list of posts",
+            "file": "posts.html"
+        },
+        "view": {
+            "name": "View Post",
+            "description": "A page where you can read a post in particular",
+            "file": "view.html"
+        },
+        "categories": {
+            "name": "Categories",
+            "description": "List of Categories",
+            "file": "categories.html"
+        },
+        "category": {
+            "name": "Category Posts",
+            "description": "Posts for a give category",
+            "file": "category.html"
+        },
+        "objectives": {
+            "name": "Objectives",
+            "description": "Objectives of the Execution Course",
+            "file": "objectives.html"
+        },
+        "evaluationMethods": {
+            "name": "Evaluation Methods",
+            "description": "Evaluation Methods of the Execution Course",
+            "file": "evaluationMethods.html"
+        },
+        "bibliographicReferences": {
+            "name": "Bibliographic References",
+            "description": "Bibliographic References of the Execution Course",
+            "file": "bibliographicReferences.html"
+        },
+        "evaluations": {
+            "name": "Evaluations",
+            "description": "Evaluations of the Execution Course",
+            "file": "evaluations.html"
+        },
+        "marks": {
+            "name": "Marks",
+            "description": "Marks of the Execution Course",
+            "file": "marks.html"
+        },
+        "program": {
+            "name": "Program",
+            "description": "Execution Course Program",
+            "file": "program.html"
+        },
+        "lessonPlan": {
+            "name": "Planning",
+            "description": "Lesson Plan for an Course Program",
+            "file": "lessonPlan.html"
+        },
+        "groupings": {
+            "name": "Groupings",
+            "description": "Groups for an Course Program",
+            "file": "groupings.html"
+        },
+        "shifts": {
+            "name": "Shifts",
+            "description": "Shifts for an Course Program",
+            "file": "shifts.html"
+        },
+        "inqueriesResults": {
+            "name": "Inquiries Results",
+            "description": "Inquerires Results for an Execution Course",
+            "file": "inquiriesResults.html"
+        },
+        "firstPage": {
+            "name": "Initial Page",
+            "description": "Initial Page for the Execution Course Site",
+            "file": "firstPage.html"
+        },
+        "courses": {
+            "name": "Scientific Area Courses",
+            "description": "Courses of a Scientific Area",
+            "file": "courses.html"
+        },
+        "dissertations": {
+            "name": "Dissertations",
+            "description": "Dissertations",
+            "file": "dissertations.html"
+        },
+        "dissertation": {
+            "name": "Dissertation",
+            "description": "Details of a specific dissertation",
+            "file": "dissertation.html"
+        },
+        "degreeDescription": {
+            "name": "Degree Description",
+            "description": "Description of a Degree",
+            "file": "degreeDescription.html"
+        },
+        "curricularPlans": {
+            "name": "Degree curricular plans",
+            "description": "Curricular plans for a degree",
+            "file": "curricularPlans.html"
+        },
+        "degreeExecutionCourses": {
+            "name": "Degree execution courses",
+            "description": "Execution course sites for a degree",
+            "file": "degreeExecutionCourses.html"
+        },
+        "accessRequirements": {
+            "name": "Degree access requirements",
+            "description": "Requirements for a degree",
+            "file": "accessRequirements.html"
+        },
+        "professionalStatus": {
+            "name": "Degree professional status",
+            "description": "Professional info for a degree",
+            "file": "professionalStatus.html"
+        },
+        "degreeClasses": {
+            "name": "degreeClasses",
+            "description": "Classes for a degree",
+            "file": "degreeClasses.html"
+        },
+        "degreeCurriculum": {
+            "name": "Degree Curriculum",
+            "description": "Curriculum for a degree",
+            "file": "degreeCurriculum.html"
+        },
+        "calendarEvents": {
+             "name": "Calendar Events",
+             "description": "Calendar with a default week based view",
+             "file": "calendarEvents.html"
+        },
+        "curricularCourse": {
+            "name": "Degree Curricular course info",
+            "description": "Info for a degree curricular course",
+            "file": "curricularCourse.html"
+        },
+        "researcherSection": {
+            "name": "Researcher Data Section",
+            "description": "Page used for homepage owner's researcher data.",
+            "file": "researcherSection.html"
+        }
+    }
+}

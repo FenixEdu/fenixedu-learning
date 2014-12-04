@@ -1,0 +1,54 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% block content %}
+    
+    <h2>{{ i18n('resources.InquiriesResources', 'label.teachingInquiries.studentInquiriesResults') }}</h2>
+    
+    {% if notAvailableMessage is empty %}
+        {% if hasAccess %}
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th>{{ executionCourse.nome }}</th>
+                </tr>
+                <td>
+                    <ul>
+                        {% lazyFor curricularCourse in curricularCourses %}
+                        <li>
+                            <a href="{{ curricularCourse.url }}">
+                                {{ i18n('resources.InquiriesResources', 'link.teachingInquiries.cuResults')}}
+                                ({{ curricularCourse.degreeAcronym }})
+                            </a>
+                        </li>
+                        {% endLazyFor %}
+                    </ul>
+                </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table class="table">
+                {% lazyFor professorship in professorships %}
+                <tr>
+                    <th>{{ professorship.personName }}</th>
+                    <td>
+                        <ul>
+                            {% lazyFor shift in professorship.shifts %}
+                            <li><a href="{{ shift.url }}">{{ i18n('resources.EnumerationResources', shift.name) }}</a></li>
+                            {% endLazyFor %}
+                        </ul>
+                    </td>
+                </tr>
+                {% endLazyFor %}
+            </table>
+
+        {% else %}
+            <p>{{ i18n('resources.InquiriesResources', 'message.inquiries.information.not.public') }}<a href="{{ loginUrl }}">Login</a></p>
+        {% endif %}
+    {% else %}
+        <p>{{ i18n('resources.InquiriesResources', notAvailableMessage, institutionAcronym) }}</p>
+
+        <p>{{ i18n('resources.InquiriesResources', 'message.inquiries.publicResults.moreInfoLink') }}</p>
+    {% endif %}
+
+{% endblock content %}

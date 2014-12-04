@@ -1,0 +1,94 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% import "fenixedu-learning-theme/personCard.html" %}
+
+{% block header %}
+    <script src="{{staticDir}}/js/bootstrap.min.js"></script>
+
+    <style>
+        h3, h4 {
+            padding-bottom: 25px;
+            padding-top: 25px;
+        }
+    </style>
+{% endblock header %}
+
+{% macro orientatorCard(person, type, affiliation, category, size) %}
+<div class="participant-card col-md-{{ size }} row text-center">
+
+    <div class="person-photo row">
+        <a href="{{ person.homepageWebAddress }}"><img class="img-circle" alt="{{ person.presentationName }}" src="{{ person.user.profile.avatarUrl }}"/></a>
+    </div>
+
+    <div class="person-details row">
+        <p><span class="label label-info">{{ type }}</span></p>
+        <p><a href="{{ person.homepageWebAddress }}">{{ person.nickname }}</a></p>
+
+        {% if affiliation is not empty %}
+            <p>{{ affiliation }}</p>
+        {% endif %}
+
+        {% if category is not empty %}
+            <p>{{ category }}</p>
+        {% endif %}
+    </div>
+
+</div>
+{% endmacro %}
+
+
+{% block content %}
+
+    <section>
+        <h3>
+            {{ thesis.finalFullTitle }}
+            <small>{{ thesis.finalSubtitle }}
+                <span class="label label-{{ getValue(states, thesis.state) }}">{{ thesis.state }}</span>
+            </small>
+        </h3>
+
+        {% if thesis.thesisAbstract is not empty %}
+            <blockquote>
+                <label>{{ i18n('resources.ApplicationResources', 'title.thesis.details.details') }}: </label>{{ thesis.thesisAbstract }}
+
+                <footer><label>Keywords: </label>{{ thesis.keywords }}</footer>
+            </blockquote>
+        {% endif %}
+        {% if thesis.currentDiscussedDate is not empty %}
+            <p><label>{{ i18n('resources.ApplicationResources', 'title.thesis.details.discussion') }}: </label>{{ thesis.currentDiscussedDate | formatDate }}</p>
+        {% endif %}
+    </section>
+
+    {% if isAccessible %}
+        <section>
+            <h4>{{ i18n('resources.ApplicationResources', 'title.thesis.details.publication') }}</h4>
+            <div class="row text-center">
+                <div class="col-md-6">
+                    <a href="{{ thesis.extendedAbstract.downloadUrl }}">
+                        <p><img class="img-circle" src="{{ staticDir }}/images/pdf.png" width="50"></p>
+                        <p>Extended Abstract</p>
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <a href="{{ thesis.dissertation.downloadUrl }}">
+                        <p><img class="img-circle" src="{{ staticDir }}/images/pdf.png" width="50"></p>
+                        <p>Thesis</p>
+                    </a>
+                </div>
+            </div>
+            <p class="text-center"><small>{{ i18n('resources.ResearcherResources', 'label.publication.subject.to.copyright') }}</small></p>
+        </section>
+    {% endif %}
+
+    <section>
+        <h4>{{ i18n('resources.ApplicationResources', 'title.thesis.details.orientation') }}</h4>
+        <div class="participants">
+            {% set size = thesis.coorientator is null ? 6 : 4 %}
+            {{ orientatorCard(thesis.student.person, 'STUDENT', null, null, size) }}
+            {{ orientatorCard(thesis.orientator.person, thesis.orientator.type.name, thesis.orientator.affiliation, thesis.orientator.category, size) }}
+            {{ orientatorCard(thesis.coorientator.person, thesis.coorientator.type.name, thesis.coorientator.affiliation, thesis.coorientator.category, size) }}
+        </div>
+    </section>
+
+
+{% endblock content %}

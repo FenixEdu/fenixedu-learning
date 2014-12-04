@@ -1,0 +1,48 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% block content %}
+  <div class="blog-post">
+    	{% for info in competenceCourseBeans %}
+            {% if info.objectives is not empty and info.objectives.content is not empty %}
+                {% for curricularCourse in info.curricularCourses %}
+
+                    {% set degree = curricularCourse.degreeCurricularPlan.degree %}
+                    <h4>
+                        {{ i18n('resources.EnumerationResources', degree.degreeType.name) }}
+                        {{ i18n('resources.ApplicationResources', 'label.in') }} {{ degree.nameI18N }}
+                    </h4>
+
+                {% endfor %}
+
+                <p>{{ info.objectives.content }}</p>
+            {% endif %}
+		{% endfor %}
+
+		{% for entry in entries(curriculumByCurricularCourse) %}
+			{% set curricularCourse = entry.key %}
+			{% set curriculum = entry.value %}
+			{% set degree = curricularCourse.degreeCurricularPlan.degree %}
+			
+			<h4>{{ i18n('resources.EnumerationResources', degree.degreeType.name) }}
+				 {{ i18n('resources.ApplicationResources', 'label.in') }} {{ degree.nameI18N }}</h4>
+
+			{% if curriculum is not empty %}
+
+                {% if curriculum.generalObjectivesI18N is not empty %}
+                    <h5>{{ i18n('resources.ApplicationResources', 'label.generalObjectives') }}</h5>
+                    <p>{{ curriculum.generalObjectivesI18N }}</p>
+                {% endif %}
+			
+				{% if curriculum.operacionalObjectives is not empty %}
+					<h5>{{ i18n('resources.ApplicationResources', 'label.operacionalObjectives') }}</h5>
+					<p>{{ curriculum.operacionalObjectivesI18N }}</p>
+				{% endif %}
+
+			{% else %}
+				<p>{{ i18n('resources.ApplicationResources', 'message.objectives.not.defined') }}</p>
+			{% endif %}
+
+		{% endfor %}
+
+  </div>
+{% endblock content %}

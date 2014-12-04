@@ -1,0 +1,99 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% macro filterOption(optionName, optionLabel, options) %}
+    <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown">{{ optionName }} <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+        <li>
+            <a class="text-left" href="#" onclick="select('{{ optionLabel }}', null);">{{ i18n('resources.FenixEduCMSResources', 'label.viewAll') }}</a>
+            {% lazyFor option in options %}
+                {% set optionId = optionLabel equals 'state' ? option.key : option.externalId %}
+                {% set optionValue = optionLabel equals 'state' ? option.key : option.name %}
+                <a class="text-left" href="#" onclick="select('{{ optionLabel }}', '{{ optionId }}');"> {{ optionValue }} </a>
+            {% endLazyFor %}
+        </li>
+    </ul>
+{% endmacro %}
+
+{% block content %}
+
+    <div class="btn-group row text-center">
+
+        <ul class="nav nav-pills">
+            <li class="dropdown">{{ filterOption('Year', 'year', years) }}</li>
+            <li class="dropdown">{{ filterOption('State', 'state', entries(states).stream) }}</li>
+            <li class="dropdown">{{ filterOption('Degree', 'degree', degrees) }}</li>
+            <li>
+                <button type="button" class="btn btn-primary dropdown-toggle btn-sm" onclick="reset();">
+                    {{ i18n('resources.FenixEduCMSResources', 'label.viewAll') }}
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    {% if thesesByYear is not empty %}
+        {% for entry in entries(thesesByYear) %}
+            {% set year = entry.key %}
+            {% set theses  = entry.value %}
+            <h3><small>{{ year.name }}</small></h3>
+
+            <ul>
+                {% for thesis in theses %}
+
+                    <li>
+                        <div year="{{ thesis.executionYear.externalId }}" state="{{ thesis.state }}" degree="{{ thesis.degree.externalId }}">
+                            <div class="thesis-title">
+                                <h5>
+                                    <a href="dissertation/{{ thesis.externalId }}">{{ thesis.finalFullTitle }}</a>
+                                    <span class="label label-{{ getValue(states, thesis.state) }}">{{ thesis.state }}</span>
+                                </h5>
+                                <h5>
+                                    <small>Author: {{ thesis.student.person.nickname }} ({{ thesis.student.person.username }})</small>
+                                </h5>
+                                </h5>
+                                <h5>
+                                    <small>
+                                        {% if thesis.orientation is not empty %}
+                                            {{ i18n('resources.ApplicationResources', 'label.thesis.coordination') }}:
+
+                                            {% for orientator in thesis.orientation %}
+                                                <span class="orientator">{{ orientator.person.nickname }}</span>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </small>
+
+                                </h5>
+                            </div>
+                            <hr/>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    {% else %}
+        <h5>{{ i18n('resources.ApplicationResources', 'label.theses.empty.message') }}</h5>
+    {% endif %}
+
+    <style>
+        li {
+            list-style-type: none;
+        }
+    </style>
+
+    <script>
+        function select(field, value) {
+            if(field) {
+                if (value) {
+                    $('[' + field + ']').fadeOut();
+                    $('[' + field + '=' + value + ']').fadeIn();
+                } else {
+                    $('[' + field + ']').fadeIn();
+                }
+            }
+        };
+        function reset() {
+            select('year', null);
+            select('degree', null);
+            select('state', null);
+        }
+    </script>
+{% endblock content %}

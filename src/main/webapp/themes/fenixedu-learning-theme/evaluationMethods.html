@@ -1,0 +1,13 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% block content %}
+
+	{% if evaluationMethod is not empty and evaluationMethod.evaluationElements is not empty %}
+		<p>{{ evaluationMethod.evaluationElements.content | raw }}</p>
+	{% elseif evaluationMethodText is not empty %}
+		<p>{{ evaluationMethodText | raw }}</p>
+	{% else %}
+		<h4>{{ i18n('resources.ApplicationResources', 'message.evaluation.not.available') }}</h4>
+	{% endif %}
+
+{% endblock content %}

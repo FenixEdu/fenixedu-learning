@@ -1,0 +1,72 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% macro row(label, value) %}
+	{% if value is not empty %}
+		<li><strong>{{ i18n('resources.PublicDegreeInformation', label) }}:</strong>&nbsp;{{ value }}</li>
+	{% endif %}
+{% endmacro %}
+
+{% block content %}
+	<!-- COURSE NAME -->
+	<h1>{{ degree.phdProgram is empty ? degree.presentationName : degree.phdProgram.presentationName }}</h1>
+
+	{% if degreeInfo is not empty %}
+		<!-- TEST REQUIREMENTS -->
+		{% if degreeInfo.testIngression is not empty %}
+			<h2>{{ i18n('resources.PublicDegreeInformation', 'public.degree.information.label.testRequirements') }}</h2>
+			<p>{{ degreeInfo.testIngression.content | raw }}</p>
+		{% endif %}
+	  
+		<!-- CLASSIFICATIONS -->
+		{% if degreeInfo.classifications is not empty %}
+			<h2>{{ i18n('resources.PublicDegreeInformation', 'public.degree.information.label.minimumScores') }}</h2>
+			<p>{{ degreeInfo.classifications.content | raw }}</p>
+		{% endif %} 	
+
+		<!-- ACCESS REQUISITES -->
+		{% if degreeInfo.accessRequisites is not empty %}
+			<h2>{{ i18n('resources.PublicDegreeInformation', 'public.degree.information.label.accessRequisites') }}</h2>
+			<p>{{ degreeInfo.accessRequisites.content | raw }}</p>
+		{% endif %}
+
+		<!-- CANDIDACY DOCUMENTS -->
+		{% if degreeInfo.candidacyDocuments is not empty %}
+			<h2>{{ i18n('resources.PublicDegreeInformation', 'public.degree.information.label.candidacyDocuments') }}</h2>
+			<p>{{ degreeInfo.candidacyDocuments.content | raw }}</p>
+		{% endif %} 
+
+		<!-- DRIFTS -->
+		{% if degreeInfo.driftsInitial is not empty %}
+			<h2>{{ i18n('resources.PublicDegreeInformation', 'public.degree.information.label.availableSpaces') }}</h2>
+			<ul>
+				{{ row('public.degree.information.label.total', degreeInfo.driftsInitial) }}
+				{{ row('public.degree.information.label.total', degreeInfo.driftsInitial) }}
+				{{ row('public.degree.information.label.filledPhase1', degreeInfo.driftsFirst) }}
+				{{ row('public.degree.information.label.filledPhase2', degreeInfo.driftsSecond) }}
+			</ul>			
+		{% endif %}
+
+	 	<!-- MARKS -->
+	 	{% if degreeInfo.markAverage is not empty %}
+			<h2>{{ i18n('resources.PublicDegreeInformation', 'public.degree.information.label.entranceMarks') }}:</h2>
+			<ul>
+				{{ row('public.degree.information.label.average', degreeInfo.markAverage) }}
+				{{ row('public.degree.information.label.minimum', degreeInfo.markMin) }}
+				{{ row('public.degree.information.label.maximum', degreeInfo.markMax) }}
+			</ul>			
+		{% endif %}
+		
+		{% if degreeInfo.testIngression is empty and degreeInfo.classifications is empty and degreeInfo.acessRequisites is empty  and degreeInfo.markMin is empty 
+			and degreeInfo.candidacyDocuments is empty and degreeInfo.driftsInitial is empty and degreeInfo.driftsSecond is empty and degreeInfo.markAverage is empty and degreeInfo.markMax is empty %}
+			<p><i>{{ i18n('resources.PublicDegreeInformation', 'not.available') }}:</i></p>
+		{% endif %}
+
+	{% else %}
+		<p><em>{{ i18n('resources.Default', 'error.public.DegreeInfoNotPresent') }}</em></p>
+	{% endif %}
+
+	<br />
+
+	<p class="text-center"><small><em>{{ i18n('resources.PublicDegreeInformation', 'public.degree.information.label.responsability.information.degree') }}</em></small></p>
+
+{% endblock content %}

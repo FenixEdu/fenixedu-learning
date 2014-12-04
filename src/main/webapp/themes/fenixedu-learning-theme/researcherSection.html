@@ -1,0 +1,12 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+{% import "fenixedu-learning-theme/sotisView.html" %}
+
+{% block content %}
+
+{% if bundle is not empty and titleKey is not empty %}
+    <h1>{{ i18n(bundle,titleKey) }}</h1>
+{% endif %}
+
+{{ sotisCall(sotisUrl,language,researcher,dataKey) }}
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% block content %}
+
+	<!-- COURSE NAME -->
+	<h1>{{ degree.phdProgram is empty ? degree.presentationName : degree.phdProgram.presentationName }}</h1>
+
+	{% if degreeInfo is not empty %}
+		<!-- QUALIFICATION LEVEL -->
+		{% if degreeInfo.qualificationLevel is not empty %}
+			<h2>{{ i18n('resources.PublicDegreeInformation', 'public.degree.information.label.qualificationLevel') }}</h2>
+			<p>{{ degreeInfo.qualificationLevel.content | raw }}</p>
+		{% endif %}
+
+		<!-- RECOGNITIONS -->
+		{% if degreeInfo.recognitions is not empty %}
+			<h2>{{ i18n('resources.PublicDegreeInformation', 'public.degree.information.label.recognitions') }}</h2>
+			<p>{{ degreeInfo.recognitions.content | raw }}</p>
+		{% endif %}
+	  
+		{% if degreeInfo.qualificationLevel is empty and degreeInfo.recognitions is empty %}
+			<p><i>{{ i18n('resources.PublicDegreeInformation', 'not.available') }}</i></p>
+		{% endif %}
+	{% else %}
+		<p><em>{{ i18n('resouces.Default', 'error.public.DegreeInfoNotPresent') }}</em></p>
+	{% endif %}
+	
+	<br />
+
+	<p class="text-center"><small><em>{{ i18n('resources.PublicDegreeInformation','public.degree.information.label.responsability.information.degree') }}</em></small></p>
+
+{% endblock content %}

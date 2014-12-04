@@ -1,0 +1,60 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+{% import "fenixedu-learning-theme/view.html" %}
+
+{% block content %}
+
+
+{% if executionCourse.executionPeriod.inquiryResponsePeriod is not empty
+	and executionCourse.availableForInquiries 
+	and executionCourse.executionPeriod.inquiryResponsePeriod.insideResponsePeriod %}
+
+	<p>
+		<strong>{{ i18n('resources.ApplicationResources', 'message.inquiries.available.prefix') }}</strong>
+		{% if isStudent %}
+			{{ i18n('resources.ApplicationResources', 'message.inquiries.available.students') }}
+			<a href="{{ showCoursesToAnswerUrl }}">
+				{{ i18n('resources.ApplicationResources', 'message.inquiries.available.at.here') }}
+			</a>
+		{% else %}
+			{{ i18n('resources.ApplicationResources', 'message.inquiries.available.non.students') }}
+		{% endif %}
+	</p>
+{% endif %}
+
+{% if pagination is not empty and pagination.posts is not empty %}
+	{% set announcement = pagination.posts | head %}
+	<blockquote>
+		{{ viewPost(announcement) }}
+		<footer>
+			<a href="{{site.address}}/announcements">Other Announcements</a>
+		</footer>
+	</blockquote>
+{% endif %}
+
+
+{% if professorships is not empty %}
+	<h4>{{ i18n('resources.ApplicationResources', 'label.lecturingTeachers') }}</h4>
+
+	<div class="row">
+		{% for professorship in professorships %}
+			<div class="col-sm-6">
+				<div class="col-sm-3 text-center">
+					<img class="img-circle" width="60" src="{{professorship.person.user.profile.avatarUrl}}?s=60"/>
+				</div>
+				<div class="col-sm-9">
+					{% if professorship.person.hasAvailableWebSite %}
+						<a href="{{professorship.person.homepageWebAddress}}">{{professorship.person.name}}</a>
+					{% else %}
+						{{professorship.person.name}}
+					{% endif %}
+					{% if professorship.responsibleFor %}
+						<p class="badge">{{ i18n('resources.ApplicationResources', 'label.responsible') }}</p>
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+
+{% endif %}
+
+{% endblock content %}

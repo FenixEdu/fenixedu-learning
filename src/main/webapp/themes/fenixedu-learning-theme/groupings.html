@@ -1,0 +1,161 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% block header %}
+<script src="{{ staticDir }}/js/groupings.js"></script>
+{% endblock header %}
+
+{% block content %}
+
+{% if groupings is not empty %}
+
+	<a id="breadcrumb" href="#" onclick="back();"><span class="glyphicon glyphicon-chevron-left"> Back</span></a>
+
+	<section id="groupings">
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th>{{ i18n('resources.ApplicationResources', 'label.groupingName') }}</th>
+					<th>{{ i18n('resources.ApplicationResources', 'label.groupingDescription') }}</th>
+					<th>{{ i18n('resources.ApplicationResources', 'label.executionCourses') }}</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for grouping in groupings %}
+					<tr class="grouping">
+						<td>
+							<a href="#" onclick="selectGrouping({{ grouping.externalId }})">
+								{{ grouping.name }}
+							</a>
+						</td>
+
+						<td>
+							{% if grouping.projectDescription is not empty %}
+								{{ grouping.projectDescription | raw }}
+							{% else %}
+								{{ i18n('resources.ApplicationResources', 'message.project.wihtout.description') }}				
+							{% endif %}
+					   	</td>
+					   	
+					   	<td>
+					   		{% if grouping.exportGroupings | length > 1 %}
+					   			{% for exportGrouping in grouping.exportGroupings %}
+					   				{{ exportGrouping.executionCourse.nome }}
+					   			{% endfor %}
+					   		{% else %}
+					   			{{ i18n('resources.ApplicationResources', 'message.project.wihtout.coavaliation') }}
+					   		{% endif %}
+		               </td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</section>
+
+	<section id="shifts">
+		{% for grouping in groupings %}
+			<div grouping="{{ grouping.externalId }}">
+				<h4><strong>{{ grouping.name }}</strong></h4>
+				
+				{% if entries(grouping.studentGroupsIndexedByShift) is not empty %}
+
+					<table class="table">
+						<thead>
+							<tr>
+								<th rowspan="2">
+									{{ i18n('resources.ApplicationResources', 'property.shift') }}
+									<a hfref="#" onclick="selectShift(null)">(all)</a>
+								</th>
+								<th colspan="4">{{ i18n('resources.ApplicationResources', 'label.lesson') }}</th>
+								<th rowspan="2">
+									{{ i18n('resources.ApplicationResources', 'property.groupOrGroups') }}
+									<a hfref="#" onclick="selectStudentGroup(null)">(all)</a>
+								</th>
+							</tr>	
+							<tr>
+								<th>{{ i18n('resources.ApplicationResources', 'label.day') }}</th>
+								<th>{{ i18n('resources.ApplicationResources', 'property.lesson.beginning') }}</th>
+								<th>{{ i18n('resources.ApplicationResources', 'property.lesson.end') }}</th>
+								<th>{{ i18n('resources.ApplicationResources', 'property.lesson.room') }}</th>
+							</tr>
+						</thead>
+						{% for shiftEntry in entries(grouping.studentGroupsIndexedByShift) %}
+							{% set shift = shiftEntry.key %}
+							{% set studentGroups = shiftEntry.value %}
+							
+							<tbody>
+									{% for lesson in shift.associatedLessons %}
+										<tr class="shift" shift="{{ shift.externalId }}" grouping="{{ grouping.externalId }}">
+											<td>
+												<a href="#" onclick="selectShift({{ shift.externalId }})">
+													{{ shift.nome }}
+												</a>
+											</td>
+											<td>{{ lesson.diaSemana }}</td>
+											<td>{{ lesson.inicio.time | date("HH:mm") }}</td>
+											<td>{{ lesson.fim.time | date("HH:mm") }}</td>
+											<td>{{ lesson.roomOccupation.room.name }}</td>
+											<td>
+												{% for group in studentGroups %}
+													<a onclick="selectStudentGroup({{ group.externalId }})" href="#">
+														{{ group.groupNumber }} 
+													</a>
+												{% endfor %}
+											</td>
+										</tr>
+									{% endfor %}
+							</tbody>
+						{% endfor %}	
+					</table>
+				{% endif %}
+			</div>
+		{% endfor %}
+	</section>
+	
+	<section id="students">
+		<h4 id="title"><small id="sub-title"></small></h4>
+		
+		<table class="table">
+			<thead>
+				<tr>
+					<th>{{ i18n('resources.ApplicationResources', 'label.student.group.number') }}</th>
+					<th>{{ i18n('resources.ApplicationResources', 'label.student.number') }}</th>
+					<th>{{ i18n('resources.ApplicationResources', 'label.name') }}</th>
+				</tr>
+			</thead>
+			{% for grouping in groupings %}
+				<tbody>
+					{% for studentGroup in grouping.studentGroupsOrderedByGroupNumber %}
+						{% for attend in studentGroup.attends %}
+							{% set student = attend.aluno %}
+							<tr class="student" grouping="{{ grouping.externalId }}"
+								 student-group="{{ studentGroup.externalId }}" shift="{{ studentGroup.shift.externalId }}">
+								<td>
+									<a onclick="selectStudentGroup({{ studentGroup.externalId }})" href="#">
+										{{ studentGroup.groupNumber }}
+									</a>
+								</td>
+								<td>{{ student.number }}</td>
+								<td>{{ student.person.name }}</td>
+							</tr>
+						{% endfor %}
+					{% endfor %}
+				</tbody>
+			{% endfor %}
+		</table>
+
+	</section>
+{% else %}
+
+	<h4><em>{{ i18n('resources.ApplicationResources', 'message.infoGroupPropertiesList.not.available') }}</em></h4>
+
+{% endif %}
+
+<style type="text/css" media="screen">
+</style>
+
+<script type="text/javascript">
+	restart();
+</script>
+
+{% endblock content %}

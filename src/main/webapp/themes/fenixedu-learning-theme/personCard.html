@@ -1,0 +1,38 @@
+{% macro personsCards(persons, title) %}
+
+	{% if persons is not empty %}
+		<h4 class="persons-title"><small>{{ title }}</small></h4>
+		{% lazyFor person in persons %}
+			<div class="person-card-item">
+				{{ personCard(person) }}
+				<hr>
+			</div>
+		{% endLazyFor %}
+	{% endif %}
+
+{% endmacro %}
+
+{% macro personCard(person) %}
+	{% if person is not empty %}
+        <div class="container-fluid">
+
+            <div class="person-card row">
+                <div class="col-md-3 person-photo text-center">
+                    <a href="{{ person.homepageWebAddress }}">
+                        <img class="img-circle" alt="{{ person.presentationName }}" src="{{ person.user.profile.avatarUrl }}"/>
+                    </a>
+                </div>
+
+                <div class="col-md-9 person-details text-left">
+                    <br/>
+                    <p><a href="{{ person.homepageWebAddress }}">{{ person.presentationName }}</a></p>
+                    {% if person.getDefaultEmailAddressValue is not empty %}
+                        <p><a href="mailto:{{ person.getDefaultEmailAddressValue }}">{{ person.getDefaultEmailAddressValue }}</a></p>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+	{% endif %}
+{% endmacro %}
+

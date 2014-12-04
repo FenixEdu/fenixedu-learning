@@ -1,0 +1,13 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% block content %}
+  <div class="blog-post">
+    <ul>
+      {% for category in categories %}
+        <li><a href="{{ category.address }}">{{category.name.content}}</a></li>
+      {% else %}
+        <li>There are no categories</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock content %}
