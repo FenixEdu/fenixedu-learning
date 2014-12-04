@@ -5,14 +5,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import net.sourceforge.fenixedu.domain.Degree;
-import net.sourceforge.fenixedu.domain.ExecutionCourse;
-import net.sourceforge.fenixedu.domain.Project;
-import net.sourceforge.fenixedu.domain.WrittenEvaluation;
-import net.sourceforge.fenixedu.util.EvaluationType;
+import org.fenixedu.academic.domain.Degree;
+import org.fenixedu.academic.domain.ExecutionCourse;
+import org.fenixedu.academic.domain.Project;
+import org.fenixedu.academic.domain.WrittenEvaluation;
+import org.fenixedu.academic.util.EvaluationType;
 
 import org.fenixedu.cms.domain.Page;
-import org.fenixedu.cms.domain.ScheduleEventBean;
+import org.fenixedu.learning.domain.ScheduleEventBean;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
 import org.fenixedu.commons.i18n.I18N;
@@ -55,8 +55,8 @@ public class DegreeEvaluations extends DegreeSiteComponent {
 
     private Collection<ScheduleEventBean> projects(Degree degree) {
         Set<ScheduleEventBean> projects = Sets.newHashSet();
-        allExecutionCourses(degree).forEach(executionCourse->{
-            for(Project project : executionCourse.getAssociatedProjects()) {
+        allExecutionCourses(degree).forEach(executionCourse -> {
+            for (Project project : executionCourse.getAssociatedProjects()) {
                 projects.addAll(projectEvents(project, executionCourse));
             }
         });

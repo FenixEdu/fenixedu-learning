@@ -15,7 +15,7 @@
     <name>FenixEdu Learning</name>
 
     <properties>
-        <version.org.fenixedu.academic>4.0.0-SNAPSHOT</version.org.fenixedu.academic>
+        <version.org.fenixedu.academic>4.1.0-SNAPSHOT</version.org.fenixedu.academic>
         <version.org.fenixedu.fenixedu-cms>1.0.0-SNAPSHOT</version.org.fenixedu.fenixedu-cms>
         <version.org.fenixedu.bennu-signals>1.0.0.RC1</version.org.fenixedu.bennu-signals>
         <version.org.jsoup.jsoup>1.7.2</version.org.jsoup.jsoup>
@@ -53,8 +53,8 @@
         </dependency>
 
         <dependency>
-            <groupId>pt.ist</groupId>
-            <artifactId>fenix</artifactId>
+            <groupId>org.fenixedu</groupId>
+            <artifactId>fenixedu-academic</artifactId>
             <version>${version.org.fenixedu.academic}</version>
         </dependency>
 
@@ -69,7 +69,11 @@
             <artifactId>jsoup</artifactId>
             <version>${version.org.jsoup.jsoup}</version>
         </dependency>
-
+		<dependency>
+			<groupId>pt.ist</groupId>
+    		<artifactId>fenixedu-onlinetests</artifactId>
+    		<version>4.0.0-SNAPSHOT</version>
+		</dependency>
     </dependencies>
         <repositories>
                 <repository>

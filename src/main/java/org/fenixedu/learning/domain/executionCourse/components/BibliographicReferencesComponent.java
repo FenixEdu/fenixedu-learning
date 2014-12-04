@@ -1,16 +1,16 @@
-package org.fenixedu.cms.domain.executionCourse.components;
+package org.fenixedu.learning.domain.executionCourse.components;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import net.sourceforge.fenixedu.domain.ExecutionCourse;
-import net.sourceforge.fenixedu.domain.degreeStructure.BibliographicReferences.BibliographicReference;
-import net.sourceforge.fenixedu.domain.degreeStructure.CompetenceCourseInformation;
+import org.fenixedu.academic.domain.ExecutionCourse;
+import org.fenixedu.academic.domain.degreeStructure.BibliographicReferences.BibliographicReference;
+import org.fenixedu.academic.domain.degreeStructure.CompetenceCourseInformation;
 
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.CMSComponent;
 import org.fenixedu.cms.domain.component.ComponentType;
-import org.fenixedu.cms.domain.executionCourse.ExecutionCourseSite;
+import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 import org.fenixedu.cms.rendering.TemplateContext;
 
 import com.google.common.collect.Lists;
@@ -36,12 +36,12 @@ public class BibliographicReferencesComponent implements CMSComponent {
         return bibliographiReferences(executionCourse).stream().filter(b -> b.isMain()).collect(Collectors.toList());
     }
 
-    public List<net.sourceforge.fenixedu.domain.BibliographicReference> optionalReferences(ExecutionCourse executionCourse) {
+    public List<org.fenixedu.academic.domain.BibliographicReference> optionalReferences(ExecutionCourse executionCourse) {
         return executionCourse.getOrderedBibliographicReferences().stream().filter(b -> b.isOptional())
                 .collect(Collectors.toList());
     }
 
-    public List<net.sourceforge.fenixedu.domain.BibliographicReference> nonOptionalReferences(ExecutionCourse executionCourse) {
+    public List<org.fenixedu.academic.domain.BibliographicReference> nonOptionalReferences(ExecutionCourse executionCourse) {
         return executionCourse.getOrderedBibliographicReferences().stream().filter(b -> !b.isOptional())
                 .collect(Collectors.toList());
     }

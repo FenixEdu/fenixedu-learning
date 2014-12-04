@@ -5,15 +5,15 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import net.sourceforge.fenixedu.domain.CurricularCourse;
-import net.sourceforge.fenixedu.domain.Curriculum;
-import net.sourceforge.fenixedu.domain.ExecutionCourse;
+import org.fenixedu.academic.domain.CurricularCourse;
+import org.fenixedu.academic.domain.Curriculum;
+import org.fenixedu.academic.domain.ExecutionCourse;
 
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.CMSComponent;
 import org.fenixedu.cms.domain.component.ComponentType;
-import org.fenixedu.cms.domain.executionCourse.CompetenceCourseBean;
-import org.fenixedu.cms.domain.executionCourse.ExecutionCourseSite;
+import org.fenixedu.learning.domain.executionCourse.CompetenceCourseBean;
+import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 import org.fenixedu.cms.rendering.TemplateContext;
 
 @ComponentType(name = "CompetenceCourse", description = "Competence Course information for an Execution Course")

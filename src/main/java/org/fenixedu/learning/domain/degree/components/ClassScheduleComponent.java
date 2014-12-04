@@ -10,11 +10,11 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import com.google.common.collect.Sets;
-import net.sourceforge.fenixedu.domain.Lesson;
-import net.sourceforge.fenixedu.domain.SchoolClass;
+import org.fenixedu.academic.domain.Lesson;
+import org.fenixedu.academic.domain.SchoolClass;
 
 import org.fenixedu.cms.domain.Page;
-import org.fenixedu.cms.domain.ScheduleEventBean;
+import org.fenixedu.learning.domain.ScheduleEventBean;
 import org.fenixedu.cms.domain.Site;
 import org.fenixedu.cms.domain.component.CMSComponent;
 import org.fenixedu.cms.domain.component.ComponentType;
@@ -45,7 +45,7 @@ public class ClassScheduleComponent extends DegreeSiteComponent {
     }
 
     private Stream<ScheduleEventBean> lessonsWithoutInstances(Lesson lesson) {
-        return lesson.getAllLessonIntervalsWithoutInstanceDates().stream().map(interval->createEventBean(lesson, interval));
+        return lesson.getAllLessonIntervalsWithoutInstanceDates().stream().map(interval -> createEventBean(lesson, interval));
     }
 
     private Stream<ScheduleEventBean> lessonWithInstances(Lesson lesson) {
@@ -59,7 +59,8 @@ public class ClassScheduleComponent extends DegreeSiteComponent {
         String shiftTypeAcronym = lesson.getShift().getShiftTypesCodePrettyPrint();
         String executionCourseName = lesson.getShift().getExecutionCourse().getNameI18N().getContent();
         String shifType = lesson.getShift().getShiftTypesPrettyPrint();
-        Set<Space> location = lesson.getLessonSpaceOccupation() != null ? lesson.getLessonSpaceOccupation().getSpaces() : newHashSet();
+        Set<Space> location =
+                lesson.getLessonSpaceOccupation() != null ? lesson.getLessonSpaceOccupation().getSpaces() : newHashSet();
         String description = executionCourseName + "( " + shifType + " )";
         return new ScheduleEventBean(executionCourseAcronym, shiftTypeAcronym, description, interval.getStart(),
                 interval.getEnd(), null, url, null, null, location);

@@ -1,6 +1,6 @@
 package org.fenixedu.learning.domain.degree;
 
-import net.sourceforge.fenixedu.domain.Degree;
+import org.fenixedu.academic.domain.Degree;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.cms.domain.CMSTheme;
@@ -10,7 +10,7 @@ import org.fenixedu.cms.domain.component.Component;
 import org.fenixedu.cms.domain.component.ListCategoryPosts;
 import org.fenixedu.cms.domain.component.MenuComponent;
 import org.fenixedu.cms.domain.component.ViewPost;
-import org.fenixedu.cms.domain.degree.components.*;
+import org.fenixedu.learning.domain.degree.components.*;
 import org.fenixedu.commons.i18n.LocalizedString;
 
 import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;

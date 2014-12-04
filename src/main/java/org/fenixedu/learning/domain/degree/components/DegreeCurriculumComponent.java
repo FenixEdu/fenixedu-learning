@@ -1,7 +1,7 @@
 package org.fenixedu.learning.domain.degree.components;
 
 import static java.util.stream.Collectors.*;
-import static net.sourceforge.fenixedu.domain.ExecutionYear.readCurrentExecutionYear;
+import static org.fenixedu.academic.domain.ExecutionYear.readCurrentExecutionYear;
 import static pt.ist.fenixframework.FenixFramework.getDomainObject;
 
 import java.math.BigDecimal;
@@ -9,15 +9,15 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Stream;
 
-import net.sourceforge.fenixedu.domain.CurricularCourse;
-import net.sourceforge.fenixedu.domain.Degree;
-import net.sourceforge.fenixedu.domain.ExecutionSemester;
-import net.sourceforge.fenixedu.domain.ExecutionYear;
-import net.sourceforge.fenixedu.domain.curricularPeriod.CurricularPeriod;
-import net.sourceforge.fenixedu.domain.degreeStructure.Context;
-import net.sourceforge.fenixedu.domain.degreeStructure.CourseGroup;
-import net.sourceforge.fenixedu.util.CurricularPeriodLabelFormatter;
-import net.sourceforge.fenixedu.util.CurricularRuleLabelFormatter;
+import org.fenixedu.academic.domain.CurricularCourse;
+import org.fenixedu.academic.domain.Degree;
+import org.fenixedu.academic.domain.ExecutionSemester;
+import org.fenixedu.academic.domain.ExecutionYear;
+import org.fenixedu.academic.domain.curricularPeriod.CurricularPeriod;
+import org.fenixedu.academic.domain.degreeStructure.Context;
+import org.fenixedu.academic.domain.degreeStructure.CourseGroup;
+import org.fenixedu.academic.util.CurricularPeriodLabelFormatter;
+import org.fenixedu.academic.util.CurricularRuleLabelFormatter;
 
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;

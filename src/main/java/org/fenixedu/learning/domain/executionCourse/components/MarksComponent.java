@@ -3,15 +3,15 @@ package org.fenixedu.learning.domain.executionCourse.components;
 import java.util.Map;
 import java.util.TreeMap;
 
-import net.sourceforge.fenixedu.domain.Attends;
-import net.sourceforge.fenixedu.domain.Evaluation;
-import net.sourceforge.fenixedu.domain.ExecutionCourse;
-import net.sourceforge.fenixedu.domain.Mark;
+import org.fenixedu.academic.domain.Attends;
+import org.fenixedu.academic.domain.Evaluation;
+import org.fenixedu.academic.domain.ExecutionCourse;
+import org.fenixedu.academic.domain.Mark;
 
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.CMSComponent;
 import org.fenixedu.cms.domain.component.ComponentType;
-import org.fenixedu.cms.domain.executionCourse.ExecutionCourseSite;
+import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 import org.fenixedu.cms.rendering.TemplateContext;
 
 @ComponentType(name = "Marks", description = "Marks for an Execution Course")

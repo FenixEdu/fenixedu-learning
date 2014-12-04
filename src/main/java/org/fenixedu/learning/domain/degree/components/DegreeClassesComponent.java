@@ -3,12 +3,12 @@ package org.fenixedu.learning.domain.degree.components;
 import static com.google.common.collect.ImmutableMap.of;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toCollection;
-import static net.sourceforge.fenixedu.domain.ExecutionSemester.readActualExecutionSemester;
-import static net.sourceforge.fenixedu.domain.SchoolClass.COMPARATOR_BY_NAME;
-import static net.sourceforge.fenixedu.domain.person.RoleType.COORDINATOR;
-import static net.sourceforge.fenixedu.domain.person.RoleType.RESOURCE_ALLOCATION_MANAGER;
-import static net.sourceforge.fenixedu.util.PeriodState.NOT_OPEN;
-import static net.sourceforge.fenixedu.util.PeriodState.OPEN;
+import static org.fenixedu.academic.domain.ExecutionSemester.readActualExecutionSemester;
+import static org.fenixedu.academic.domain.SchoolClass.COMPARATOR_BY_NAME;
+import static org.fenixedu.academic.domain.person.RoleType.COORDINATOR;
+import static org.fenixedu.academic.domain.person.RoleType.RESOURCE_ALLOCATION_MANAGER;
+import static org.fenixedu.academic.util.PeriodState.NOT_OPEN;
+import static org.fenixedu.academic.util.PeriodState.OPEN;
 import static org.fenixedu.bennu.core.security.Authenticate.getUser;
 import static pt.ist.fenixframework.FenixFramework.getDomainObject;
 
@@ -17,8 +17,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Predicate;
 
-import net.sourceforge.fenixedu.dataTransferObject.InfoDegree;
-import net.sourceforge.fenixedu.domain.*;
+import org.fenixedu.academic.dto.InfoDegree;
+import org.fenixedu.academic.domain.*;
 
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;
@@ -48,8 +48,13 @@ public class DegreeClassesComponent extends DegreeSiteComponent {
     private SortedMap<Integer, Set<SchoolClass>> classesByCurricularYear(Degree degree, ExecutionSemester semester) {
         DegreeCurricularPlan plan = degree.getMostRecentDegreeCurricularPlan();
         Predicate<SchoolClass> predicate = schoolClass -> schoolClass.getExecutionDegree().getDegreeCurricularPlan() == plan;
-        return semester.getSchoolClassesSet().stream().filter(predicate).collect(
-                groupingBy(SchoolClass::getAnoCurricular, TreeMap::new, toCollection(() -> Sets.newTreeSet(COMPARATOR_BY_NAME))));
+        return semester
+                .getSchoolClassesSet()
+                .stream()
+                .filter(predicate)
+                .collect(
+                        groupingBy(SchoolClass::getAnoCurricular, TreeMap::new,
+                                toCollection(() -> Sets.newTreeSet(COMPARATOR_BY_NAME))));
     }
 
     private ExecutionSemester getOtherExecutionSemester(ExecutionSemester semester) {
@@ -60,10 +65,10 @@ public class DegreeClassesComponent extends DegreeSiteComponent {
     private boolean canViewNextExecutionSemester(ExecutionSemester nextExecutionSemester) {
         Predicate<Person> hasPerson = person -> person != null;
         Predicate<Person> isCoordinator = person -> person.hasRole(COORDINATOR);
-        Predicate<Person> isManager = person -> person.hasRole(RESOURCE_ALLOCATION_MANAGER); 
-        return nextExecutionSemester.getState() == OPEN || 
-                (nextExecutionSemester.getState() == NOT_OPEN && getUser() != null 
-                        && hasPerson.and(isManager.or(isCoordinator)).test(getUser().getPerson()));
+        Predicate<Person> isManager = person -> person.hasRole(RESOURCE_ALLOCATION_MANAGER);
+        return nextExecutionSemester.getState() == OPEN
+                || (nextExecutionSemester.getState() == NOT_OPEN && getUser() != null && hasPerson.and(
+                        isManager.or(isCoordinator)).test(getUser().getPerson()));
     }
 
     private ExecutionSemester getExecutionSemester(String[] requestContext) {

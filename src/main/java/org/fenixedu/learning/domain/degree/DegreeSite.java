@@ -1,14 +1,15 @@
 package org.fenixedu.learning.domain.degree;
 
-import net.sourceforge.fenixedu.domain.Degree;
-import org.fenixedu.bennu.core.domain.Bennu;
-import org.fenixedu.commons.i18n.LocalizedString;
-import pt.ist.fenixframework.DomainObject;
-
 import java.util.Optional;
 
+import org.fenixedu.academic.domain.Degree;
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.commons.i18n.LocalizedString;
+
+import pt.ist.fenixframework.DomainObject;
+
 public class DegreeSite extends DegreeSite_Base {
-    
+
     public DegreeSite(Degree degree) {
         super();
         setDegree(degree);

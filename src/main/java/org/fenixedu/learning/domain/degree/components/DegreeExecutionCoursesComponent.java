@@ -2,8 +2,8 @@ package org.fenixedu.learning.domain.degree.components;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toCollection;
-import static net.sourceforge.fenixedu.dataTransferObject.ExecutionCourseView.COMPARATOR_BY_NAME;
-import static net.sourceforge.fenixedu.domain.ExecutionSemester.COMPARATOR_BY_SEMESTER_AND_YEAR;
+import static org.fenixedu.academic.dto.ExecutionCourseView.COMPARATOR_BY_NAME;
+import static org.fenixedu.academic.domain.ExecutionSemester.COMPARATOR_BY_SEMESTER_AND_YEAR;
 
 import java.util.Set;
 import java.util.SortedMap;
@@ -11,10 +11,10 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.function.Supplier;
 
-import net.sourceforge.fenixedu.dataTransferObject.ExecutionCourseView;
-import net.sourceforge.fenixedu.domain.Degree;
-import net.sourceforge.fenixedu.domain.ExecutionSemester;
-import net.sourceforge.fenixedu.util.PeriodState;
+import org.fenixedu.academic.dto.ExecutionCourseView;
+import org.fenixedu.academic.domain.Degree;
+import org.fenixedu.academic.domain.ExecutionSemester;
+import org.fenixedu.academic.util.PeriodState;
 
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;

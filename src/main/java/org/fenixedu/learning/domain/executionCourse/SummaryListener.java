@@ -5,7 +5,7 @@ import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
 import java.util.Locale;
 import java.util.Optional;
 
-import net.sourceforge.fenixedu.domain.*;
+import org.fenixedu.academic.domain.*;
 
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;

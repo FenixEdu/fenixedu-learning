@@ -7,10 +7,10 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import net.sourceforge.fenixedu.domain.*;
-import net.sourceforge.fenixedu.domain.util.icalendar.EventBean;
-import net.sourceforge.fenixedu.util.HourMinuteSecond;
-import net.sourceforge.fenixedu.webServices.jersey.beans.publico.FenixRoomEvent;
+import org.fenixedu.academic.domain.*;
+import org.fenixedu.academic.domain.util.icalendar.EventBean;
+import org.fenixedu.academic.util.HourMinuteSecond;
+import org.fenixedu.academic.api.beans.publico.FenixRoomEvent;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.spaces.domain.Space;
 import org.joda.time.DateTime;
@@ -63,7 +63,7 @@ public class ScheduleEventBean implements Comparable<ScheduleEventBean> {
     private String secureSpaceNames(Collection<Space> spaces) {
         try {
             return spaces.stream().map(Space::getPresentationName).collect(Collectors.joining(";"));
-        } catch(Exception e) {
+        } catch (Exception e) {
             return new String();
         }
     }
@@ -78,7 +78,7 @@ public class ScheduleEventBean implements Comparable<ScheduleEventBean> {
         for (CourseLoad courseLoad : executionCourse.getCourseLoadsSet()) {
             for (Shift shift : courseLoad.getShiftsSet()) {
                 for (Lesson lesson : shift.getAssociatedLessonsSet()) {
-                    for(Interval interval : lesson.getAllLessonIntervals()) {
+                    for (Interval interval : lesson.getAllLessonIntervals()) {
                         events.add(scheduleEvent(shift, lesson, interval));
                     }
                 }
@@ -94,6 +94,7 @@ public class ScheduleEventBean implements Comparable<ScheduleEventBean> {
         String shiftTypesPrettyPrint = shift.getShiftTypesPrettyPrint();
         String color = ScheduleEventBean.COLORS[shift.getSortedTypes().stream().findFirst().get().ordinal()];
         HashSet<Space> spaces = Sets.newHashSet(lesson.getSala());
-        return new ScheduleEventBean(shiftAcronym, roomName, shiftTypesPrettyPrint, interval.getStart(), interval.getEnd(), null, url, color, null, spaces);
+        return new ScheduleEventBean(shiftAcronym, roomName, shiftTypesPrettyPrint, interval.getStart(), interval.getEnd(), null,
+                url, color, null, spaces);
     }
 }

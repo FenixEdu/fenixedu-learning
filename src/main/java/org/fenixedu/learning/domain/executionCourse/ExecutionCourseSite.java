@@ -2,11 +2,11 @@ package org.fenixedu.learning.domain.executionCourse;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import net.sourceforge.fenixedu.domain.ExecutionCourse;
-import net.sourceforge.fenixedu.domain.accessControl.StudentGroup;
-import net.sourceforge.fenixedu.domain.accessControl.StudentSharingDegreeOfCompetenceOfExecutionCourseGroup;
-import net.sourceforge.fenixedu.domain.accessControl.StudentSharingDegreeOfExecutionCourseGroup;
-import net.sourceforge.fenixedu.domain.accessControl.TeacherGroup;
+import org.fenixedu.academic.domain.ExecutionCourse;
+import org.fenixedu.academic.domain.accessControl.StudentGroup;
+import org.fenixedu.academic.domain.accessControl.StudentSharingDegreeOfCompetenceOfExecutionCourseGroup;
+import org.fenixedu.academic.domain.accessControl.StudentSharingDegreeOfExecutionCourseGroup;
+import org.fenixedu.academic.domain.accessControl.TeacherGroup;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.groups.AnyoneGroup;
 import org.fenixedu.bennu.core.groups.Group;

@@ -1,15 +1,15 @@
 package org.fenixedu.learning.domain.degree.components;
 
 import static java.util.stream.Collectors.toList;
-import static net.sourceforge.fenixedu.domain.ExecutionCourse.EXECUTION_COURSE_EXECUTION_PERIOD_COMPARATOR;
+import static org.fenixedu.academic.domain.ExecutionCourse.EXECUTION_COURSE_EXECUTION_PERIOD_COMPARATOR;
 import static pt.ist.fenixframework.FenixFramework.getDomainObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sourceforge.fenixedu.domain.CurricularCourse;
-import net.sourceforge.fenixedu.domain.ExecutionCourse;
-import net.sourceforge.fenixedu.domain.ExecutionSemester;
+import org.fenixedu.academic.domain.CurricularCourse;
+import org.fenixedu.academic.domain.ExecutionCourse;
+import org.fenixedu.academic.domain.ExecutionSemester;
 
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;
@@ -42,8 +42,9 @@ public class CurricularCourseComponent extends DegreeSiteComponent {
         wrap.put("degreeCurricularPlanName", curricularCourse.getDegreeCurricularPlan().getPresentationName());
         wrap.put("acronym", curricularCourse.getAcronym(period));
         wrap.put("isOptional", curricularCourse.isOptional());
-        wrap.put("executionCourses", curricularCourse.getAssociatedExecutionCoursesSet().stream().sorted(
-                EXECUTION_COURSE_EXECUTION_PERIOD_COMPARATOR).limit(5).map(ec -> createWrap(ec)).collect(toList()));
+        wrap.put("executionCourses",
+                curricularCourse.getAssociatedExecutionCoursesSet().stream().sorted(EXECUTION_COURSE_EXECUTION_PERIOD_COMPARATOR)
+                        .limit(5).map(ec -> createWrap(ec)).collect(toList()));
         wrap.put("parentContexts", curricularCourse.getParentContextsByExecutionYear(period.getExecutionYear()));
         wrap.put("weight", curricularCourse.getWeight(period));
         wrap.put("prerequisites", curricularCourse.getPrerequisitesI18N().toLocalizedString());

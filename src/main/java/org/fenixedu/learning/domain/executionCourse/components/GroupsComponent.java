@@ -1,11 +1,11 @@
 package org.fenixedu.learning.domain.executionCourse.components;
 
-import net.sourceforge.fenixedu.domain.ExecutionCourse;
+import org.fenixedu.academic.domain.ExecutionCourse;
 
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.CMSComponent;
 import org.fenixedu.cms.domain.component.ComponentType;
-import org.fenixedu.cms.domain.executionCourse.ExecutionCourseSite;
+import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 import org.fenixedu.cms.rendering.TemplateContext;
 
 @ComponentType(name = "Groups", description = "Groups for an Execution Course")

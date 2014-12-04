@@ -3,7 +3,7 @@ package org.fenixedu.learning.domain.executionCourse;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import net.sourceforge.fenixedu.dataTransferObject.InfoLessonInstanceAggregation;
+import org.fenixedu.academic.dto.InfoLessonInstanceAggregation;
 
 import org.joda.time.format.ISODateTimeFormat;
 

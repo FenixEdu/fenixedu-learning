@@ -1,6 +1,6 @@
 package org.fenixedu.learning.domain.degree.components;
 
-import net.sourceforge.fenixedu.domain.thesis.Thesis;
+import org.fenixedu.academic.domain.thesis.Thesis;
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.CMSComponent;
 import org.fenixedu.cms.domain.component.ComponentType;
@@ -9,7 +9,7 @@ import org.fenixedu.bennu.core.security.Authenticate;
 import pt.ist.fenixframework.FenixFramework;
 
 import static java.util.stream.Collectors.groupingBy;
-import static org.fenixedu.cms.domain.DissertationsUtils.getThesisStateMapping;
+import static org.fenixedu.learning.domain.DissertationsUtils.getThesisStateMapping;
 
 @ComponentType(name = "thesis", description = "Provides information for a specific thesis")
 public class ThesisComponent implements CMSComponent {

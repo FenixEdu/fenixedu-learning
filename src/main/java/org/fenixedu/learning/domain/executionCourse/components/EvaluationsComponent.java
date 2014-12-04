@@ -3,13 +3,13 @@ package org.fenixedu.learning.domain.executionCourse.components;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import net.sourceforge.fenixedu.domain.Exam;
-import net.sourceforge.fenixedu.domain.ExecutionCourse;
-
+import org.fenixedu.academic.domain.Exam;
+import org.fenixedu.academic.domain.ExecutionCourse;
+import org.fenixedu.academic.domain.onlineTests.OnlineTest;
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.CMSComponent;
 import org.fenixedu.cms.domain.component.ComponentType;
-import org.fenixedu.cms.domain.executionCourse.ExecutionCourseSite;
+import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 import org.fenixedu.cms.rendering.TemplateContext;
 
 @ComponentType(name = "Evaluations", description = "Evaluations for an Execution Course")
@@ -20,7 +20,7 @@ public class EvaluationsComponent implements CMSComponent {
         ExecutionCourse executionCourse = ((ExecutionCourseSite) page.getSite()).getExecutionCourse();
         globalContext.put("evaluations", executionCourse.getAssociatedEvaluationsSet());
         globalContext.put("comment", executionCourse.getComment());
-        globalContext.put("onlineTests", executionCourse.getAssociatedOnlineTests());
+        globalContext.put("onlineTests", OnlineTest.readOnlineTestsByExecutionCourse(executionCourse));
         globalContext.put("adHocEvaluations", executionCourse.getOrderedAssociatedAdHocEvaluations());
         globalContext.put("projects", executionCourse.getAssociatedProjects());
         globalContext.put("publishedExams", publishedExams(executionCourse));

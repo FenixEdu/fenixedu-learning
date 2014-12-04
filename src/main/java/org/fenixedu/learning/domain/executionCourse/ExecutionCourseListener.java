@@ -1,6 +1,6 @@
 package org.fenixedu.learning.domain.executionCourse;
 
-import net.sourceforge.fenixedu.domain.ExecutionCourse;
+import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.cms.domain.CMSTheme;
@@ -11,8 +11,9 @@ import org.fenixedu.cms.domain.component.Component;
 import org.fenixedu.cms.domain.component.ListCategoryPosts;
 import org.fenixedu.cms.domain.component.MenuComponent;
 import org.fenixedu.cms.domain.component.ViewPost;
-import org.fenixedu.cms.domain.executionCourse.components.*;
+import org.fenixedu.learning.domain.executionCourse.components.*;
 import org.fenixedu.commons.i18n.LocalizedString;
+
 
 import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
 import static org.fenixedu.cms.domain.component.Component.forType;
@@ -53,7 +54,8 @@ public class ExecutionCourseListener {
 
         Component referencesComponent = forType(BibliographicReferencesComponent.class);
         Component evaluationMethodsComponent = forType(EvaluationMethodsComponent.class);
-        Component inquiriesResultsComponent = forType(InquiriesResultsComponent.class);
+        // TODO: recreate this somehow
+        //Component inquiriesResultsComponent = forType(InquiriesResultsComponent.class);
         Component homeComponent = forType(InitialPageComponent.class);
         Component menuComponent = new MenuComponent(menu);
 
@@ -66,7 +68,7 @@ public class ExecutionCourseListener {
         Page.create(newSite, menu, null, OBJECTIVES_TITLE, true, "objectives", user, forType(ObjectivesComponent.class), menuComponent);
         Page.create(newSite, menu, null, LESSON_PLAN_TITLE, true, "lessonPlan", user, forType(LessonPlanComponent.class), menuComponent);
         Page.create(newSite, menu, null, PROGRAM_TITLE, true, "program", user, forType(ObjectivesComponent.class), menuComponent);
-        Page.create(newSite, menu, null, INQUIRIES_RESULTS_TITLE, true, "inqueriesResults", user, inquiriesResultsComponent, menuComponent);
+        //Page.create(newSite, menu, null, INQUIRIES_RESULTS_TITLE, true, "inqueriesResults", user, inquiriesResultsComponent, menuComponent);
         Page.create(newSite, menu, null, SHIFTS_TITLE, true, "shifts", user, forType(ExecutionCourseComponent.class), menuComponent);
         Page.create(newSite, menu, null, ANNOUNCEMENTS_TITLE, true, "category", user, announcementsComponent, menuComponent);
         Page.create(newSite, menu, null, SUMMARIES_TITLE, true, "category", user, summariesComponent, menuComponent);

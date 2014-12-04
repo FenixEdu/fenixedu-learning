@@ -1,19 +1,19 @@
 package org.fenixedu.learning.domain;
 
 import com.google.common.collect.Maps;
-import net.sourceforge.fenixedu.domain.Degree;
-import net.sourceforge.fenixedu.domain.ExecutionYear;
-import net.sourceforge.fenixedu.domain.thesis.Thesis;
-import net.sourceforge.fenixedu.domain.thesis.ThesisState;
+import org.fenixedu.academic.domain.Degree;
+import org.fenixedu.academic.domain.ExecutionYear;
+import org.fenixedu.academic.domain.thesis.Thesis;
+import org.fenixedu.academic.domain.thesis.ThesisState;
 
 import java.util.*;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.groupingBy;
-import static net.sourceforge.fenixedu.domain.ExecutionYear.REVERSE_COMPARATOR_BY_YEAR;
-import static net.sourceforge.fenixedu.domain.thesis.ThesisState.*;
-import static net.sourceforge.fenixedu.domain.thesis.ThesisState.REVISION;
-import static net.sourceforge.fenixedu.domain.thesis.ThesisState.SUBMITTED;
+import static org.fenixedu.academic.domain.ExecutionYear.REVERSE_COMPARATOR_BY_YEAR;
+import static org.fenixedu.academic.domain.thesis.ThesisState.*;
+import static org.fenixedu.academic.domain.thesis.ThesisState.REVISION;
+import static org.fenixedu.academic.domain.thesis.ThesisState.SUBMITTED;
 
 /**
  * Created by borgez on 25-11-2014.
