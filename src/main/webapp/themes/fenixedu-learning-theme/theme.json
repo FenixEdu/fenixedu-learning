@@ -1,6 +1,6 @@
 {
     "type": "fenixedu-learning-theme",
-    "name": "FenixEDU Learning Theme",
+    "name": "FenixEdu Learning Theme",
     "description": "This is the theme for FenixEdu Learning",
     "extends": "cms-default-theme",
     "templates": {

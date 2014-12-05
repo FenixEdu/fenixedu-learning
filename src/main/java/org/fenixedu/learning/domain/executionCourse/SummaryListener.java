@@ -17,7 +17,7 @@ import com.google.common.base.Strings;
 
 public class SummaryListener {
 
-    public static final String BUNDLE = "resources.FenixEduCMSResources";
+    public static final String BUNDLE = "resources.FenixEduLearningResources";
     public static final LocalizedString SUMMARIES_TITLE = getLocalizedString(BUNDLE, "label.summaries");
     public static final String SUMMARIES_CATEGORY = "summary";
 

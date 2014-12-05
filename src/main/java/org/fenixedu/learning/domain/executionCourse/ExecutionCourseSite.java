@@ -2,6 +2,7 @@ package org.fenixedu.learning.domain.executionCourse;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+
 import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.academic.domain.accessControl.StudentGroup;
 import org.fenixedu.academic.domain.accessControl.StudentSharingDegreeOfCompetenceOfExecutionCourseGroup;
@@ -11,10 +12,13 @@ import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.groups.AnyoneGroup;
 import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.bennu.core.groups.LoggedGroup;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.bennu.portal.domain.MenuContainer;
 import org.fenixedu.bennu.portal.domain.PortalConfiguration;
 import org.fenixedu.cms.domain.CMSFolder;
 import org.fenixedu.commons.i18n.LocalizedString;
+
 import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
@@ -59,10 +63,19 @@ public class ExecutionCourseSite extends ExecutionCourseSite_Base {
         super.delete();
     }
 
-    private CMSFolder folderForPath(MenuContainer parent, String path, LocalizedString description) {
+    private CMSFolder folderForPath(MenuContainer parent, String path) {
+
+        LocalizedString.Builder description = new LocalizedString.Builder();
+        CoreConfiguration
+                .supportedLocales()
+                .stream()
+                .forEach(
+                        l -> description.with(l,
+                                BundleUtil.getString("resources.FenixEduLearningResources", l, "label.course.folder.description")));
+
         return parent.getOrderedChild().stream().filter(item -> item.getPath().equals(path))
                 .map(item -> item.getAsMenuFunctionality().getCmsFolder()).findAny()
-                .orElseGet(() -> new CMSFolder(parent, path, description));
+                .orElseGet(() -> new CMSFolder(parent, path, description.build()));
     }
 
     public List<Group> getContextualPermissionGroups() {

@@ -19,7 +19,7 @@ import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
 import static org.fenixedu.cms.domain.component.Component.forType;
 
 public class ExecutionCourseListener {
-    public static final String BUNDLE = "resources.FenixEduCMSResources";
+    public static final String BUNDLE = "resources.FenixEduLearningResources";
 
     public static final LocalizedString ANNOUNCEMENTS_TITLE = getLocalizedString(BUNDLE, "label.announcements");
     public static final LocalizedString VIEW_POST_TITLE = getLocalizedString(BUNDLE, "label.viewPost");
@@ -36,7 +36,7 @@ public class ExecutionCourseListener {
     private static final LocalizedString INQUIRIES_RESULTS_TITLE = getLocalizedString(BUNDLE, "label.inquiriesResults");
     private static final LocalizedString SUMMARIES_TITLE = getLocalizedString(BUNDLE, "label.summaries");
     private static final LocalizedString SHIFTS_TITLE = getLocalizedString(BUNDLE, "label.shifts");
-    public static final LocalizedString MENU_TITLE = getLocalizedString("resources.FenixEduCMSResources", "label.menu");
+    public static final LocalizedString MENU_TITLE = getLocalizedString("resources.FenixEduLearningResources", "label.menu");
 
     public static ExecutionCourseSite create(ExecutionCourse executionCourse) {
         final ExecutionCourseSite newSite = new ExecutionCourseSite(executionCourse);
