@@ -35,7 +35,7 @@ public class ExecutionCourseSite extends ExecutionCourseSite_Base {
         checkNotNull(executionCourse);
         setExecutionCourse(executionCourse);
         setPublished(true);
-        setFolder(folderForPath(PortalConfiguration.getInstance().getMenu(), "courses", getDescription()));
+        setFolder(folderForPath(PortalConfiguration.getInstance().getMenu(), "courses"));
         setSlug(on("-").join(getExecutionCourse().getSigla(), getExecutionCourse().getExternalId()));
         setBennu(Bennu.getInstance());
     }
