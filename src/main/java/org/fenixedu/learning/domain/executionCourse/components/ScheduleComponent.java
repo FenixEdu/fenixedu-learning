@@ -1,26 +1,19 @@
 package org.fenixedu.learning.domain.executionCourse.components;
 
-import org.fenixedu.academic.domain.Coordinator;
-import org.fenixedu.academic.domain.ExecutionCourse;
-import org.fenixedu.cms.domain.Page;
-import org.fenixedu.learning.domain.ScheduleEventBean;
-import org.fenixedu.cms.domain.component.CMSComponent;
-import org.fenixedu.cms.domain.component.ComponentType;
-import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
-import org.fenixedu.cms.rendering.TemplateContext;
-import org.joda.time.DateTime;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.*;
-import static org.fenixedu.academic.domain.person.RoleType.RESOURCE_ALLOCATION_MANAGER;
 import static org.fenixedu.bennu.core.security.Authenticate.getUser;
 import static org.fenixedu.bennu.core.security.Authenticate.isLogged;
-import static org.joda.time.DateTime.*;
+
+import java.util.Collection;
+
+import org.fenixedu.academic.domain.Coordinator;
+import org.fenixedu.academic.domain.ExecutionCourse;
+import org.fenixedu.academic.domain.person.RoleType;
+import org.fenixedu.cms.domain.Page;
+import org.fenixedu.cms.domain.component.CMSComponent;
+import org.fenixedu.cms.domain.component.ComponentType;
+import org.fenixedu.cms.rendering.TemplateContext;
+import org.fenixedu.learning.domain.ScheduleEventBean;
+import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 
 @ComponentType(name = "Execution Course Schedule", description = "Schedule of an execution course")
 public class ScheduleComponent implements CMSComponent {
@@ -41,7 +34,7 @@ public class ScheduleComponent implements CMSComponent {
     private boolean hasPermissionToViewSchedule(ExecutionCourse executionCourse) {
         boolean isOpenPeriod = !executionCourse.getExecutionPeriod().isNotOpen();
         boolean isLogged = isLogged();
-        boolean isAllocationManager = getUser().getPerson().hasRole(RESOURCE_ALLOCATION_MANAGER);
+        boolean isAllocationManager = RoleType.RESOURCE_ALLOCATION_MANAGER.isMember(getUser());
         boolean isCoordinator =
                 executionCourse.getDegreesSortedByDegreeName().stream()
                         .flatMap(degree -> degree.getCurrentCoordinators().stream()).map(Coordinator::getPerson)

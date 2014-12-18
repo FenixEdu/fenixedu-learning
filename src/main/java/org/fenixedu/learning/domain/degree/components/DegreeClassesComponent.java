@@ -5,8 +5,6 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toCollection;
 import static org.fenixedu.academic.domain.ExecutionSemester.readActualExecutionSemester;
 import static org.fenixedu.academic.domain.SchoolClass.COMPARATOR_BY_NAME;
-import static org.fenixedu.academic.domain.person.RoleType.COORDINATOR;
-import static org.fenixedu.academic.domain.person.RoleType.RESOURCE_ALLOCATION_MANAGER;
 import static org.fenixedu.academic.util.PeriodState.NOT_OPEN;
 import static org.fenixedu.academic.util.PeriodState.OPEN;
 import static org.fenixedu.bennu.core.security.Authenticate.getUser;
@@ -17,9 +15,13 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Predicate;
 
+import org.fenixedu.academic.domain.Degree;
+import org.fenixedu.academic.domain.DegreeCurricularPlan;
+import org.fenixedu.academic.domain.ExecutionSemester;
+import org.fenixedu.academic.domain.Person;
+import org.fenixedu.academic.domain.SchoolClass;
+import org.fenixedu.academic.domain.person.RoleType;
 import org.fenixedu.academic.dto.InfoDegree;
-import org.fenixedu.academic.domain.*;
-
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
@@ -64,8 +66,8 @@ public class DegreeClassesComponent extends DegreeSiteComponent {
 
     private boolean canViewNextExecutionSemester(ExecutionSemester nextExecutionSemester) {
         Predicate<Person> hasPerson = person -> person != null;
-        Predicate<Person> isCoordinator = person -> person.hasRole(COORDINATOR);
-        Predicate<Person> isManager = person -> person.hasRole(RESOURCE_ALLOCATION_MANAGER);
+        Predicate<Person> isCoordinator = person -> RoleType.COORDINATOR.isMember(person.getUser());
+        Predicate<Person> isManager = person -> RoleType.RESOURCE_ALLOCATION_MANAGER.isMember(person.getUser());
         return nextExecutionSemester.getState() == OPEN
                 || (nextExecutionSemester.getState() == NOT_OPEN && getUser() != null && hasPerson.and(
                         isManager.or(isCoordinator)).test(getUser().getPerson()));

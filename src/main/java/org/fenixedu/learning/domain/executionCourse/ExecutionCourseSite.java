@@ -1,7 +1,11 @@
 package org.fenixedu.learning.domain.executionCourse;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
+import static com.google.common.base.Joiner.on;
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.academic.domain.accessControl.StudentGroup;
@@ -22,12 +26,7 @@ import org.fenixedu.commons.i18n.LocalizedString;
 import pt.ist.fenixframework.Atomic;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import static com.google.common.base.Joiner.on;
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.collect.Lists;
 
 public class ExecutionCourseSite extends ExecutionCourseSite_Base {
 
