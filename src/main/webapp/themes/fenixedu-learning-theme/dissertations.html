@@ -4,7 +4,7 @@
     <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown">{{ optionName }} <span class="caret"></span></button>
     <ul class="dropdown-menu">
         <li>
-            <a class="text-left" href="#" onclick="select('{{ optionLabel }}', null);">{{ i18n('resources.FenixEduCMSResources', 'label.viewAll') }}</a>
+            <a class="text-left" href="#" onclick="select('{{ optionLabel }}', null);">{{ i18n('resources.FenixEduLearningResources', 'label.viewAll') }}</a>
             {% lazyFor option in options %}
                 {% set optionId = optionLabel equals 'state' ? option.key : option.externalId %}
                 {% set optionValue = optionLabel equals 'state' ? option.key : option.name %}
@@ -24,7 +24,7 @@
             <li class="dropdown">{{ filterOption('Degree', 'degree', degrees) }}</li>
             <li>
                 <button type="button" class="btn btn-primary dropdown-toggle btn-sm" onclick="reset();">
-                    {{ i18n('resources.FenixEduCMSResources', 'label.viewAll') }}
+                    {{ i18n('resources.FenixEduLearningResources', 'label.viewAll') }}
                 </button>
             </li>
         </ul>
