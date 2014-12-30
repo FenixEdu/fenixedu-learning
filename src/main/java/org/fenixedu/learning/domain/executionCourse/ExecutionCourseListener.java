@@ -1,5 +1,8 @@
 package org.fenixedu.learning.domain.executionCourse;
 
+import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
+import static org.fenixedu.cms.domain.component.Component.forType;
+
 import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
@@ -7,16 +10,22 @@ import org.fenixedu.cms.domain.CMSTheme;
 import org.fenixedu.cms.domain.Category;
 import org.fenixedu.cms.domain.Menu;
 import org.fenixedu.cms.domain.Page;
+import org.fenixedu.cms.domain.Site;
 import org.fenixedu.cms.domain.component.Component;
 import org.fenixedu.cms.domain.component.ListCategoryPosts;
 import org.fenixedu.cms.domain.component.MenuComponent;
 import org.fenixedu.cms.domain.component.ViewPost;
-import org.fenixedu.learning.domain.executionCourse.components.*;
 import org.fenixedu.commons.i18n.LocalizedString;
-
-
-import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
-import static org.fenixedu.cms.domain.component.Component.forType;
+import org.fenixedu.learning.domain.executionCourse.components.BibliographicReferencesComponent;
+import org.fenixedu.learning.domain.executionCourse.components.EvaluationMethodsComponent;
+import org.fenixedu.learning.domain.executionCourse.components.EvaluationsComponent;
+import org.fenixedu.learning.domain.executionCourse.components.ExecutionCourseComponent;
+import org.fenixedu.learning.domain.executionCourse.components.GroupsComponent;
+import org.fenixedu.learning.domain.executionCourse.components.InitialPageComponent;
+import org.fenixedu.learning.domain.executionCourse.components.LessonPlanComponent;
+import org.fenixedu.learning.domain.executionCourse.components.MarksComponent;
+import org.fenixedu.learning.domain.executionCourse.components.ObjectivesComponent;
+import org.fenixedu.learning.domain.executionCourse.components.ScheduleComponent;
 
 public class ExecutionCourseListener {
     public static final String BUNDLE = "resources.FenixEduLearningResources";
@@ -42,12 +51,15 @@ public class ExecutionCourseListener {
         final ExecutionCourseSite newSite = new ExecutionCourseSite(executionCourse);
         executionCourse.setCmsSite(newSite);
         final Menu menu = new Menu(newSite, MENU_TITLE);
-        final User user = Authenticate.getUser();
-
         newSite.setTheme(CMSTheme.forType("fenixedu-learning-theme"));
+        createDefaultContents(newSite, menu, Authenticate.getUser());
+        return newSite;
+    }
 
-        Category summariesCategory = newSite.categoryForSlug("summary", ANNOUNCEMENTS_TITLE);
-        Category announcementsCategory = newSite.categoryForSlug("announcement", ANNOUNCEMENTS_TITLE);
+    public static void createDefaultContents(Site site, Menu menu, User author) {
+
+        Category summariesCategory = site.categoryForSlug("summary", ANNOUNCEMENTS_TITLE);
+        Category announcementsCategory = site.categoryForSlug("announcement", ANNOUNCEMENTS_TITLE);
 
         ListCategoryPosts summariesComponent = new ListCategoryPosts(summariesCategory);
         ListCategoryPosts announcementsComponent = new ListCategoryPosts(announcementsCategory);
@@ -59,24 +71,32 @@ public class ExecutionCourseListener {
         Component homeComponent = forType(InitialPageComponent.class);
         Component menuComponent = new MenuComponent(menu);
 
-        Page initialPage = Page.create(newSite, menu, null, INITIAL_PAGE_TITLE, true, "firstPage", user, homeComponent, announcementsComponent, menuComponent);
-        Page.create(newSite, menu, null, GROUPS_TITLE, true, "groupings", user, forType(GroupsComponent.class), menuComponent);
-        Page.create(newSite, menu, null, EVALUATIONS_TITLE, true, "evaluations", user, forType(EvaluationsComponent.class), menuComponent);
-        Page.create(newSite, menu, null, REFERENCES_TITLE, true, "bibliographicReferences", user, referencesComponent, menuComponent);
-        Page.create(newSite, menu, null, SCHEDULE_TITLE, true, "calendarEvents", user, forType(ScheduleComponent.class), menuComponent);
-        Page.create(newSite, menu, null, EVALUATION_METHOD_TITLE, true, "evaluationMethods", user, evaluationMethodsComponent, menuComponent);
-        Page.create(newSite, menu, null, OBJECTIVES_TITLE, true, "objectives", user, forType(ObjectivesComponent.class), menuComponent);
-        Page.create(newSite, menu, null, LESSON_PLAN_TITLE, true, "lessonPlan", user, forType(LessonPlanComponent.class), menuComponent);
-        Page.create(newSite, menu, null, PROGRAM_TITLE, true, "program", user, forType(ObjectivesComponent.class), menuComponent);
+        Page initialPage =
+                Page.create(site, menu, null, INITIAL_PAGE_TITLE, true, "firstPage", author, homeComponent,
+                        announcementsComponent, menuComponent);
+        Page.create(site, menu, null, GROUPS_TITLE, true, "groupings", author, forType(GroupsComponent.class), menuComponent);
+        Page.create(site, menu, null, EVALUATIONS_TITLE, true, "evaluations", author, forType(EvaluationsComponent.class),
+                menuComponent);
+        Page.create(site, menu, null, REFERENCES_TITLE, true, "bibliographicReferences", author, referencesComponent,
+                menuComponent);
+        Page.create(site, menu, null, SCHEDULE_TITLE, true, "calendarEvents", author, forType(ScheduleComponent.class),
+                menuComponent);
+        Page.create(site, menu, null, EVALUATION_METHOD_TITLE, true, "evaluationMethods", author, evaluationMethodsComponent,
+                menuComponent);
+        Page.create(site, menu, null, OBJECTIVES_TITLE, true, "objectives", author, forType(ObjectivesComponent.class),
+                menuComponent);
+        Page.create(site, menu, null, LESSON_PLAN_TITLE, true, "lessonPlan", author, forType(LessonPlanComponent.class),
+                menuComponent);
+        Page.create(site, menu, null, PROGRAM_TITLE, true, "program", author, forType(ObjectivesComponent.class), menuComponent);
         //Page.create(newSite, menu, null, INQUIRIES_RESULTS_TITLE, true, "inqueriesResults", user, inquiriesResultsComponent, menuComponent);
-        Page.create(newSite, menu, null, SHIFTS_TITLE, true, "shifts", user, forType(ExecutionCourseComponent.class), menuComponent);
-        Page.create(newSite, menu, null, ANNOUNCEMENTS_TITLE, true, "category", user, announcementsComponent, menuComponent);
-        Page.create(newSite, menu, null, SUMMARIES_TITLE, true, "category", user, summariesComponent, menuComponent);
-        Page.create(newSite, menu, null, MARKS_TITLE, true, "marks", user, forType(MarksComponent.class), menuComponent);
-        Page.create(newSite, null, null, VIEW_POST_TITLE, true, "view", user, forType(ViewPost.class), menuComponent);
+        Page.create(site, menu, null, SHIFTS_TITLE, true, "shifts", author, forType(ExecutionCourseComponent.class),
+                menuComponent);
+        Page.create(site, menu, null, ANNOUNCEMENTS_TITLE, true, "category", author, announcementsComponent, menuComponent);
+        Page.create(site, menu, null, SUMMARIES_TITLE, true, "category", author, summariesComponent, menuComponent);
+        Page.create(site, menu, null, MARKS_TITLE, true, "marks", author, forType(MarksComponent.class), menuComponent);
+        Page.create(site, null, null, VIEW_POST_TITLE, true, "view", author, forType(ViewPost.class), menuComponent);
         //TODO content search
-        newSite.setInitialPage(initialPage);
+        site.setInitialPage(initialPage);
 
-        return newSite;
     }
 }
