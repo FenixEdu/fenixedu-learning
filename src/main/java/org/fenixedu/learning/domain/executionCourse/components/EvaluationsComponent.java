@@ -5,12 +5,11 @@ import java.util.stream.Collectors;
 
 import org.fenixedu.academic.domain.Exam;
 import org.fenixedu.academic.domain.ExecutionCourse;
-import org.fenixedu.academic.domain.onlineTests.OnlineTest;
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.CMSComponent;
 import org.fenixedu.cms.domain.component.ComponentType;
-import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 import org.fenixedu.cms.rendering.TemplateContext;
+import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 
 @ComponentType(name = "Evaluations", description = "Evaluations for an Execution Course")
 public class EvaluationsComponent implements CMSComponent {
@@ -18,9 +17,7 @@ public class EvaluationsComponent implements CMSComponent {
     @Override
     public void handle(Page page, TemplateContext componentContext, TemplateContext globalContext) {
         ExecutionCourse executionCourse = ((ExecutionCourseSite) page.getSite()).getExecutionCourse();
-        globalContext.put("evaluations", executionCourse.getAssociatedEvaluationsSet());
         globalContext.put("comment", executionCourse.getComment());
-        globalContext.put("onlineTests", OnlineTest.readOnlineTestsByExecutionCourse(executionCourse));
         globalContext.put("adHocEvaluations", executionCourse.getOrderedAssociatedAdHocEvaluations());
         globalContext.put("projects", executionCourse.getAssociatedProjects());
         globalContext.put("publishedExams", publishedExams(executionCourse));

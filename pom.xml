@@ -69,11 +69,6 @@
             <artifactId>jsoup</artifactId>
             <version>${version.org.jsoup.jsoup}</version>
         </dependency>
-		<dependency>
-			<groupId>pt.ist</groupId>
-    		<artifactId>fenixedu-ist-onlinetests</artifactId>
-    		<version>4.0.0-SNAPSHOT</version>
-		</dependency>
     </dependencies>
         <repositories>
                 <repository>
