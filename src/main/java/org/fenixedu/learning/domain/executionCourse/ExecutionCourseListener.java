@@ -13,7 +13,6 @@ import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.Site;
 import org.fenixedu.cms.domain.component.Component;
 import org.fenixedu.cms.domain.component.ListCategoryPosts;
-import org.fenixedu.cms.domain.component.MenuComponent;
 import org.fenixedu.cms.domain.component.ViewPost;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.learning.domain.executionCourse.components.BibliographicReferencesComponent;
@@ -50,7 +49,8 @@ public class ExecutionCourseListener {
     public static ExecutionCourseSite create(ExecutionCourse executionCourse) {
         final ExecutionCourseSite newSite = new ExecutionCourseSite(executionCourse);
         executionCourse.setCmsSite(newSite);
-        final Menu menu = new Menu(newSite, MENU_TITLE);
+        final Menu menu = new Menu(newSite);
+        menu.setName(MENU_TITLE);
         newSite.setTheme(CMSTheme.forType("fenixedu-learning-theme"));
         createDefaultContents(newSite, menu, Authenticate.getUser());
         return newSite;
@@ -58,8 +58,8 @@ public class ExecutionCourseListener {
 
     public static void createDefaultContents(Site site, Menu menu, User author) {
 
-        Category summariesCategory = site.categoryForSlug("summary", ANNOUNCEMENTS_TITLE);
-        Category announcementsCategory = site.categoryForSlug("announcement", ANNOUNCEMENTS_TITLE);
+        Category summariesCategory = site.getOrCreateCategoryForSlug("summary", ANNOUNCEMENTS_TITLE);
+        Category announcementsCategory = site.getOrCreateCategoryForSlug("announcement", ANNOUNCEMENTS_TITLE);
 
         ListCategoryPosts summariesComponent = new ListCategoryPosts(summariesCategory);
         ListCategoryPosts announcementsComponent = new ListCategoryPosts(announcementsCategory);
@@ -69,32 +69,24 @@ public class ExecutionCourseListener {
         // TODO: recreate this somehow
         //Component inquiriesResultsComponent = forType(InquiriesResultsComponent.class);
         Component homeComponent = forType(InitialPageComponent.class);
-        Component menuComponent = new MenuComponent(menu);
 
         Page initialPage =
                 Page.create(site, menu, null, INITIAL_PAGE_TITLE, true, "firstPage", author, homeComponent,
-                        announcementsComponent, menuComponent);
-        Page.create(site, menu, null, GROUPS_TITLE, true, "groupings", author, forType(GroupsComponent.class), menuComponent);
-        Page.create(site, menu, null, EVALUATIONS_TITLE, true, "evaluations", author, forType(EvaluationsComponent.class),
-                menuComponent);
-        Page.create(site, menu, null, REFERENCES_TITLE, true, "bibliographicReferences", author, referencesComponent,
-                menuComponent);
-        Page.create(site, menu, null, SCHEDULE_TITLE, true, "calendarEvents", author, forType(ScheduleComponent.class),
-                menuComponent);
-        Page.create(site, menu, null, EVALUATION_METHOD_TITLE, true, "evaluationMethods", author, evaluationMethodsComponent,
-                menuComponent);
-        Page.create(site, menu, null, OBJECTIVES_TITLE, true, "objectives", author, forType(ObjectivesComponent.class),
-                menuComponent);
-        Page.create(site, menu, null, LESSON_PLAN_TITLE, true, "lessonPlan", author, forType(LessonPlanComponent.class),
-                menuComponent);
-        Page.create(site, menu, null, PROGRAM_TITLE, true, "program", author, forType(ObjectivesComponent.class), menuComponent);
+                        announcementsComponent);
+        Page.create(site, menu, null, GROUPS_TITLE, true, "groupings", author, forType(GroupsComponent.class));
+        Page.create(site, menu, null, EVALUATIONS_TITLE, true, "evaluations", author, forType(EvaluationsComponent.class));
+        Page.create(site, menu, null, REFERENCES_TITLE, true, "bibliographicReferences", author, referencesComponent);
+        Page.create(site, menu, null, SCHEDULE_TITLE, true, "calendarEvents", author, forType(ScheduleComponent.class));
+        Page.create(site, menu, null, EVALUATION_METHOD_TITLE, true, "evaluationMethods", author, evaluationMethodsComponent);
+        Page.create(site, menu, null, OBJECTIVES_TITLE, true, "objectives", author, forType(ObjectivesComponent.class));
+        Page.create(site, menu, null, LESSON_PLAN_TITLE, true, "lessonPlan", author, forType(LessonPlanComponent.class));
+        Page.create(site, menu, null, PROGRAM_TITLE, true, "program", author, forType(ObjectivesComponent.class));
         //Page.create(newSite, menu, null, INQUIRIES_RESULTS_TITLE, true, "inqueriesResults", user, inquiriesResultsComponent, menuComponent);
-        Page.create(site, menu, null, SHIFTS_TITLE, true, "shifts", author, forType(ExecutionCourseComponent.class),
-                menuComponent);
-        Page.create(site, menu, null, ANNOUNCEMENTS_TITLE, true, "category", author, announcementsComponent, menuComponent);
-        Page.create(site, menu, null, SUMMARIES_TITLE, true, "category", author, summariesComponent, menuComponent);
-        Page.create(site, menu, null, MARKS_TITLE, true, "marks", author, forType(MarksComponent.class), menuComponent);
-        Page.create(site, null, null, VIEW_POST_TITLE, true, "view", author, forType(ViewPost.class), menuComponent);
+        Page.create(site, menu, null, SHIFTS_TITLE, true, "shifts", author, forType(ExecutionCourseComponent.class));
+        Page.create(site, menu, null, ANNOUNCEMENTS_TITLE, true, "category", author, announcementsComponent);
+        Page.create(site, menu, null, SUMMARIES_TITLE, true, "category", author, summariesComponent);
+        Page.create(site, menu, null, MARKS_TITLE, true, "marks", author, forType(MarksComponent.class));
+        Page.create(site, null, null, VIEW_POST_TITLE, true, "view", author, forType(ViewPost.class));
         //TODO content search
         site.setInitialPage(initialPage);
 

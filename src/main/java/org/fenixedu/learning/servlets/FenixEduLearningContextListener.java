@@ -21,7 +21,8 @@ public class FenixEduLearningContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         Signal.register(Summary.CREATE_SIGNAL, (DomainObjectEvent<Summary> event) -> {
-            SummaryListener.updatePost(new Post(), event.getInstance());
+            Summary summary = event.getInstance();
+            SummaryListener.updatePost(new Post(summary.getExecutionCourse().getCmsSite()), summary);
         });
         FenixFramework.getDomainModel().registerDeletionListener(Summary.class, (summary) -> {
             Post post = summary.getPost();
