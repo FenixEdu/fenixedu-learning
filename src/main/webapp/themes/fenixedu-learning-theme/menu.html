@@ -32,7 +32,7 @@
 
 <nav class="col-sm-3 blog-sidebar">
   <!-- REGULAR MENU -->
-    {% for menu in menus.values() %}
+    {% for menu in menus.values %}
         <div class="sidebar-module">
             <h4>{{ menu.name.content }}</h4>
             {{ menuChildren(menu.children) }}
