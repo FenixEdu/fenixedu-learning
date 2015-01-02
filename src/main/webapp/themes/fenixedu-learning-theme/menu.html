@@ -30,11 +30,16 @@
     {% endif %}
 {% endmacro %}
 
-<nav class="col-sm-3 blog-sidebar">
+<nav class="col-sm-3">
   <!-- REGULAR MENU -->
+    <div class="pull-right" style="margin-top: 6px">
+        {% for locale in app.supportedLocales %}
+            <a class="locale-changer {% if locale == app.locale %}active{% endif %}" title="{{locale.displayName}}" onclick="setLang('{{locale}}')">{{locale.language}}</a>
+        {% endfor %}
+    </div>
     {% for menu in menus.values %}
         <div class="sidebar-module">
-            <h4>{{ menu.name.content }}</h4>
+            <h5 class="menu-header">{{ menu.name.content }}</h5>
             {{ menuChildren(menu.children) }}
         </div>
     {% endfor %}
@@ -42,10 +47,8 @@
     <div class="sidebar-module">
         <h4>Subscribe</h4>
 
-        <p><a href="{{site.rssUrl}}"><img src="{{staticDir}}/images/rss.svg" height="16"/> RSS for {{site.name.content}}</a></p>
-        {% if category != null %}
-            <a href="{{category.rssUrl}}"><img src="{{staticDir}}/images/rss.svg" height="16"/> RSS for {{category.name.content}}</a>
-        {% endif %}
+        <p><img src="{{staticDir}}/images/rss.svg" height="16"/> <a href="{{site.rssUrl}}">Anúncios</a></p>
+        <p><img src="{{staticDir}}/images/rss.svg" height="16"/> <a href="{{category.rssUrl}}">Sumários</a></p>
     </div>
 </nav>
 
@@ -58,17 +61,4 @@
   });
 </script>
 
-<style>
-    .menuItem>.children {
-        display: none;
-    }
-    .menuItem.open>.children {
-        display: block;
-    }
-    .menuItem.active a {
-        background-color: #f5f6f7;
-    }
-    .menuItem.open > .children {
-        padding-left: 8px;
-    }
-</style>
+<script>setLang=function(l){$.post('{{request.contextPath}}/api/bennu-core/profile/locale/'+l.replace('_', '-')).always(function(){location.reload();});}</script>

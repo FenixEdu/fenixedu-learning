@@ -26,8 +26,11 @@
 {% block content %}
 
     {% if attendsMap is not empty and entries(attendsMap) is not empty %}
-        <table class="table">
+
+        <p><em>{{ i18n('resources.ApplicationResources', 'classification.nonOfficial.information') }}</em></p>
+        <table class="table table-condensed">
             <tr>
+                <th nowrap>{{ i18n('resources.ApplicationResources', 'label.username') }}</th>
                 <th nowrap>{{ i18n('resources.ApplicationResources', 'label.number') }}</th>
                 <th nowrap>{{ i18n('resources.ApplicationResources', 'label.name') }}</th>
                 <th nowrap>{{ i18n('resources.ApplicationResources', 'label.Degree') }}</th>
@@ -39,6 +42,7 @@
                 {% set attends = attendEntry.key %}
                 {% set evaluations = attendEntry.value %}
                 <tr>
+                    <td nowrap>{{ attends.registration.student.person.username }}</td>
                     <td nowrap>{{ attends.registration.number }}</td>
                     <td nowrap>{{ attends.registration.person.name }}</td>
                     <td nowrap>{{ attends.registration.degreeCurricularPlanName }}</td>
@@ -50,7 +54,6 @@
             {% endfor %}
         </table>
 
-        <p>{{ i18n('resources.ApplicationResources', 'classification.nonOfficial.information') }}</p>
     {% else %}
         <h4>Ainda nao existem notas publicadas.</h4>
     {% endif %}

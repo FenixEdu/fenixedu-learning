@@ -24,6 +24,7 @@ import org.fenixedu.cms.domain.CMSFolder;
 import org.fenixedu.commons.i18n.LocalizedString;
 
 import pt.ist.fenixframework.Atomic;
+import pt.ist.fenixframework.DomainObject;
 import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 import com.google.common.collect.Lists;
@@ -86,6 +87,11 @@ public class ExecutionCourseSite extends ExecutionCourseSite_Base {
         groups.add(StudentSharingDegreeOfExecutionCourseGroup.get(getExecutionCourse()));
         groups.add(StudentSharingDegreeOfCompetenceOfExecutionCourseGroup.get(getExecutionCourse()));
         return groups;
+    }
+
+    @Override
+    public DomainObject getObject() {
+        return getExecutionCourse();
     }
 
 }

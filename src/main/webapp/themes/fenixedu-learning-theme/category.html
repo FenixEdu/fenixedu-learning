@@ -7,6 +7,7 @@
   {% if pagination.pages is not empty %}
       {% for post in pagination.posts %}
         {{ viewPost(post) }}
+        <hr />
       {% endfor %}
 
       {% if pagination.pages.size != 1 %}
@@ -14,9 +15,9 @@
       <ul class="pagination pagination-sm">
 
         {% if pagination.current != 1 %}
-          <li><a href="#">&laquo;</a></li>
+          <li><a href="?p={{pagination.current - 1}}">&laquo;</a></li>
         {% else %}
-          <li class="disabled"><a href="#">&laquo;</a></li>
+          <li class="disabled"><a href="">&laquo;</a></li>
         {% endif %}
 
         {% for i in pagination.pages %}
@@ -27,10 +28,10 @@
           {% endif %}
         {% endfor %}
 
-        {% if pagination.current != pagination.pages %}
-          <li><a href="#">&raquo;</a></li>
+        {% if pagination.current != pagination.pages.size %}
+          <li><a href="?p={{pagination.current + 1}}">&raquo;</a></li>
         {% else %}
-          <li class="disabled"><a href="#">&raquo;</a></li>
+          <li class="disabled"><a href="">&raquo;</a></li>
         {% endif %}
 
       </ul>

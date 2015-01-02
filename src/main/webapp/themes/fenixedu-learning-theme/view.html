@@ -1,26 +1,20 @@
 {% extends "fenixedu-learning-theme/base.html" %}
 
-{% macro viewPost(post) %}
+{% macro viewPost(post, page) %}
 
-    <div class="blog-post">
+    <div>
 
-        {% if not post.name equals site.name %}
-            <h2 class="blog-post-title"><a href="{{post.address}}">{{ post.name.content }}</a></h2>
+        {% if post.name.content != page.name.content %}
+            <h2 style="margin-top: 0"><a href="{{post.address}}">{{ post.name.content }}</a></h2>
+
+            <p class="small">
+                {{ post.creationDate|formatDate("d MMMM Y, HH:mm") }} - {{post.createdBy.displayName}}
+            </p>
         {% endif %}
-
-        <p class="small blog-post-meta">
-            {{ post.creationDate|formatDate("MMMM d, Y, H:m") }} by <a href="#">{{post.createdBy.username}}</a>
-
-        <span class="pull-right">
-            {% for cat in post.categoriesSet %}
-               <a href="{{cat.address}}" class="badge">{{cat.name.content}}</a>
-            {% endfor %}
-        </span>
-        </p>
 
         <p>{{post.body.content | raw}}</p>
 
-        {% if post.attachments.size != 0%}
+        {% if post.attachments.size != 0 %}
             <p>
             <h4>Attachments</h4>
             <ul>
@@ -31,10 +25,10 @@
             </p>
         {% endif %}
 
-    </div><!-- /.blog-post -->
+    </div>
 
 {% endmacro %}
 
 {% block content %}
-	{{ viewPost(post) }}
+	{{ viewPost(post, page) }}
 {% endblock content %}

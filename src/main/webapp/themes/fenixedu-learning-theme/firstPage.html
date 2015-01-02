@@ -23,12 +23,20 @@
 
 {% if pagination is not empty and pagination.posts is not empty %}
 	{% set announcement = pagination.posts | head %}
-	<blockquote>
-		{{ viewPost(announcement) }}
-		<footer>
-			<a href="{{site.address}}/announcements">Other Announcements</a>
-		</footer>
-	</blockquote>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<strong>Últimos anúncios</strong>
+			</div>
+			<div class="panel-body">
+				{{ viewPost(announcement) }}
+				<hr />
+				<ul>
+				{% for post in pagination.posts | tail %}
+					<li><small>{{ post.creationDate|formatDate("dd-MM-YYYY HH:mm") }}</small> <a href="{{post.address}}">{{post.name.content}}</a></li>
+				{% endfor %}
+				</ul>
+			</div>
+		</div>
 {% endif %}
 
 

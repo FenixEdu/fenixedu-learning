@@ -1,8 +1,9 @@
 body {
 	background-color: #fbfbfb;
-	font-family: 'Lato', Arial, Helvetica, sans-serif;
-	font-weight: 300 !important;
-	color: #384044;
+	background: url('//tecnico.ulisboa.pt/img/page/cubes.png') repeat scroll center top #FFF;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 13px;
+	color: #444;
 }
 
 a {
@@ -10,9 +11,8 @@ a {
 }
 
 footer {
-	border-top: 1px solid #eee;
 	padding:20px 30px 50px;
-	margin-top: 50px;
+	margin-top: 10px;
 }
 
 main {
@@ -35,7 +35,7 @@ main>div>.top-lead {
 .nav-pills>li>a {
 	color: #62696c;
 	border-radius: 1px;
-	padding: 5px 15px;
+	padding: 5px 10px;
 }
 
 * {
@@ -91,6 +91,14 @@ main>div>.top-lead {
 	font-size:12px
 }
 
+nav {
+	border-left: 1px solid #eee;
+}
+
+.main-content {
+	border-right: 1px solid #eee;
+}
+
 @media (max-width: 768px) {
 	nav {
 		border-top: 2px solid #eee;
@@ -104,4 +112,47 @@ main>div>.top-lead {
 	.blog-main {
 		padding-top: 10px;
 	}
+}
+
+.menu-header {
+	padding-bottom: 10px;
+	border-bottom: 1px solid #eee;
+}
+
+.site-header a, .site-header a:hover {
+	color: #444;
+	text-decoration: none;
+}
+
+.date-label {
+	background-color: #118cdc;
+}
+
+.locale-changer {
+    font-size: 11px;
+    font-weight: 400;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+.locale-changer.active, .locale-changer.active:hover {
+    color: #222;
+    border-bottom: none;
+    text-decoration: none;
+}
+.locale-changer:not(.active) {
+	cursor: pointer;
+}
+.locale-changer:not(:last-of-type):after {
+    content: '/';
+    font: normal 300 13px/1.2 "Helvetica Neue", sans-serif;
+    padding: 0 4px 0 7.5px;
+    color: #999;
+}
+
+.menuItem>.children {
+    display: none;
+}
+.menuItem.open>.children {
+    display: block;
+    padding-left: 15px;
 }

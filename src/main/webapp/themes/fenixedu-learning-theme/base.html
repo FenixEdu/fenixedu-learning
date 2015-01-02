@@ -1,20 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html dir="ltr" lang="{{app.locale}}">
   <head>
     <meta charset="utf-8">
+    <meta http-equiv="Content-Language" content="{{app.locale.language}}" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="Description" content="FenixEdu™ is an open-source academic information platform." />
+    <meta name="Keywords" content="FenixEdu, open-source, academic, information, platform, academic administration, higher education, e-learning" />
+    <meta name="Language" content="{{app.locale}}" />
+    <meta name="Robots" content="all" />
+    <meta name="Author" content="FenixEdu" />
+    <meta name="Email" content="hello@fenixedu.org" />
+    <meta name="Copyright" content="Técnico Lisboa - Instituto Superior Técnico" />
+    <meta name="Distribution" content="Global" />
+    <meta name="Rating" content="General" />
 
-    <title>{{ site.name.content }}</title>
-    
-    <!-- Bootstrap core CSS -->
+    <!-- OpenGraph Specific Metas -->
+    <meta property="og:title" content="FenixEdu™" />
+    <meta property="og:type" content="application" />
+    <meta property="og:url" content="http://www.fenixedu.org" />
+    <meta property="og:site_name" content="FenixEdu" />
+    <meta property="og:description" content="FenixEdu™ is an open-source academic information platform." />
+    <meta property="fb:profile_id" content="379238245509413" />
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.5">
+
+
+    <title>{{page.name.content}} · {{ site.name.content }}</title>
+
     <link href="{{ staticDir }}/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ staticDir }}/css/publicPages.css" rel="stylesheet">
     <script src="{{ staticDir }}/js/jquery-2.1.1.min.js" type="text/javascript"></script>
-
-    <!-- Custom styles for this template -->
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -81,24 +98,22 @@
     <div class="container">
 
       <div class="row">
-        <div class="blog-header col-sm-8">
-          <h1 class="blog-title">{{ site.name.content }}</h1>
+        <div class="col-sm-9">
+          <h1 class="site-header"><a href="{{site.address}}">{{ site.name.content }}</a> <small>{{site.siteObject.executionPeriod.semester}}º semestre {{site.siteObject.executionPeriod.executionYear.year}}</small></h1>
         </div>
-        <div class="col-sm-4 text-right hidden-xs">
+        <div class="col-sm-3 text-center hidden-xs">
           <h1><img class="logo" src="{{request.contextPath}}/api/bennu-portal/configuration/logo" /></h1>
         </div>
       </div>
 
       <main class="row">
 
-        <div class="col-sm-9 blog-main">
+        <div class="col-sm-9 main-content">
           <div class="lead top-lead">
             {{page.name.content}}
           </div>
-          <!-- Content -->
           {% block content %}{% endblock content %}
-          <!-- End Content -->
-        </div><!-- /.blog-main -->
+        </div>
         {% include "fenixedu-learning-theme/menu.html" %}
 
       </main><!-- /.row -->
@@ -113,6 +128,5 @@
     </footer>
 
     <script src="{{ staticDir }}/js/bootstrap.min.js" type="text/javascript" async></script>
-
   </body>
 </html>
