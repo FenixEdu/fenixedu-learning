@@ -1,12 +1,19 @@
 package org.fenixedu.learning.domain.degree.components;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toSet;
 import static org.fenixedu.academic.domain.ExecutionYear.readCurrentExecutionYear;
 import static pt.ist.fenixframework.FenixFramework.getDomainObject;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import org.fenixedu.academic.domain.CurricularCourse;
@@ -18,7 +25,6 @@ import org.fenixedu.academic.domain.degreeStructure.Context;
 import org.fenixedu.academic.domain.degreeStructure.CourseGroup;
 import org.fenixedu.academic.util.CurricularPeriodLabelFormatter;
 import org.fenixedu.academic.util.CurricularRuleLabelFormatter;
-
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.domain.wraps.Wrap;
@@ -34,17 +40,20 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
     @Override
     public void handle(Page page, TemplateContext componentContext, TemplateContext globalContext) {
         Degree degree = degree(page);
+        String pageUrl = pageForComponent(page.getSite(), CurricularCourseComponent.class).map(Page::getAddress).orElse(null);
         ExecutionYear selectedYear = selectedYear(globalContext.getRequestContext(), degree);
-        globalContext.put("courseGroups", courseGroups(degree, selectedYear));
-        globalContext.put("allCurricularCourses", allCurricularCourses(courseGroups(degree, selectedYear).collect(toSet())));
+        globalContext.put("courseGroups", courseGroups(degree, selectedYear, pageUrl));
+        globalContext.put("allCurricularCourses",
+                allCurricularCourses(courseGroups(degree, selectedYear, pageUrl).collect(toSet())));
 
-        globalContext.put("coursesByCurricularSemester", coursesByCurricularSemester(degree, selectedYear));
+        globalContext.put("coursesByCurricularSemester", coursesByCurricularSemester(degree, selectedYear, pageUrl));
         globalContext.put("years", degree.getDegreeCurricularPlansExecutionYears());
         globalContext.put("selectedYear", selectedYear);
     }
 
-    SortedMap<CurricularPeriod, Set<CurricularCourseWrap>> coursesByCurricularSemester(Degree degree, ExecutionYear year) {
-        return allCurricularCourses(courseGroups(degree, year).collect(toSet())).collect(
+    SortedMap<CurricularPeriod, Set<CurricularCourseWrap>> coursesByCurricularSemester(Degree degree, ExecutionYear year,
+            String pageUrl) {
+        return allCurricularCourses(courseGroups(degree, year, pageUrl).collect(toSet())).collect(
                 groupingBy(CurricularCourseWrap::getCurricularPeriod, TreeMap::new, toCollection(TreeSet::new)));
     }
 
@@ -54,9 +63,9 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
         return Stream.concat(fathers.stream().flatMap(CourseGroupWrap::getCurricularCourses), childrenCall);
     }
 
-    Stream<CourseGroupWrap> courseGroups(Degree degree, ExecutionYear year) {
+    Stream<CourseGroupWrap> courseGroups(Degree degree, ExecutionYear year, String pageUrl) {
         return degree.getDegreeCurricularPlansForYear(year).stream().filter(plan -> plan.isApproved() && plan.isActive())
-                .map(plan -> new CourseGroupWrap(null, plan.getRoot(), year.getFirstExecutionPeriod()));
+                .map(plan -> new CourseGroupWrap(null, plan.getRoot(), year.getFirstExecutionPeriod(), pageUrl));
     }
 
     ExecutionYear selectedYear(String[] requestContext, Degree degree) {
@@ -73,11 +82,13 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
         private final ExecutionSemester executionInterval;
         private final CourseGroup courseGroup;
         private final Context previous;
+        private final String pageUrl;
 
-        public CourseGroupWrap(Context previous, CourseGroup courseGroup, ExecutionSemester executionInterval) {
+        public CourseGroupWrap(Context previous, CourseGroup courseGroup, ExecutionSemester executionInterval, String pageUrl) {
             this.executionInterval = executionInterval;
             this.courseGroup = courseGroup;
             this.previous = previous;
+            this.pageUrl = pageUrl;
         }
 
         public boolean hasCurricularCourses() {
@@ -95,14 +106,15 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
 
         public Stream<CurricularCourseWrap> getCurricularCourses() {
             return courseGroup.getSortedOpenChildContextsWithCurricularCourses(executionInterval.getExecutionYear()).stream()
-                    .map(context -> new CurricularCourseWrap(context, executionInterval));
+                    .map(context -> new CurricularCourseWrap(context, executionInterval, pageUrl));
         }
 
         public Stream<CourseGroupWrap> getCourseGroups() {
             return courseGroup
                     .getSortedOpenChildContextsWithCourseGroups(executionInterval)
                     .stream()
-                    .map(context -> new CourseGroupWrap(context, (CourseGroup) context.getChildDegreeModule(), executionInterval));
+                    .map(context -> new CourseGroupWrap(context, (CourseGroup) context.getChildDegreeModule(), executionInterval,
+                            pageUrl));
         }
     }
 
@@ -110,9 +122,11 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
         private final Context context;
         private final ExecutionSemester executionInterval;
         private final CurricularCourse curricularCourse;
+        private final String pageUrl;
 
-        public CurricularCourseWrap(Context context, ExecutionSemester executionInterval) {
+        public CurricularCourseWrap(Context context, ExecutionSemester executionInterval, String pageUrl) {
             this.context = context;
+            this.pageUrl = pageUrl;
             this.curricularCourse = (CurricularCourse) context.getChildDegreeModule();
             this.executionInterval = executionInterval;
         }
@@ -126,7 +140,7 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
         }
 
         public String getUrl() {
-            return "curricular-course/" + curricularCourse.getExternalId();
+            return pageUrl + "/" + curricularCourse.getExternalId();
         }
 
         public String getContextInformation() {

@@ -24,7 +24,13 @@
 					<div class="col-md-4">
 						<h4>{{ i18n('resources.BolonhaManagerResources', 'year') }} {{ year }}</h4>
 						{% for class in classes %}
-							<p><a href="timetable/{{ class.externalId }}">{{ class.nome }}</a></p>
+							<p>
+								{% if timetablePage is not empty %}
+									<a href="{{ timetablePage }}/{{ class.externalId }}">{{ class.nome }}</a>
+								{% else %}
+									<span>{{ class.nome }}</span>
+								{% endif %}
+							</p>
 
 						{% endfor %}
 					</div>

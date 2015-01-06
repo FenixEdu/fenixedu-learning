@@ -38,6 +38,8 @@ public class DegreeClassesComponent extends DegreeSiteComponent {
     public void handle(Page page, TemplateContext componentContext, TemplateContext global) {
         Degree degree = degree(page);
         global.put("degreeInfo", InfoDegree.newInfoFromDomain(degree));
+        global.put("timetablePage",
+                pageForComponent(page.getSite(), ClassScheduleComponent.class).map(Page::getAddress).orElse(null));
 
         ExecutionSemester selectedSemester = getExecutionSemester(global.getRequestContext());
         ExecutionSemester otherSemester = getOtherExecutionSemester(selectedSemester);

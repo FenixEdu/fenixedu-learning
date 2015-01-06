@@ -7,27 +7,25 @@
 	{% set semester = executionCourseBySemesterAndCurricularYear.key %}
 	{% set executionCoursesByCurricularYears = executionCourseBySemesterAndCurricularYear.value %}
 	{% set numExecutionCourses = entries(executionCoursesByCurricularYears).size %}
-	{% set columnSize = numExecutionCourses > 0 ? ((12 / numExecutionCourses) % 12) : 12 %}
-		<h3 class="text-center">{{ semester.qualifiedName }}</h3>
+		<h3>{{ semester.qualifiedName }}</h3>
 
 		<div class="row">
 			{% for executionCoursesByYear in entries(executionCoursesByCurricularYears) %}
 				{% set year = executionCoursesByYear.key %}
 				{% set executionCourses = executionCoursesByYear.value %}
-				<div class="col-md-{{ columnSize }}">
-					<h4 class="text-center">
+				<div class="col-sm-12">
+					<h4>
 						{{ i18n('resources.PublicDegreeInformation', 'public.degree.information.label.year') }} {{ year }}
 					</h4>
 
-					<br />
-					
+					<ul>
 					{% for executionCourseWrap in executionCourses %}
-						<p><a href="{{ executionCourseWrap.executionCourse.cmsSite.fullUrl }}">{{ executionCourseWrap.executionCourseName }}</a></p>
-						<hr>
+						<li><a href="{{ executionCourseWrap.executionCourse.site.fullUrl }}">{{ executionCourseWrap.executionCourseName }}</a></li>
 					{% endfor %}
+					</ul>
 				</div>
 			{% else %}
-				<div class="col-md-12">
+				<div class="col-sm-12">
 					<p class="text-center"><em>There are no executions of curricular units for this execution period.</em></p>
 				</div>
 			{% endfor %}

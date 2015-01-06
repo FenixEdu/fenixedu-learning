@@ -99,7 +99,10 @@
 
       <div class="row">
         <div class="col-sm-9">
-          <h1 class="site-header"><a href="{{site.address}}">{{ site.name.content }}</a> <small>{{site.siteObject.executionPeriod.semester}}º semestre {{site.siteObject.executionPeriod.executionYear.year}}</small></h1>
+          <h1 class="site-header"><a href="{{site.address}}">{{ site.name.content }}</a>
+          {% if site.siteObject.executionPeriod is not empty %}
+            <small>{{site.siteObject.executionPeriod.semester}}º semestre {{site.siteObject.executionPeriod.executionYear.year}}</small></h1>
+          {% endif %}
         </div>
         <div class="col-sm-3 text-center hidden-xs">
           <h1><img class="logo" src="{{request.contextPath}}/api/bennu-portal/configuration/logo" /></h1>
@@ -121,10 +124,12 @@
     </div><!-- /.container -->
 
     <footer class="container">
-      {{app.title.content}}
-      <span class="pull-right">
-        {{app.copyright.content}}
-      </span>
+      <div class="col-sm-9">
+        {{app.title.content}}
+      </div>
+      <div class="col-sm-3 text-center">
+        <a class="brand" href="http://fenixedu.org"><img width="150" src="{{staticDir}}/images/logo_fenixedu_footer.svg" alt="Powered by FenixEdu"></a>
+      </div>
     </footer>
 
     <script src="{{ staticDir }}/js/bootstrap.min.js" type="text/javascript" async></script>

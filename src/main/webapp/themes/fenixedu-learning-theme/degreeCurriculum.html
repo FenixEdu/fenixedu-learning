@@ -1,32 +1,40 @@
 {% extends "fenixedu-learning-theme/base.html" %}
 
-{% block header %}
-	<script src="{{staticDir}}/js/bootstrap.min.js"></script>
-{% endblock header %}
-
 {% macro viewCurricularCourses(curricularCoursesStream) %}
 	{% set applicationBundle = 'resources.ApplicationResources' %}
 	{% lazyFor curricularCourse in curricularCoursesStream %}
-		<div class="row">
+		<div class="row small">
 			<!-- NAME -->
-			<div class="col-md-4">
-				<a href="{{ curricularCourse.url }}">{{ curricularCourse.name.content }} </a>
+			<div class="col-md-5">
+				<a href="{{ curricularCourse.url }}" style="font-size: 120%">{{ curricularCourse.name.content }} </a>
+				<div>
+					{{ curricularCourse.contextInformation }}
+				</div>
 			</div>
 
 			<!-- INFO -->
 			<div class="col-md-2">
-				<p><span class="context-info">{{ curricularCourse.contextInformation }}</span></p>
+				<p>
+					<span class="context-info">
+						{% if curricularCourse.isSemestrial %}
+							Semestral
+						{% else %}
+							Anual
+						{% endif %}
+					</span>
+					{% if curricularCourse.isOptional %}
+						({{ i18n(applicationBundle, 'label.degreeCurricularPlan.renderer.option') }})
+					{% else %}
+						({{ curricularCourse.regimeAcronym }})
+					{% endif %}
+				</p>
 			</div>
 
-			<!-- REGIME -->
-			<div class="col-md-1">
-				<p><span class="regime">
-				{% if curricularCourse.isOptional %}
-					{{ i18n(applicationBundle, 'label.degreeCurricularPlan.renderer.option') }}
-				{% else %}
-					{{ curricularCourse.regimeAcronym }}
-				{% endif %}
-				</span></p>
+			<div class="col-md-2">
+				<p>
+					{{ curricularCourse.ECTS }}
+					{{ i18n(applicationBundle, 'label.credits.abbreviation') }}
+				</p>
 			</div>
 
 			<!-- LOAD -->
@@ -47,21 +55,9 @@
 				</p>
 			</div>
 			
-			<!-- ECTS -->
-			<div class="col-md-1">
-				<p><span class="ects">
-					{{ curricularCourse.ECTS }}
-					{{ i18n(applicationBundle, 'label.credits.abbreviation') }}
-				</span></p>
-			</div>
-			
 			<!-- FREQUENCY -->
 			<div class="col-md-1">
-				{% if curricularCourse.isSemestrial %}
-					<p>Semestrial</p>
-				{% else %}
-					<p>Anual</p>
-				{% endif %}
+
 			</div>
 		</div>
 
@@ -133,23 +129,22 @@
     </ul>
 
 	<br />
-	
-		<div class="dropdown">
+	<div>
+		<button class="btn btn-sm btn-default pull-right" type="button" id="rules_button">
+			Show Rules
+		</button>
+		<div class="dropdown pull-right">
 			<button class="btn btn-sm btn-default dropdown-toggle" type="button" data-toggle="dropdown">
 				{{ selectedYear.year }} 
 				<span class="caret"></span>
 			</button>
-		
 			<ul class="dropdown-menu" role="menu">
 				{% for year in years %}
 					<li><a href="#">{{ year.year }}</a></li>
 				{% endfor %}
 			</ul>
-		<button class="btn btn-sm btn-default" type="button" id="rules_button">
-			Show Rules
-		</button>
-
 		</div>
+	</div>
 
 
     <div class="tab-content">
@@ -174,17 +169,12 @@
 
 	<style type="text/css">
 		.level {
-			margin-left: 20px;
-		}
-		p {
-			font-size: 85%;
-		}
-		a {
-			font-size: 110%;
+			margin-left: 10px;
 		}
 		.rule {
 			color: #888;
 			margin-top: 0px;
+			font-size: 90%;
 		}
 		hr {
 			margin-top: 5px;
