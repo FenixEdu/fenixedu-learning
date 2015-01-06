@@ -47,8 +47,9 @@
     <div class="sidebar-module">
         <h4>Subscribe</h4>
 
-        <p><img src="{{staticDir}}/images/rss.svg" height="16"/> <a href="{{site.rssUrl}}">Anúncios</a></p>
-        <p><img src="{{staticDir}}/images/rss.svg" height="16"/> <a href="{{category.rssUrl}}">Sumários</a></p>
+        {% lazyFor cat in site.siteObject.site.categoriesToShow %}
+          <p><img src="{{staticDir}}/images/rss.svg" height="16"/> <a href="{{cat.rssUrl}}">{{cat.name.content}}</a></p>
+        {% endLazyFor %}
     </div>
 </nav>
 

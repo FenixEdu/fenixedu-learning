@@ -48,7 +48,7 @@ public class ExecutionCourseListener {
 
     public static ExecutionCourseSite create(ExecutionCourse executionCourse) {
         final ExecutionCourseSite newSite = new ExecutionCourseSite(executionCourse);
-        executionCourse.setCmsSite(newSite);
+        executionCourse.setSite(newSite);
         final Menu menu = new Menu(newSite);
         menu.setName(MENU_TITLE);
         newSite.setTheme(CMSTheme.forType("fenixedu-learning-theme"));

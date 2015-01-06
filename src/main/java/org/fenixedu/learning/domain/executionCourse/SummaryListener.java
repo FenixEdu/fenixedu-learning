@@ -5,8 +5,11 @@ import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
 import java.util.Locale;
 import java.util.Optional;
 
-import org.fenixedu.academic.domain.*;
-
+import org.fenixedu.academic.domain.Person;
+import org.fenixedu.academic.domain.Professorship;
+import org.fenixedu.academic.domain.ShiftType;
+import org.fenixedu.academic.domain.Summary;
+import org.fenixedu.academic.domain.Teacher;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.cms.domain.Post;
@@ -22,7 +25,7 @@ public class SummaryListener {
     public static final String SUMMARIES_CATEGORY = "summary";
 
     public static void updatePost(Post post, Summary summary) {
-        ExecutionCourseSite site = summary.getExecutionCourse().getCmsSite();
+        ExecutionCourseSite site = summary.getExecutionCourse().getSite();
 
         summary.setPost(post);
         post.setSlug("summary-" + summary.getOid());

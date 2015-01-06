@@ -10,7 +10,6 @@ import java.util.Map;
 import org.fenixedu.academic.domain.CurricularCourse;
 import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.academic.domain.ExecutionSemester;
-
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
@@ -59,7 +58,7 @@ public class CurricularCourseComponent extends DegreeSiteComponent {
         wrap.put("name", executionCourse.getNameI18N().toLocalizedString());
         wrap.put("executionYear", executionCourse.getExecutionYear().getYear());
         wrap.put("executionPeriod", executionCourse.getExecutionPeriod().getName());
-        wrap.put("url", executionCourse.getCmsSite() != null ? executionCourse.getCmsSite().getFullUrl() : "#");
+        wrap.put("url", executionCourse.getSite() != null ? executionCourse.getSite().getFullUrl() : "#");
         return wrap;
     }
 }

@@ -6,6 +6,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.academic.domain.accessControl.StudentGroup;
@@ -21,6 +22,8 @@ import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.bennu.portal.domain.MenuContainer;
 import org.fenixedu.bennu.portal.domain.PortalConfiguration;
 import org.fenixedu.cms.domain.CMSFolder;
+import org.fenixedu.cms.domain.Category;
+import org.fenixedu.cms.domain.wraps.Wrap;
 import org.fenixedu.commons.i18n.LocalizedString;
 
 import pt.ist.fenixframework.Atomic;
@@ -92,6 +95,11 @@ public class ExecutionCourseSite extends ExecutionCourseSite_Base {
     @Override
     public DomainObject getObject() {
         return getExecutionCourse();
+    }
+
+    public Stream<Wrap> getCategoriesToShow() {
+        return Stream.of(categoryForSlug("announcement"), categoryForSlug("summary")).filter(Objects::nonNull)
+                .map(Category::makeWrap);
     }
 
 }

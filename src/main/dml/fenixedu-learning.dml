@@ -19,7 +19,7 @@ relation DegreeSiteHasDegree {
 }
 
 relation ExecutionCourseFenixEduExecutionCourseSite {
-	executionCourse.ExecutionCourseSite playsRole cmsSite {
+	executionCourse.ExecutionCourseSite playsRole site {
 	    multiplicity 0..1;
     }
 	.org.fenixedu.academic.domain.ExecutionCourse playsRole executionCourse {

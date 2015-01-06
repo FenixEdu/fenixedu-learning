@@ -9,16 +9,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import com.google.common.collect.Sets;
 import org.fenixedu.academic.domain.Lesson;
 import org.fenixedu.academic.domain.SchoolClass;
-
 import org.fenixedu.cms.domain.Page;
-import org.fenixedu.learning.domain.ScheduleEventBean;
 import org.fenixedu.cms.domain.Site;
-import org.fenixedu.cms.domain.component.CMSComponent;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
+import org.fenixedu.learning.domain.ScheduleEventBean;
 import org.fenixedu.spaces.domain.Space;
 import org.joda.time.Interval;
 
@@ -53,7 +50,7 @@ public class ClassScheduleComponent extends DegreeSiteComponent {
     }
 
     private ScheduleEventBean createEventBean(Lesson lesson, Interval interval) {
-        Optional<Site> site = Optional.ofNullable(lesson.getExecutionCourse().getCmsSite());
+        Optional<Site> site = Optional.ofNullable(lesson.getExecutionCourse().getSite());
         String url = site.isPresent() ? site.get().getFullUrl() : "#";
         String executionCourseAcronym = lesson.getShift().getExecutionCourse().getPrettyAcronym();
         String shiftTypeAcronym = lesson.getShift().getShiftTypesCodePrettyPrint();
