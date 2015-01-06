@@ -10,7 +10,7 @@ relation SummaryPost {
 }
 
 relation DegreeSiteHasDegree {
-    degree.DegreeSite playsRole cmsSite {
+    degree.DegreeSite playsRole site {
         multiplicity 0..1;
     }
     .org.fenixedu.academic.domain.Degree playsRole degree {

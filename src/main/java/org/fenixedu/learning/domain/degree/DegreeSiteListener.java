@@ -9,6 +9,7 @@ import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.cms.domain.CMSTheme;
 import org.fenixedu.cms.domain.Menu;
 import org.fenixedu.cms.domain.Page;
+import org.fenixedu.cms.domain.Site;
 import org.fenixedu.cms.domain.component.Component;
 import org.fenixedu.cms.domain.component.ListCategoryPosts;
 import org.fenixedu.cms.domain.component.ViewPost;
@@ -52,32 +53,44 @@ public class DegreeSiteListener {
         newSite.setName(degree.getNameI18N().toLocalizedString());
         Menu menu = new Menu(newSite);
         menu.setName(MENU_TITLE);
-        User user = Authenticate.getUser();
 
         newSite.setTheme(CMSTheme.forType("fenixedu-learning-theme"));
 
-        Component announcementsComponent = new ListCategoryPosts(newSite.getOrCreateCategoryForSlug("announcement", ANNOUNCEMENTS_TITLE));
+        createDefaultContents(newSite, menu, Authenticate.getUser());
 
-        Page initialPage = Page.create(newSite, menu, null, DESCRIPTION_TITLE, true, "degreeDescription", user,
-                forType(DescriptionComponent.class), forType(LatestAnnouncementsComponent.class));
+        return newSite;
+    }
+
+    public static void createDefaultContents(Site newSite, Menu menu, User user) {
+        Component announcementsComponent =
+                new ListCategoryPosts(newSite.getOrCreateCategoryForSlug("announcement", ANNOUNCEMENTS_TITLE));
+
+        Page initialPage =
+                Page.create(newSite, menu, null, DESCRIPTION_TITLE, true, "degreeDescription", user,
+                        forType(DescriptionComponent.class), forType(LatestAnnouncementsComponent.class));
         Page.create(newSite, menu, null, ANNOUNCEMENTS_TITLE, true, "category", user, announcementsComponent);
-        Page.create(newSite, menu, null, TITLE_CURRICULUM, true, "degreeCurriculum", user, forType(DegreeCurriculumComponent.class));
+        Page.create(newSite, menu, null, TITLE_CURRICULUM, true, "degreeCurriculum", user,
+                forType(DegreeCurriculumComponent.class));
 
         Page.create(newSite, null, null, VIEW_POST_TITLE, true, "view", user, forType(ViewPost.class));
         Page.create(newSite, null, null, TITLE_THESIS, true, "dissertation", user, forType(ThesisComponent.class));
         Page.create(newSite, null, null, TITLE_CLASS, true, "calendarEvents", user, forType(ClassScheduleComponent.class));
-        Page.create(newSite, null, null, TITLE_CURRICULAR_COURSE, true, "curricularCourse", user, forType(CurricularCourseComponent.class));
+        Page.create(newSite, null, null, TITLE_CURRICULAR_COURSE, true, "curricularCourse", user,
+                forType(CurricularCourseComponent.class));
 
         Page.create(newSite, menu, null, THESES_TITLE, true, "dissertations", user, forType(DegreeDissertationsComponent.class));
-        Page.create(newSite, menu, null, REQUIREMENTS_TITLE, true, "accessRequirements", user, forType(DescriptionComponent.class));
-        Page.create(newSite, menu, null, PROFESSIONAL_STATUS_TITLE, true, "professionalStatus", user, forType(DescriptionComponent.class));
-        Page.create(newSite, menu, null, CURRICULAR_PLAN_TITLE, true, "curricularPlans", user, forType(DegreeCurricularPlansComponent.class));
-        Page.create(newSite, menu, null, EXECUTION_COURSE_SITES_TITLE, true, "degreeExecutionCourses", user, forType(DegreeExecutionCoursesComponent.class));
+        Page.create(newSite, menu, null, REQUIREMENTS_TITLE, true, "accessRequirements", user,
+                forType(DescriptionComponent.class));
+        Page.create(newSite, menu, null, PROFESSIONAL_STATUS_TITLE, true, "professionalStatus", user,
+                forType(DescriptionComponent.class));
+        Page.create(newSite, menu, null, CURRICULAR_PLAN_TITLE, true, "curricularPlans", user,
+                forType(DegreeCurricularPlansComponent.class));
+        Page.create(newSite, menu, null, EXECUTION_COURSE_SITES_TITLE, true, "degreeExecutionCourses", user,
+                forType(DegreeExecutionCoursesComponent.class));
         Page.create(newSite, menu, null, EVALUATIONS_TITLE, true, "calendarEvents", user, forType(DegreeEvaluations.class));
         Page.create(newSite, menu, null, CLASSES_TITLE, true, "degreeClasses", user, forType(DegreeClassesComponent.class));
 
         newSite.setInitialPage(initialPage);
 
-        return newSite;
     }
 }
