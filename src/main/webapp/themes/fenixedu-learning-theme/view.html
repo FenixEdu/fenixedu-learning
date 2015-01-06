@@ -7,6 +7,8 @@
         {% if post.name.content != page.name.content %}
             <h2 style="margin-top: 0"><a href="{{post.address}}">{{ post.name.content }}</a></h2>
 
+        {% if post.isVisible %}
+
             <p class="small">
                 {{ post.creationDate|formatDate("d MMMM Y, HH:mm") }} - {{post.createdBy.displayName}}
             </p>
@@ -25,7 +27,33 @@
             </p>
         {% endif %}
 
-    </div>
+
+        {% endif %}
+
+        {% else %}
+
+            {% if request.user.isAuthenticated %}
+                
+            <p>
+                {{ i18n('CmsExceptionResources', 'label.autenticated.private.post') }}
+            </p>
+
+            {% else %}
+
+            <p>
+                {{ i18n('CmsExceptionResources', 'label.unautenticated.private.post') }} : {{ post.visibilityGroup }}
+            </p>
+
+            <p>
+                <a href="/login?callback={{ request.url }}">Login</a>
+            </p>    
+
+            {% endif %}    
+
+        {% endif %}
+
+    </div><!-- /.blog-post -->
+
 
 {% endmacro %}
 
