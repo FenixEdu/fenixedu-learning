@@ -2,22 +2,25 @@ package org.fenixedu.learning.domain;
 
 import static org.fenixedu.commons.i18n.I18N.getLocale;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
-import org.fenixedu.academic.domain.*;
-import org.fenixedu.academic.domain.util.icalendar.EventBean;
-import org.fenixedu.academic.util.HourMinuteSecond;
-import org.fenixedu.academic.api.beans.publico.FenixRoomEvent;
+import org.fenixedu.academic.domain.CourseLoad;
+import org.fenixedu.academic.domain.ExecutionCourse;
+import org.fenixedu.academic.domain.Lesson;
+import org.fenixedu.academic.domain.Shift;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.spaces.domain.Space;
 import org.joda.time.DateTime;
+import org.joda.time.Interval;
 
 import com.google.common.collect.ImmutableSet;
-import org.joda.time.Interval;
-import org.joda.time.YearMonthDay;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 /**
  * Created by borgez on 10/14/14.
@@ -73,18 +76,28 @@ public class ScheduleEventBean implements Comparable<ScheduleEventBean> {
         return begin.compareTo(o.begin);
     }
 
-    public static Collection<ScheduleEventBean> forExecutionCourse(ExecutionCourse executionCourse) {
+    public static Collection<ScheduleEventBean> forExecutionCourse(ExecutionCourse executionCourse, Interval interval) {
         List<ScheduleEventBean> events = Lists.newArrayList();
         for (CourseLoad courseLoad : executionCourse.getCourseLoadsSet()) {
             for (Shift shift : courseLoad.getShiftsSet()) {
                 for (Lesson lesson : shift.getAssociatedLessonsSet()) {
-                    for (Interval interval : lesson.getAllLessonIntervals()) {
-                        events.add(scheduleEvent(shift, lesson, interval));
+                    for (Interval lessonInterval : lesson.getAllLessonIntervals()) {
+                        if (interval.contains(lessonInterval)) {
+                            events.add(scheduleEvent(shift, lesson, lessonInterval));
+                        }
                     }
                 }
             }
         }
         return events;
+    }
+
+    public String getTitle() {
+        return Optional.ofNullable(title.getContent()).orElse("") + "\n" + Optional.ofNullable(subtitle.getContent()).orElse("");
+    }
+
+    public String getDescription() {
+        return Optional.ofNullable(description.getContent()).orElse("") + "\n" + Optional.ofNullable(location).orElse("");
     }
 
     private static ScheduleEventBean scheduleEvent(Shift shift, Lesson lesson, Interval interval) {
