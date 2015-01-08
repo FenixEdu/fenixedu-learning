@@ -58,7 +58,7 @@ public class ExecutionCourseListener {
 
     public static void createDefaultContents(Site site, Menu menu, User author) {
 
-        Category summariesCategory = site.getOrCreateCategoryForSlug("summary", ANNOUNCEMENTS_TITLE);
+        Category summariesCategory = site.getOrCreateCategoryForSlug("summary", SUMMARIES_TITLE);
         Category announcementsCategory = site.getOrCreateCategoryForSlug("announcement", ANNOUNCEMENTS_TITLE);
 
         ListCategoryPosts summariesComponent = new ListCategoryPosts(summariesCategory);
