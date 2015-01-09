@@ -5,8 +5,6 @@
 
 	{% if evaluation.publishmentMessage is not empty %}
 		<th nowrap>
-			{% if evaluationClass equals "net.sourceforge.fenixedu.domain.onlineTests.OnlineTest" %}
-				{{ evaluation.distributedTest.evaluationTitle }}
 			{% elseif evaluationClass equals "net.sourceforge.fenixedu.domain.Project" %}
 				{{ evaluation.name }}
 			{% elseif evaluationClass equals "net.sourceforge.fenixedu.domain.WrittenTest" %}
@@ -17,6 +15,8 @@
 				{{ i18n('resources.ApplicationResources', 'label.final.evaluation') }}
 			{% elseif evaluationClass equals "net.sourceforge.fenixedu.domain.AdHocEvaluation" %}
 				{{ evaluation.name }}
+			{% else %}
+                {{ evaluation.presentationName }}
 			{% endif %}
 		</th>
 	{% endif %}
