@@ -47,7 +47,7 @@
                                     <span class="label label-{{ getValue(states, thesis.state) }}">{{ thesis.state }}</span>
                                 </h5>
                                 <h5>
-                                    <small>Author: {{ thesis.student.person.nickname }} ({{ thesis.student.person.username }})</small>
+                                    <small>Author: {{ thesis.student.person.presentationName }}</small>
                                 </h5>
                                 </h5>
                                 <h5>
@@ -56,7 +56,7 @@
                                             {{ i18n('resources.ApplicationResources', 'label.thesis.coordination') }}:
 
                                             {% for orientator in thesis.orientation %}
-                                                <span class="orientator">{{ orientator.person.nickname }}</span>
+                                                <span class="orientator">{{ orientator.person.presentationName }}</span>
                                             {% endfor %}
                                         {% endif %}
                                     </small>
