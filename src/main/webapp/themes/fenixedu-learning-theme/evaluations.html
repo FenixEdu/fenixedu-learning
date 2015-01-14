@@ -69,7 +69,7 @@
                 </td>
                 <td>
                     {% if exam.enrollmentBeginDayDate is not empty %}
-                         {{ exam.enrollmentBeginDayDate | date("dd/MM/yyyy HH:mm") }} - {{ exam.enrollmentEndTimeDate | date("dd/MM/yyyy HH:mm") }}
+                         {{ exam.enrollmentBeginDayDate | date("dd/MM/yyyy") }} {{ exam.enrollmentBeginTimeDate | date("HH:mm") }} - {{ exam.enrollmentEndDayDate | date("dd/MM/yyyy") }} {{ exam.enrollmentEndTimeDate | date("HH:mm") }}
                     {% endif %}
                 </td>
                 <td>
@@ -96,7 +96,7 @@
                 </td>
                 <td>
                     {% if test.enrollmentBeginDayDate is not empty %}
-                         {{ test.enrollmentBeginDayDate | date("dd/MM/yyyy HH:mm") }} - {{ test.enrollmentEndTimeDate | date("dd/MM/yyyy HH:mm") }}
+                         {{ test.enrollmentBeginDayDate | date("dd/MM/yyyy") }} {{ test.enrollmentBeginTimeDate | date("HH:mm") }} - {{ test.enrollmentEndDayDate | date("dd/MM/yyyy") }} {{ test.enrollmentEndTimeDate | date("HH:mm") }}
                     {% endif %}
                 </td>
                 <td>
