@@ -5,15 +5,15 @@
 
 	{% if evaluation.publishmentMessage is not empty %}
 		<th nowrap>
-			{% elseif evaluationClass equals "net.sourceforge.fenixedu.domain.Project" %}
+			{% if evaluationClass equals "org.fenixedu.academic.domain.Project" %}
 				{{ evaluation.name }}
-			{% elseif evaluationClass equals "net.sourceforge.fenixedu.domain.WrittenTest" %}
+			{% elseif evaluationClass equals "org.fenixedu.academic.domain.WrittenTest" %}
 				{{ evaluation.description }}
-			{% elseif evaluationClass equals "net.sourceforge.fenixedu.domain.Exam" %}
+			{% elseif evaluationClass equals "org.fenixedu.academic.domain.Exam" %}
 				{{ evaluation.season }}
-			{% elseif evaluationClass equals "net.sourceforge.fenixedu.domain.FinalEvaluation" %}
+			{% elseif evaluationClass equals "org.fenixedu.academic.domain.FinalEvaluation" %}
 				{{ i18n('resources.ApplicationResources', 'label.final.evaluation') }}
-			{% elseif evaluationClass equals "net.sourceforge.fenixedu.domain.AdHocEvaluation" %}
+			{% elseif evaluationClass equals "org.fenixedu.academic.domain.AdHocEvaluation" %}
 				{{ evaluation.name }}
 			{% else %}
                 {{ evaluation.presentationName }}
