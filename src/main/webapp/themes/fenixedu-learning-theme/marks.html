@@ -2,21 +2,23 @@
 
 {% macro evaluationMethod(evaluation) %}
 	{% set evaluationClass = evaluation.class.name %}
-
-	{% if evaluation.publishmentMessage is not empty %}
+	{% if evaluation.publishmentMessage != null %}
 		<th nowrap>
 			{% if evaluationClass equals "org.fenixedu.academic.domain.Project" %}
-				{{ evaluation.name }}
+				{% set title = evaluation.name %}
 			{% elseif evaluationClass equals "org.fenixedu.academic.domain.WrittenTest" %}
-				{{ evaluation.description }}
+			    {% set title = evaluation.description %}
 			{% elseif evaluationClass equals "org.fenixedu.academic.domain.Exam" %}
-				{{ evaluation.season }}
+				{% set title = evaluation.season %}
 			{% elseif evaluationClass equals "org.fenixedu.academic.domain.FinalEvaluation" %}
-				{{ i18n('resources.ApplicationResources', 'label.final.evaluation') }}
+				{% set title = i18n('resources.ApplicationResources', 'label.final.evaluation') %}
 			{% elseif evaluationClass equals "org.fenixedu.academic.domain.AdHocEvaluation" %}
-				{{ evaluation.name }}
+				{% set title = evaluation.name %}
+			{% endif %}
+			{% if title is not empty %}
+			    {{title}}
 			{% else %}
-                {{ evaluation.presentationName }}
+			    {{evaluation.presentationName}}
 			{% endif %}
 		</th>
 	{% endif %}
@@ -28,7 +30,7 @@
     {% if attendsMap is not empty and entries(attendsMap) is not empty %}
 
         <p><em>{{ i18n('resources.ApplicationResources', 'classification.nonOfficial.information') }}</em></p>
-        <table class="table table-condensed">
+        <table class="table table-condensed table-bordered">
             <tr>
                 <th nowrap>{{ i18n('resources.ApplicationResources', 'label.username') }}</th>
                 <th nowrap>{{ i18n('resources.ApplicationResources', 'label.number') }}</th>
