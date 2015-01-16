@@ -13,30 +13,9 @@
 {% endblock header %}
 
 {% block content %}
-
 	<div id='calendar'></div>
 
 	<script type="text/javascript">
-		function date(weekday, hour, minutes) {
-			return moment().day( weekday - 1).hour( hour + 1 ).minute( minutes ).toISOString();
-		}
-		var scheduleEvents = [];
-
-		{% for event in events %}
-			try {
-				scheduleEvents.push({
-					id: "{{ event.id }}",
-					title: "{{ event.title.content | raw | default('') }}\n{{ event.subtitle.content | raw | default('') }}",
-					start: "{{ event.begin }}",
-					end: "{{ event.end }}",
-					url: "{{ event.url }}",
-					description: "{{ event.description.content | default('') }}\n{{ event.location | default('') }}"
-				});
-			} catch(e) {
-				console.err("error for event ", event);
-			}
-		{% endfor %}
-
 		var i18nDayNames = [
 			"{{ i18n('resources.FenixEduLearningResources', 'weekday.sunday') }}",
 			"{{ i18n('resources.FenixEduLearningResources', 'weekday.monday') }}",
@@ -53,8 +32,7 @@
 			weekends: true,
 			minTime : '08:00',
 			maxTime : '23:59',
-			defaultDate: moment().toISOString(),
-			defaultView: '{{ defaultView is empty ? "week" : defaultView }}',
+			defaultView: '{{defaultView}}',
 			timeFormat: 'HH:mm',
 			axisFormat: 'HH:mm',
 			slotDuration: '00:30:00',
@@ -62,7 +40,7 @@
 			dayNames: i18nDayNames,
 			dayNamesShort: i18nDayNames,
 			eventAfterRender: afterEventsRender,
-			events: scheduleEvents,
+			events: "{{eventsUrl}}",
             header: {
                 left: 'prev,next today',
                 center: 'title',
@@ -74,6 +52,7 @@
 
 		$(document).ready(function() {
 			$('#calendar').fullCalendar(config);
+			$('#calendar').fullCalendar('gotoDate', '{{dayToShow}}' );
 		});
 
 		function afterEventsRender( event, jsEvent, view ) {
