@@ -30,16 +30,11 @@
     {% endif %}
 {% endmacro %}
 
-<nav class="col-sm-3">
+<nav class="col-sm-3" style="padding-left:0px; padding-top:60px;z-index:999; margin-left:-1px;">
   <!-- REGULAR MENU -->
-    <div class="pull-right" style="margin-top: 6px">
-        {% for locale in app.supportedLocales %}
-            <a class="locale-changer {% if locale == app.locale %}active{% endif %}" title="{{locale.displayName}}" onclick="setLang('{{locale}}')">{{locale.language}}</a>
-        {% endfor %}
-    </div>
     {% for menu in menus.values %}
         <div class="sidebar-module">
-            <h5 class="menu-header">{{ menu.name.content }}</h5>
+            
             {{ menuChildren(menu.children) }}
         </div>
     {% endfor %}

@@ -1,6 +1,10 @@
 {% extends "fenixedu-learning-theme/base.html" %}
 {% import "fenixedu-learning-theme/view.html" %}
 
+{% block contentTitle %}
+	Últimos anúncios
+{% endblock contentTitle %}
+
 {% block content %}
 
 
@@ -23,45 +27,58 @@
 
 {% if pagination is not empty and pagination.posts is not empty %}
 	{% set announcement = pagination.posts | head %}
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<strong>Últimos anúncios</strong>
-			</div>
-			<div class="panel-body">
+		<div>
+			<div>
 				{{ viewPost(announcement) }}
-				<hr />
-				<ul>
+				
 				{% for post in pagination.posts | tail %}
-					<li><small>{{ post.creationDate|formatDate("dd-MM-YYYY HH:mm") }}</small> <a href="{{post.address}}">{{post.name.content}}</a></li>
+				<hr />
+					<h5 style="margin-top: 0; font-weight:400"><a href="{{post.address}}">{{ post.name.content }}</a></h5>
+					<p class="small" style="font-size:11px; color:#888;margin-top:5px; margin-bottom:18px;"> 
+                    <span>{{ post.creationDate|formatDate("d MMMM Y, HH:mm") }} </span>
+          </p>
+					
 				{% endfor %}
-				</ul>
+				
 			</div>
 		</div>
 {% endif %}
 
 
 {% if professorships is not empty %}
-	<h4>{{ i18n('resources.ApplicationResources', 'label.lecturingTeachers') }}</h4>
+          <h3 style="font-weight:300; margin-bottom: 22px; margin-top:45px;">            
+            {{ i18n('resources.ApplicationResources', 'label.lecturingTeachers') }}            
+          </h3>
 
-	<div class="row">
+	
 		{% for professorship in professorships %}
-			<div class="col-sm-6">
-				<div class="col-sm-3 text-center">
+		{% if loop.index == 0 %}
+			{% else %}
+			<hr>
+		{% endif %}
+		
+	<div class="row" style="margin-top:25px;">
+				<div class="col-sm-1">
 					<img class="img-circle" width="60" src="{{professorship.person.user.profile.avatarUrl}}?s=60"/>
 				</div>
-				<div class="col-sm-9">
+				<div class="col-sm-11" style="margin-top:12px;padding-left:25px;">
 					{% if professorship.person.hasAvailableWebSite %}
-						<a href="{{professorship.person.homepageWebAddress}}">{{professorship.person.name}}</a>
+						<a href="{{professorship.person.homepageWebAddress}}">{{professorship.person.profile.displayName}}</a>
+						
+						{% if professorship.responsibleFor %}
+						<p class="badge" style="font-weight:400; background:#aaa; font-size:11px; padding-left:10px; padding-right:10px; margin-left:5px; margin-bottom:0px;">{{ i18n('resources.ApplicationResources', 'label.responsible') }}</p>
+					{% endif %}
 					{% else %}
 						{{professorship.person.name}}
 					{% endif %}
-					{% if professorship.responsibleFor %}
-						<p class="badge">{{ i18n('resources.ApplicationResources', 'label.responsible') }}</p>
-					{% endif %}
-				</div>
+					<div>
+					{{professorship.person.profile.email}}
+					</div>
 			</div>
-		{% endfor %}
 	</div>
+
+		{% endfor %}
+	
 
 {% endif %}
 

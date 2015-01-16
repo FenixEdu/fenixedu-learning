@@ -20,7 +20,7 @@
     <meta property="og:type" content="application" />
     <meta property="og:url" content="http://www.fenixedu.org" />
     <meta property="og:site_name" content="FenixEdu" />
-    <meta property="og:description" content="FenixEdu™ is an open-source academic information platform." />
+    <meta property="og:description" content="FenixEdu Learning is an open-source academic information platform." />
     <meta property="fb:profile_id" content="379238245509413" />
 
     <!-- Mobile Specific Metas -->
@@ -66,55 +66,55 @@
   <body>
 
     {% block topbar %}
-    <!-- Bar -->
-    <div class="navbar navbar-inverse fenixedu-bar">
-      <div class="container-fluid">
-        <ul class="nav navbar-nav">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#fenixedu-bar-menu">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <li><a class="navbar-brand" href="{{request.contextPath}}/" target="_blank">{{app.title.content}}</a></li>
-        </ul>
-        <div class="collapse navbar-collapse" id="fenixedu-bar-menu">
-          <ul class="nav navbar-nav navbar-right text-center">
-            {% if not request.user.authenticated %}
-              <li class="active"><a href="{{request.contextPath}}/login">Login</a></li>
-            {% else %}
-              <li><a><img src="{{request.user.avatar}}?s=20" width="20" heigth="20" style="margin-right: 10px" class="img-circle"/>{{request.user.displayName}}</a></li>
-              {% if devMode %}
-                <li class="devmode active"><a>Debug Mode</a></li>
-              {% endif %}
-              <li class="active"><a href="{{request.contextPath}}/logout">Logout</a></li>
-            {% endif %}
-          </ul>
-        </div>
-      </div>
-    </div>
     {% endblock %}
+	<div id="headcounter">
+		<div class="container">
+			
 
-    <div class="container">
-
+		<div class="row" style="padding-top:60px; padding-bottom:30px;" >
+			<div class="col-sm-9">
+        <div>
+				  <img class="logo" src="{{request.contextPath}}/api/bennu-portal/configuration/logo" />
+        </div>
+			</div>
+			<div class="col-sm-3 ">
+        <div >
+	           
+        </div>
+			</div>
+		</div>
+		</div>
+	</div>
+	
+		<div class="container">
       <div class="row">
         <div class="col-sm-9">
-          <h1 class="site-header"><a href="{{site.address}}">{{ site.name.content }}</a>
-          {% if site.siteObject.executionPeriod is not empty %}
-            <small>{{site.siteObject.executionPeriod.semester}}º semestre {{site.siteObject.executionPeriod.executionYear.year}}</small></h1>
-          {% endif %}
+          <h2 style="font-weight:300;" class="site-header"><a href="{{site.address}}">{{ site.name.content }}</a> {% block titleLink %}{% endblock titleLink %} </h2>
+          
+            <div style="font-size:15px; color:#888; margin-top:10px; margin-bottom:20px;"><small>
+              {% if site.siteObject.executionPeriod is not empty %}{{site.siteObject.executionPeriod.semester}}º semestre {{site.siteObject.executionPeriod.executionYear.year}}{% else %}&nbsp;{% endif %}</small></div>          
         </div>
-        <div class="col-sm-3 text-center hidden-xs">
-          <h1><img class="logo" src="{{request.contextPath}}/api/bennu-portal/configuration/logo" /></h1>
+        <div class="col-sm-3 hidden-xs">
+              <div style="margin-top: 6px; margin-top: 25px;">
+                <i class="glyphicon glyphicon-globe" style="padding-right:10px; color:#009EE2"></i>
+                  {% for locale in app.supportedLocales %}
+                      <a class="locale-changer {% if locale == app.locale %}active{% endif %}" title="{{locale.displayName}}" onclick="setLang('{{locale}}')">{{locale.language}}</a>
+                  {% endfor %}
+              </div>
         </div>
       </div>
+	  		</div>
+	
+    <div class="container">
 
       <main class="row">
 
-        <div class="col-sm-9 main-content">
-          <div class="lead top-lead">
-            {{page.name.content}}
-          </div>
+        <div class="col-sm-9 main-content" style="background:white; border-top: 1px solid #009EE2; border-right:1px solid #E5E5E5; border-bottom:1px solid #E5E5E5; padding-left:50px; padding-right:50px; padding-top:60px; padding-bottom:60px; min-height:800px;">
+          <h3 style="font-weight:300; margin-bottom: 22px; margin-top:0px;">
+            {% block contentTitle %}
+            {{page.name.content}}  
+            {% endblock contentTitle %}            
+          </h3>
           {% block content %}{% endblock content %}
         </div>
         {% include "fenixedu-learning-theme/menu.html" %}
@@ -123,13 +123,15 @@
 
     </div><!-- /.container -->
 
-    <footer class="container">
+    <footer class="container" style="border-top:1px solid #ddd; margin-top:30px">
       <div class="col-sm-9">
-        {{app.title.content}}
-      </div>
-      <div class="col-sm-3 text-center">
         <a class="brand" href="http://fenixedu.org"><img width="150" src="{{staticDir}}/images/logo_fenixedu_footer.svg" alt="Powered by FenixEdu"></a>
       </div>
+
+      <div class="col-sm-3 text-left" style="color:#888">
+        <span style="padding-left:15px;">{{app.copyright.content}}</span>
+      </div>
+      
     </footer>
 
     <script src="{{ staticDir }}/js/bootstrap.min.js" type="text/javascript" async></script>

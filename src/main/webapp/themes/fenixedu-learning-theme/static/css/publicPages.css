@@ -1,25 +1,23 @@
 body {
-	background-color: #fbfbfb;
-	background: url('//tecnico.ulisboa.pt/img/page/cubes.png') repeat scroll center top #FFF;
+	background-color: #F8F8F8;
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 	font-size: 13px;
 	color: #444;
 }
 
 a {
-	color: #118cdc;
+	color: #009EE2;
 }
 
 footer {
-	padding:20px 30px 50px;
+	padding:20px 30px 100px;
 }
 
 main {
-	margin-top: 10px;
-	background: #FDFDFD;
+	/*background: #FDFDFD;
 	border: 1px solid #e3e3e3;
-	border-radius: 10px;
-	padding: 10px;
+
+	padding: 10px;*/
 }
 
 main>div>.top-lead {
@@ -27,14 +25,34 @@ main>div>.top-lead {
 	padding-bottom: 5px;
 }
 
+.nav-pills>li.active{
+}
+
 .nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
-	background-color: #118cdc;
+	background: white;
+	border-bottom: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	color:#444;
+	margin-left: -2px;
+	border-radius: 0px;
 }
 
 .nav-pills>li>a {
-	color: #62696c;
-	border-radius: 1px;
-	padding: 5px 10px;
+	color: #444;
+		padding: 8px 25px;
+		font-size: 13px;
+}
+
+.nav-pills>li>a {
+	padding-left:25px;
+}
+
+.nav-pills>li li>a {
+	padding-left:50px;
+}
+
+.nav-pills>li li li>a {
+	padding-left:75px;
 }
 
 * {
@@ -91,7 +109,7 @@ main>div>.top-lead {
 }
 
 nav {
-	border-left: 1px solid #eee;
+
 }
 
 .main-content {
@@ -153,5 +171,8 @@ nav {
 }
 .menuItem.open>.children {
     display: block;
-    padding-left: 15px;
+}
+
+li li>a{
+	padding-left: 15px;
 }

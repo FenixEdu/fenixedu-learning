@@ -7,7 +7,7 @@
 	{% elseif evaluationMethodText is not empty %}
 		<p>{{ evaluationMethodText | raw }}</p>
 	{% else %}
-		<h4>{{ i18n('resources.ApplicationResources', 'message.evaluation.not.available') }}</h4>
+		<i>{{ i18n('resources.ApplicationResources', 'message.evaluation.not.available') }}</i>
 	{% endif %}
 
 {% endblock content %}

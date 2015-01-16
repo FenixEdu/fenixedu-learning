@@ -14,23 +14,19 @@
 
 {% macro personCard(person) %}
 	{% if person is not empty %}
-        <div class="container-fluid">
-
-            <div class="person-card row">
-                <div class="col-md-3 person-photo text-center">
-                    <a href="{{ person.homepageWebAddress }}">
-                        <img class="img-circle" alt="{{ person.presentationName }}" src="{{ person.user.profile.avatarUrl }}"/>
-                    </a>
+        <div class="row" style="margin-top:25px;">
+                <div class="col-sm-1">
+                    <img class="img-circle" width="60" src="{{person.user.profile.avatarUrl}}?s=60"/>
                 </div>
-
-                <div class="col-md-9 person-details text-left">
-                    <br/>
-                    <p><a href="{{ person.homepageWebAddress }}">{{ person.presentationName }}</a></p>
-                    {% if person.getDefaultEmailAddressValue is not empty %}
-                        <p><a href="mailto:{{ person.getDefaultEmailAddressValue }}">{{ person.getDefaultEmailAddressValue }}</a></p>
+                <div class="col-sm-11" style="margin-top:12px;padding-left:25px;">
+                    {% if person.hasAvailableWebSite %}
+                        <a href="{{person.homepageWebAddress}}">{{person.profile.displayName}}</a>
+                    {% else %}
+                        {{person.name}}
                     {% endif %}
-                </div>
-
+                    <div>
+                    {{person.profile.email}}
+                    </div>
             </div>
         </div>
 	{% endif %}

@@ -23,7 +23,7 @@
             {{ referencesList(nonOptionalReferences) }}
         </ul>
     {% else %}
-        <h4>{{ i18n('resources.ApplicationResources', 'label.noPrimaryBibliographicReference') }}</h4>
+        <i>{{ i18n('resources.ApplicationResources', 'label.noPrimaryBibliographicReference') }}</i>
     {% endif %}
 
     <h3>{{ i18n('resources.ApplicationResources', 'message.optionalBibliography') }}</h3>
@@ -33,6 +33,6 @@
             {{ referencesList(optionalReferences) }}
         </ul>
     {% else %}
-        <h4>{{ i18n('resources.ApplicationResources', 'label.noSecondaryBibliographicReference') }}</h4>
+        <i>{{ i18n('resources.ApplicationResources', 'label.noSecondaryBibliographicReference') }}</i>
     {% endif %}
 {% endblock content %}

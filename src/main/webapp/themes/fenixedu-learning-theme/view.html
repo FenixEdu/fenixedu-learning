@@ -6,9 +6,11 @@
         {% if post.isVisible %}
 
             {% if post.name.content != page.name.content %}
-                <h2 style="margin-top: 0"><a href="{{post.address}}">{{ post.name.content }}</a></h2>
-                <p class="small">
-                    {{ post.creationDate|formatDate("d MMMM Y, HH:mm") }} - {{post.createdBy.displayName}}
+                <h5 style="margin-top: 0; font-weight:400"><a href="{{post.address}}">{{ post.name.content }}</a></h5>
+                    <p class="small" style="font-size:11px; color:#888;margin-top:5px; margin-bottom:18px;"> 
+                    <span>{{ post.creationDate|formatDate("d MMMM Y, HH:mm") }} </span>
+                    <span style="padding-left:5px; padding-right:5px; color:#ddd;">&bull;</span>
+                    <span>{{post.createdBy.displayName}}</span>
                 </p>
             {% endif %}
 
@@ -51,7 +53,9 @@
 
 
 {% endmacro %}
-
+{% block contentTitle %}
+    
+{% endblock contentTitle %}
 {% block content %}
 	{{ viewPost(post, page, request) }}
 {% endblock content %}
