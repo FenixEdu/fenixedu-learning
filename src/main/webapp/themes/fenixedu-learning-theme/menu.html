@@ -14,8 +14,11 @@
 
 {% macro menuItem(item) %}
   <li class="menuItem {{ item.isActive equals true ? 'open' : '' }} {{ item.isOpen equals true ? 'active' : '' }}">
-    <a href="{{ item.address }}">
+    <a class="item" href="{{ item.address }}">
       {{ item.name.content }}
+      {% if item.rssUrl != null %}
+        <a class="rsslink" href="{{item.rssUrl}}"><i style="float:right;" class="fa fa-rss"></i></a>
+      {% endif %}
     </a>
     {{ menuChildren(item.children) }}
   </li>
@@ -40,11 +43,6 @@
     {% endfor %}
 
     <div class="sidebar-module">
-        <h4>Subscribe</h4>
-
-        {% lazyFor cat in site.siteObject.site.categoriesToShow %}
-          <p><img src="{{staticDir}}/images/rss.svg" height="16"/> <a href="{{cat.rssUrl}}">{{cat.name.content}}</a></p>
-        {% endLazyFor %}
     </div>
 </nav>
 
@@ -56,5 +54,5 @@
     event.preventDefault();
   });
 </script>
-
+<link rel="stylesheet" href="{{request.contextPath}}/static/css/font-awesome.css"/>
 <script>setLang=function(l){$.post('{{request.contextPath}}/api/bennu-core/profile/locale/'+l.replace('_', '-')).always(function(){location.reload();});}</script>
