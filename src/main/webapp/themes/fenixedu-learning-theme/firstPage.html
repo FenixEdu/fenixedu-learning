@@ -81,5 +81,14 @@
 	
 
 {% endif %}
-
 {% endblock content %}
+
+
+	{% block titleLink %}
+{% if executionCourse.email is not empty %}
+   <a style="padding-left:20px; font-size:15px; color:#009EE2; font-weight:300" href="mailto:{{executionCourse.email}}">+ Email</a>
+   {% endif %}
+{% endblock titleLink %}
+
+
+   
