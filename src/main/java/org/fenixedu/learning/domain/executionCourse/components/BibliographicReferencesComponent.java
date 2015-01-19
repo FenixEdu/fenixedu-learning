@@ -6,17 +6,15 @@ import java.util.stream.Collectors;
 import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.academic.domain.degreeStructure.BibliographicReferences.BibliographicReference;
 import org.fenixedu.academic.domain.degreeStructure.CompetenceCourseInformation;
-
 import org.fenixedu.cms.domain.Page;
-import org.fenixedu.cms.domain.component.CMSComponent;
 import org.fenixedu.cms.domain.component.ComponentType;
-import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 import org.fenixedu.cms.rendering.TemplateContext;
+import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 
 import com.google.common.collect.Lists;
 
 @ComponentType(name = "bibliographicReferences", description = "Bibliographic References for an Execution Course")
-public class BibliographicReferencesComponent implements CMSComponent {
+public class BibliographicReferencesComponent extends BaseExecutionCourseComponent {
 
     @Override
     public void handle(Page page, TemplateContext componentContext, TemplateContext globalContext) {

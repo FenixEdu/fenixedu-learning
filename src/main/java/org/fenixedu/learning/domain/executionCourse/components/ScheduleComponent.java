@@ -3,7 +3,6 @@ package org.fenixedu.learning.domain.executionCourse.components;
 import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.cms.domain.Page;
-import org.fenixedu.cms.domain.component.CMSComponent;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
 import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
@@ -11,7 +10,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.ISODateTimeFormat;
 
 @ComponentType(name = "Execution Course Schedule", description = "Schedule of an execution course")
-public class ScheduleComponent implements CMSComponent {
+public class ScheduleComponent extends BaseExecutionCourseComponent {
 
     @Override
     public void handle(Page page, TemplateContext componentContext, TemplateContext globalContext) {

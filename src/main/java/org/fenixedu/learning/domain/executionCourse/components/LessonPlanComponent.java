@@ -1,20 +1,20 @@
 package org.fenixedu.learning.domain.executionCourse.components;
 
-import com.google.common.collect.Maps;
+import java.util.List;
+import java.util.Map;
+
 import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.academic.domain.LessonPlanning;
 import org.fenixedu.academic.domain.ShiftType;
 import org.fenixedu.cms.domain.Page;
-import org.fenixedu.cms.domain.component.CMSComponent;
 import org.fenixedu.cms.domain.component.ComponentType;
-import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 import org.fenixedu.cms.rendering.TemplateContext;
+import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 
-import java.util.List;
-import java.util.Map;
+import com.google.common.collect.Maps;
 
 @ComponentType(name = "LessonsPlanning", description = "Lessons planing for an Execution Course")
-public class LessonPlanComponent implements CMSComponent {
+public class LessonPlanComponent extends BaseExecutionCourseComponent {
 
     @Override
     public void handle(Page page, TemplateContext componentContext, TemplateContext globalContext) {

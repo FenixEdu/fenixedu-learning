@@ -30,4 +30,8 @@ public abstract class DegreeSiteComponent implements CMSComponent {
         return Optional.empty();
     }
 
+    public static boolean supportsSite(Site site) {
+        return site instanceof DegreeSite;
+    }
+
 }

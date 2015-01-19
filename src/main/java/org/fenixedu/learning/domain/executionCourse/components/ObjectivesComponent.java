@@ -8,16 +8,14 @@ import java.util.stream.Collectors;
 import org.fenixedu.academic.domain.CurricularCourse;
 import org.fenixedu.academic.domain.Curriculum;
 import org.fenixedu.academic.domain.ExecutionCourse;
-
 import org.fenixedu.cms.domain.Page;
-import org.fenixedu.cms.domain.component.CMSComponent;
 import org.fenixedu.cms.domain.component.ComponentType;
+import org.fenixedu.cms.rendering.TemplateContext;
 import org.fenixedu.learning.domain.executionCourse.CompetenceCourseBean;
 import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
-import org.fenixedu.cms.rendering.TemplateContext;
 
 @ComponentType(name = "CompetenceCourse", description = "Competence Course information for an Execution Course")
-public class ObjectivesComponent implements CMSComponent {
+public class ObjectivesComponent extends BaseExecutionCourseComponent {
 
     @Override
     public void handle(Page page, TemplateContext componentContext, TemplateContext globalContext) {
