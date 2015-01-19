@@ -18,15 +18,14 @@
  */
 package org.fenixedu.learning.domain.degree.components;
 
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
 import org.fenixedu.cms.domain.Category;
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.Post;
-import org.fenixedu.cms.domain.component.CMSComponent;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
-
-import java.util.Comparator;
-import java.util.stream.Collectors;
 
 @ComponentType(name = "latestAnnouncements", description = "Latest Announcements of a Degree")
 public class LatestAnnouncementsComponent extends DegreeSiteComponent {

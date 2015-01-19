@@ -22,7 +22,6 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import org.fenixedu.academic.dto.InfoLessonInstanceAggregation;
-
 import org.joda.time.format.ISODateTimeFormat;
 
 import com.google.common.collect.ComparisonChain;

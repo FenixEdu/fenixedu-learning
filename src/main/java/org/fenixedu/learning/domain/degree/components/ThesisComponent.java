@@ -18,16 +18,16 @@
  */
 package org.fenixedu.learning.domain.degree.components;
 
+import static org.fenixedu.learning.domain.DissertationsUtils.getThesisStateMapping;
+
 import org.fenixedu.academic.domain.thesis.Thesis;
+import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.CMSComponent;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
-import org.fenixedu.bennu.core.security.Authenticate;
-import pt.ist.fenixframework.FenixFramework;
 
-import static java.util.stream.Collectors.groupingBy;
-import static org.fenixedu.learning.domain.DissertationsUtils.getThesisStateMapping;
+import pt.ist.fenixframework.FenixFramework;
 
 @ComponentType(name = "thesis", description = "Provides information for a specific thesis")
 public class ThesisComponent implements CMSComponent {
@@ -41,7 +41,8 @@ public class ThesisComponent implements CMSComponent {
     }
 
     private boolean isAccessible(Thesis thesis) {
-        return thesis!=null && thesis.getDissertation()!=null && thesis.getDissertation().isAccessible(Authenticate.getUser());
+        return thesis != null && thesis.getDissertation() != null
+                && thesis.getDissertation().isAccessible(Authenticate.getUser());
     }
 
 }

@@ -26,7 +26,6 @@ import org.fenixedu.academic.domain.CompetenceCourse;
 import org.fenixedu.academic.domain.CurricularCourse;
 import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.academic.domain.ExecutionSemester;
-
 import org.fenixedu.commons.i18n.LocalizedString;
 
 import com.google.common.base.Objects;

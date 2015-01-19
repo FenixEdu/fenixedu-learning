@@ -18,20 +18,28 @@
  */
 package org.fenixedu.learning.domain;
 
-import com.google.common.collect.Maps;
+import static java.util.stream.Collectors.groupingBy;
+import static org.fenixedu.academic.domain.ExecutionYear.REVERSE_COMPARATOR_BY_YEAR;
+import static org.fenixedu.academic.domain.thesis.ThesisState.APPROVED;
+import static org.fenixedu.academic.domain.thesis.ThesisState.CONFIRMED;
+import static org.fenixedu.academic.domain.thesis.ThesisState.DRAFT;
+import static org.fenixedu.academic.domain.thesis.ThesisState.EVALUATED;
+import static org.fenixedu.academic.domain.thesis.ThesisState.REVISION;
+import static org.fenixedu.academic.domain.thesis.ThesisState.SUBMITTED;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.stream.Stream;
+
 import org.fenixedu.academic.domain.Degree;
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.thesis.Thesis;
 import org.fenixedu.academic.domain.thesis.ThesisState;
 
-import java.util.*;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.groupingBy;
-import static org.fenixedu.academic.domain.ExecutionYear.REVERSE_COMPARATOR_BY_YEAR;
-import static org.fenixedu.academic.domain.thesis.ThesisState.*;
-import static org.fenixedu.academic.domain.thesis.ThesisState.REVISION;
-import static org.fenixedu.academic.domain.thesis.ThesisState.SUBMITTED;
+import com.google.common.collect.Maps;
 
 /**
  * Created by borgez on 25-11-2014.
@@ -41,7 +49,7 @@ public class DissertationsUtils {
     private static Map<ThesisState, String> states;
 
     public static Map<ThesisState, String> getThesisStateMapping() {
-        if(states == null) {
+        if (states == null) {
             states = Maps.newHashMap();
             states.put(EVALUATED, "success");
             states.put(CONFIRMED, "primary");

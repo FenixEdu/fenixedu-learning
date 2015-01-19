@@ -18,7 +18,15 @@
  */
 package org.fenixedu.learning.domain.degree.components;
 
-import com.google.common.collect.ImmutableSet;
+import static org.fenixedu.academic.domain.Degree.COMPARATOR_BY_DEGREE_TYPE_AND_NAME_AND_ID;
+import static org.fenixedu.academic.domain.ExecutionYear.COMPARATOR_BY_YEAR;
+import static org.fenixedu.learning.domain.DissertationsUtils.allThesesByYear;
+import static org.fenixedu.learning.domain.DissertationsUtils.getThesisStateMapping;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.SortedMap;
+
 import org.fenixedu.academic.domain.Degree;
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.thesis.Thesis;
@@ -26,14 +34,7 @@ import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.SortedMap;
-
-import static org.fenixedu.academic.domain.Degree.COMPARATOR_BY_DEGREE_TYPE_AND_NAME_AND_ID;
-import static org.fenixedu.academic.domain.ExecutionYear.COMPARATOR_BY_YEAR;
-import static org.fenixedu.learning.domain.DissertationsUtils.allThesesByYear;
-import static org.fenixedu.learning.domain.DissertationsUtils.getThesisStateMapping;
+import com.google.common.collect.ImmutableSet;
 
 @ComponentType(name = "degreeDissertations", description = "Dissertations information for a Degree")
 public class DegreeDissertationsComponent extends DegreeSiteComponent {
