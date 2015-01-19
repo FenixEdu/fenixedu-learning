@@ -18,17 +18,17 @@
  */
 package org.fenixedu.learning.domain.degree;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Stream;
-
 import org.fenixedu.academic.domain.Degree;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.cms.domain.Category;
 import org.fenixedu.cms.domain.wraps.Wrap;
 import org.fenixedu.commons.i18n.LocalizedString;
-
 import pt.ist.fenixframework.DomainObject;
+
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public class DegreeSite extends DegreeSite_Base {
 
@@ -40,7 +40,15 @@ public class DegreeSite extends DegreeSite_Base {
 
     @Override
     public LocalizedString getName() {
-        return Optional.ofNullable(super.getName()).orElse(getDegree().getNameI18N().toLocalizedString());
+        if (super.getName() != null) {
+            if (getDegree().getPhdProgram() != null) {
+                return new LocalizedString().with(Locale.getDefault(), getDegree().getPhdProgram().getPresentationName());
+            } else {
+                return new LocalizedString().with(Locale.getDefault(), getDegree().getPresentationName());
+            }
+        } else {
+            return super.getName();
+        }
     }
 
     @Override
