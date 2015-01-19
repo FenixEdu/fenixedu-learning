@@ -1,8 +1,12 @@
 package org.fenixedu.learning.api;
 
+import static com.google.common.collect.Sets.newHashSet;
+import static java.util.stream.Collectors.toList;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -16,12 +20,16 @@ import javax.ws.rs.QueryParam;
 import org.fenixedu.academic.domain.Coordinator;
 import org.fenixedu.academic.domain.Degree;
 import org.fenixedu.academic.domain.ExecutionCourse;
+import org.fenixedu.academic.domain.Lesson;
 import org.fenixedu.academic.domain.Project;
+import org.fenixedu.academic.domain.SchoolClass;
 import org.fenixedu.academic.domain.WrittenEvaluation;
 import org.fenixedu.academic.util.EvaluationType;
 import org.fenixedu.bennu.core.groups.DynamicGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.cms.domain.Site;
 import org.fenixedu.learning.domain.ScheduleEventBean;
+import org.fenixedu.spaces.domain.Space;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.Interval;
@@ -51,6 +59,47 @@ public class EventsResource {
     public String degreeEvaluationsEvents(@PathParam("degree") Degree degree, @QueryParam("start") String start,
             @QueryParam("end") String end) {
         return toJson(allPublicEvaluations(degree, getInterval(start, end))).toString();
+    }
+
+    @GET
+    @Path("/degree/class/{schoolClass}")
+    @Produces("application/json; charset=utf-8")
+    public String classScheduleEvents(@PathParam("schoolClass") SchoolClass schoolClass, @QueryParam("start") String start,
+            @QueryParam("end") String end) {
+        return toJson(getEvents(schoolClass, getInterval(start, end))).toString();
+    }
+
+    private Collection<ScheduleEventBean> getEvents(SchoolClass schoolClass, Interval interval) {
+        return schoolClass.getAssociatedShiftsSet().stream().flatMap(shift -> shift.getAssociatedLessonsSet().stream())
+                .flatMap(lesson -> lessonEvents(lesson, interval)).collect(toList());
+    }
+
+    private Stream<ScheduleEventBean> lessonEvents(Lesson lesson, Interval interval) {
+        return Stream.concat(lessonsWithoutInstances(lesson, interval), lessonWithInstances(lesson, interval));
+    }
+
+    private Stream<ScheduleEventBean> lessonsWithoutInstances(Lesson lesson, Interval interval) {
+        return lesson.getAllLessonIntervalsWithoutInstanceDates().stream()
+                .filter(i -> interval.contains(i) || i.contains(interval)).map(i -> createEventBean(lesson, i));
+    }
+
+    private Stream<ScheduleEventBean> lessonWithInstances(Lesson lesson, Interval interval) {
+        return lesson.getLessonInstancesSet().stream().filter(instance -> interval.contains(instance.getInterval()))
+                .map(instance -> createEventBean(lesson, instance.getInterval()));
+    }
+
+    private ScheduleEventBean createEventBean(Lesson lesson, Interval interval) {
+        Optional<Site> site = Optional.ofNullable(lesson.getExecutionCourse().getSite());
+        String url = site.isPresent() ? site.get().getFullUrl() : "#";
+        String executionCourseAcronym = lesson.getShift().getExecutionCourse().getPrettyAcronym();
+        String shiftTypeAcronym = lesson.getShift().getShiftTypesCodePrettyPrint();
+        String executionCourseName = lesson.getShift().getExecutionCourse().getNameI18N().getContent();
+        String shifType = lesson.getShift().getShiftTypesPrettyPrint();
+        Set<Space> location =
+                lesson.getLessonSpaceOccupation() != null ? lesson.getLessonSpaceOccupation().getSpaces() : newHashSet();
+        String description = executionCourseName + "( " + shifType + " )";
+        return new ScheduleEventBean(executionCourseAcronym, shiftTypeAcronym, description, interval.getStart(),
+                interval.getEnd(), null, url, null, null, location);
     }
 
     private Interval getInterval(String start, String end) {
