@@ -49,6 +49,8 @@ public class DegreeDissertationsComponent extends DegreeSiteComponent {
         globalContext.put("years", allThesesByYear.keySet().stream().sorted(COMPARATOR_BY_YEAR));
         globalContext.put("degrees", degrees.stream().sorted(COMPARATOR_BY_DEGREE_TYPE_AND_NAME_AND_ID));
         globalContext.put("states", getThesisStateMapping());
+        Page thesisPage = DegreeSiteComponent.pageForComponent(page.getSite(), ThesisComponent.class).get();
+        globalContext.put("dissertationUrl", thesisPage.getAddress());
     }
 
 }
