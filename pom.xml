@@ -15,7 +15,7 @@
     <name>FenixEdu Learning</name>
 
     <properties>
-        <version.org.fenixedu.academic>4.0.2</version.org.fenixedu.academic>
+        <version.org.fenixedu.academic>4.0.3</version.org.fenixedu.academic>
         <version.org.fenixedu.fenixedu-cms>1.0.0.RC2</version.org.fenixedu.fenixedu-cms>
         <version.org.fenixedu.bennu-signals>1.0.0.RC1</version.org.fenixedu.bennu-signals>
         <version.org.jsoup.jsoup>1.7.2</version.org.jsoup.jsoup>
