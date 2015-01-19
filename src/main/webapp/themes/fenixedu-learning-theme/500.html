@@ -9,3 +9,13 @@
 		<p><a href="{{site.address}}" class="btn btn-primary btn-lg" role="button"><span class="glyphicon glyphicon-home"></span> Home</a></p>
 	</div>
 {% endblock content %}
+
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% block content %}
+    <h3 style="font-weight:300; margin-bottom: 22px; margin-top:0px;">500. <small>{{ i18n('resources.FenixEduLearningResources', 'label.internal.error.title') }}</small></h3>
+
+    <p>{{ i18n('resources.FenixEduLearningResources', 'label.internal.error.title') }}</p>
+
+    <p><a href="{{site.address}}" role="button">{{ i18n('resources.FenixEduLearningResources', 'label.back.to') }} {{site.name.content}}</a></p>
+{% endblock content %}
