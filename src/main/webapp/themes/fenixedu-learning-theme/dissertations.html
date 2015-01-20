@@ -43,7 +43,7 @@
                         <div year="{{ thesis.executionYear.externalId }}" state="{{ thesis.state }}" degree="{{ thesis.degree.externalId }}">
                             <div class="thesis-title">
                                 <h5>
-                                    <a href="dissertation/{{ thesis.externalId }}">{{ thesis.finalFullTitle }}</a>
+                                    <a href="{{ dissertationUrl }}/{{ thesis.externalId }}">{{ thesis.finalFullTitle }}</a>
                                     <span class="label label-{{ getValue(states, thesis.state) }}">{{ thesis.state }}</span>
                                 </h5>
                                 <h5>
