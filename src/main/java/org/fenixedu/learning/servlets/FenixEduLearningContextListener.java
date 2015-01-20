@@ -79,7 +79,8 @@ public class FenixEduLearningContextListener implements ServletContextListener {
             if (cat != null) {
                 Post post = new Post(bean.getCourse().getSite());
                 post.addCategories(cat);
-                post.setName(new LocalizedString(I18N.getLocale(), bean.getTitle()));
+                post.setName(bean.getTitle() == null ? BundleUtil.getLocalizedString("resources.ApplicationResources",
+                        "message.publishment") : new LocalizedString(I18N.getLocale(), bean.getTitle()));
                 post.setBody(new LocalizedString(I18N.getLocale(), bean.getEvaluation().getPublishmentMessage()));
             }
         }
