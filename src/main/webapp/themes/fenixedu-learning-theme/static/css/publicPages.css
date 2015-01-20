@@ -197,3 +197,34 @@ li li>a{
 	color:#009EE2!important;
 }
 
+#content-block {
+	background: white;
+	border-top: 1px solid #009EE2;
+	border-right: 1px solid #E5E5E5;
+	border-bottom: 1px solid #E5E5E5;
+	padding-left: 50px;
+	padding-right: 50px;
+	padding-top: 60px;
+	padding-bottom: 60px;
+	min-height: 800px;
+	overflow: auto;
+	position: relative;
+}
+
+#content-block:after {
+	content: "";
+	pointer-events: none;
+	position: absolute;
+	width: 25px;
+	height: 100%;
+	top: 0;
+	right: 0;
+	// Safari 5.1-6, Chrome 10+
+	background-image: -webkit-linear-gradient(right, rgba(255, 255, 255, 1)  , rgba(255, 255, 255, 0)  , 0%, 100%); 
+	// Opera 12
+	background-image: -o-linear-gradient(right, rgba(255, 255, 255, 1)  , rgba(255, 255, 255, 0)  , 0%, 100%);
+	// Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+	background-image: linear-gradient(to left, rgba(255, 255, 255, 1)  , rgba(255, 255, 255, 0), 0%, 100%);
+	background-repeat: repeat-x;
+	filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=1)",argb(rgba(255, 255, 255, 0)  ),argb(rgba(255, 255, 255, 1)  )));
+}
