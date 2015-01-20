@@ -40,7 +40,7 @@ public class DegreeSite extends DegreeSite_Base {
 
     @Override
     public LocalizedString getName() {
-        if (super.getName() != null) {
+        if (super.getName() == null) {
             if (getDegree().getPhdProgram() != null) {
                 return new LocalizedString().with(Locale.getDefault(), getDegree().getPhdProgram().getPresentationName());
             } else {
