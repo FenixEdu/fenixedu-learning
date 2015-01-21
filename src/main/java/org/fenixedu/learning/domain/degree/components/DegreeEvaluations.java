@@ -38,7 +38,6 @@ public class DegreeEvaluations extends DegreeSiteComponent {
         globalContext.put("defaultView", "month");
         globalContext.put("eventsUrl", CoreConfiguration.getConfiguration().applicationUrl()
                 + "/api/fenixedu-learning/events/degree/evaluations/" + degree.getExternalId());
-        globalContext.put("dayToShow", ISODateTimeFormat.date().print(LocalDate.now()));
     }
 
 }

@@ -19,13 +19,11 @@
 package org.fenixedu.learning.api;
 
 import static com.google.common.collect.Sets.newHashSet;
+import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
+import static org.fenixedu.academic.domain.ExecutionYear.COMPARATOR_BY_YEAR;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -35,13 +33,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import org.fenixedu.academic.domain.Coordinator;
-import org.fenixedu.academic.domain.Degree;
-import org.fenixedu.academic.domain.ExecutionCourse;
-import org.fenixedu.academic.domain.Lesson;
-import org.fenixedu.academic.domain.Project;
-import org.fenixedu.academic.domain.SchoolClass;
-import org.fenixedu.academic.domain.WrittenEvaluation;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import org.fenixedu.academic.domain.*;
 import org.fenixedu.academic.util.EvaluationType;
 import org.fenixedu.bennu.core.groups.DynamicGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
@@ -51,6 +45,7 @@ import org.fenixedu.spaces.domain.Space;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.Interval;
+import org.joda.time.LocalDate;
 import org.joda.time.format.ISODateTimeFormat;
 
 import com.google.common.base.Strings;
@@ -72,6 +67,17 @@ public class EventsResource {
     }
 
     @GET
+    @Path("/executionCourse/{course}/nearestEvent")
+    @Produces("application/json; charset=utf-8")
+    public String nearestExecutionCourseEvent(@PathParam("course") ExecutionCourse course) {
+        LocalDate date = LocalDate.now();
+        if(hasPermissionToViewSchedule(course)) {
+            date = nearestEventDate(ScheduleEventBean.forExecutionCourse(course, course.getAcademicInterval().toInterval()));
+        }
+        return toJson(date).toString();
+    }
+
+    @GET
     @Path("/degree/evaluations/{degree}")
     @Produces("application/json; charset=utf-8")
     public String degreeEvaluationsEvents(@PathParam("degree") Degree degree, @QueryParam("start") String start,
@@ -80,11 +86,28 @@ public class EventsResource {
     }
 
     @GET
+    @Path("/degree/class/{schoolClass}/nearestEvent")
+    @Produces("application/json; charset=utf-8")
+    public String nearestClassScheduleEvent(@PathParam("schoolClass") SchoolClass schoolClass) {
+        return toJson(nearestEventDate(getEvents(schoolClass, schoolClass.getAcademicInterval().toInterval()))).toString();
+    }
+
+    @GET
     @Path("/degree/class/{schoolClass}")
     @Produces("application/json; charset=utf-8")
     public String classScheduleEvents(@PathParam("schoolClass") SchoolClass schoolClass, @QueryParam("start") String start,
             @QueryParam("end") String end) {
         return toJson(getEvents(schoolClass, getInterval(start, end))).toString();
+    }
+
+    @GET
+    @Path("/degree/evaluations/{degree}/nearestEvent")
+    @Produces("application/json; charset=utf-8")
+    public String nearestEvaluationEvent(@PathParam("degree") Degree degree) {
+        Optional<Interval> interval = degree.getDegreeCurricularPlansExecutionYears().stream()
+                .sorted(COMPARATOR_BY_YEAR.reversed()).map(year -> year.getAcademicInterval().toInterval()).findFirst();
+        LocalDate date = interval.isPresent() ? nearestEventDate(allPublicEvaluations(degree, interval.get())) : LocalDate.now();
+        return toJson(date).toString();
     }
 
     private Collection<ScheduleEventBean> getEvents(SchoolClass schoolClass, Interval interval) {
@@ -223,5 +246,20 @@ public class EventsResource {
                         .flatMap(degree -> degree.getCurrentCoordinators().stream()).map(Coordinator::getPerson)
                         .filter(coordinator -> coordinator.equals(Authenticate.getUser().getPerson())).findFirst().isPresent();
         return isOpenPeriod || (isLogged && (isAllocationManager || isCoordinator));
+    }
+
+    private JsonElement toJson(LocalDate localDate) {
+        if(localDate == null) {
+            return new JsonPrimitive(ISODateTimeFormat.date().print(LocalDate.now()));
+        } else {
+            return new JsonPrimitive(ISODateTimeFormat.date().print(localDate));
+        }
+    }
+
+    private LocalDate nearestEventDate(Collection<ScheduleEventBean> events) {
+        LocalDate now = LocalDate.now();
+        LocalDate result = events.stream().map(e-> e.begin).map(DateTime::toLocalDate)
+                .collect(toCollection(TreeSet::new)).lower(now);
+        return Optional.ofNullable(result).orElse(now);
     }
 }

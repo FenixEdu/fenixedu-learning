@@ -26,6 +26,10 @@
 			"{{ i18n('resources.FenixEduLearningResources', 'weekday.saturday') }}"
 		];
 
+		var i18nDayNamesShort = i18nDayNames.map(function(el){
+			return el.substr(0,3);
+		});
+
 		var config = {
 			firstDay: 0,
 			allDaySlot: false,
@@ -38,7 +42,7 @@
 			slotDuration: '00:30:00',
 			slotEventOverlap: false,
 			dayNames: i18nDayNames,
-			dayNamesShort: i18nDayNames,
+			dayNamesShort: i18nDayNamesShort,
 			eventAfterRender: afterEventsRender,
 			events: "{{eventsUrl}}",
             header: {
@@ -52,7 +56,9 @@
 
 		$(document).ready(function() {
 			$('#calendar').fullCalendar(config);
-			$('#calendar').fullCalendar('gotoDate', '{{dayToShow}}' );
+			$.get("{{eventsUrl}}/nearestEvent", function(selectedDate) {
+				$('#calendar').fullCalendar('gotoDate', selectedDate );
+			});
 		});
 
 		function afterEventsRender( event, jsEvent, view ) {
