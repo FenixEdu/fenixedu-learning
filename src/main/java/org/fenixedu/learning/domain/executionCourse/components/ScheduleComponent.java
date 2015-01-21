@@ -36,7 +36,6 @@ public class ScheduleComponent extends BaseExecutionCourseComponent {
         globalContext.put("defaultView", "agendaWeek");
         globalContext.put("eventsUrl", CoreConfiguration.getConfiguration().applicationUrl()
                 + "/api/fenixedu-learning/events/executionCourse/" + executionCourse.getExternalId());
-        globalContext.put("dayToShow", ISODateTimeFormat.date().print(LocalDate.now()));
     }
 
 }

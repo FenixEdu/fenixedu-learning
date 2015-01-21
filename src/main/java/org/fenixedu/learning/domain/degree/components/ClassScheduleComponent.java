@@ -40,7 +40,6 @@ public class ClassScheduleComponent extends DegreeSiteComponent {
         globalContext.put("defaultView", "agendaWeek");
         globalContext.put("eventsUrl", CoreConfiguration.getConfiguration().applicationUrl()
                 + "/api/fenixedu-learning/events/degree/class/" + schoolClass.getExternalId());
-        globalContext.put("dayToShow", ISODateTimeFormat.date().print(LocalDate.now()));
     }
 
 }
