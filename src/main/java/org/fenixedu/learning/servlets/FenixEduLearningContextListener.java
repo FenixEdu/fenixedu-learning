@@ -86,7 +86,8 @@ public class FenixEduLearningContextListener implements ServletContextListener {
         }
     }
 
-    private static void handleThesisProposalApproval(Thesis thesis) {
+    private static void handleThesisProposalApproval(DomainObjectEvent<Thesis> event) {
+        Thesis thesis = event.getInstance();
         if (thesis.getProposedDiscussed() == null || thesis.getDegree().getSite() == null) {
             return;
         }
