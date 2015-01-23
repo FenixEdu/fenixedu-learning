@@ -23,7 +23,12 @@ import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 import static org.fenixedu.academic.domain.ExecutionYear.COMPARATOR_BY_YEAR;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,9 +38,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
-import org.fenixedu.academic.domain.*;
+import org.fenixedu.academic.domain.Coordinator;
+import org.fenixedu.academic.domain.Degree;
+import org.fenixedu.academic.domain.ExecutionCourse;
+import org.fenixedu.academic.domain.Lesson;
+import org.fenixedu.academic.domain.Project;
+import org.fenixedu.academic.domain.SchoolClass;
+import org.fenixedu.academic.domain.WrittenEvaluation;
 import org.fenixedu.academic.util.EvaluationType;
 import org.fenixedu.bennu.core.groups.DynamicGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
@@ -51,7 +60,9 @@ import org.joda.time.format.ISODateTimeFormat;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 @Path("/fenixedu-learning/events")
 public class EventsResource {
@@ -71,7 +82,7 @@ public class EventsResource {
     @Produces("application/json; charset=utf-8")
     public String nearestExecutionCourseEvent(@PathParam("course") ExecutionCourse course) {
         LocalDate date = LocalDate.now();
-        if(hasPermissionToViewSchedule(course)) {
+        if (hasPermissionToViewSchedule(course)) {
             date = nearestEventDate(ScheduleEventBean.forExecutionCourse(course, course.getAcademicInterval().toInterval()));
         }
         return toJson(date).toString();
@@ -104,8 +115,9 @@ public class EventsResource {
     @Path("/degree/evaluations/{degree}/nearestEvent")
     @Produces("application/json; charset=utf-8")
     public String nearestEvaluationEvent(@PathParam("degree") Degree degree) {
-        Optional<Interval> interval = degree.getDegreeCurricularPlansExecutionYears().stream()
-                .sorted(COMPARATOR_BY_YEAR.reversed()).map(year -> year.getAcademicInterval().toInterval()).findFirst();
+        Optional<Interval> interval =
+                degree.getDegreeCurricularPlansExecutionYears().stream().sorted(COMPARATOR_BY_YEAR.reversed())
+                        .map(year -> year.getAcademicInterval().toInterval()).findFirst();
         LocalDate date = interval.isPresent() ? nearestEventDate(allPublicEvaluations(degree, interval.get())) : LocalDate.now();
         return toJson(date).toString();
     }
@@ -193,7 +205,8 @@ public class EventsResource {
     private ScheduleEventBean createEventBean(WrittenEvaluation evaluation) {
         ExecutionCourse ec = evaluation.getAssociatedExecutionCoursesSet().stream().findFirst().get();
         return new ScheduleEventBean(ec.getPrettyAcronym(), evaluation.getEvaluationType().toString(), evaluation.getFullName(),
-                evaluation.getBeginningDateTime(), evaluation.getEndDateTime(), null, null,
+                evaluation.getBeginningDateTime(), evaluation.getEndDateTime(), null, evaluation
+                        .getAssociatedExecutionCoursesSet().stream().findAny().map(ExecutionCourse::getSiteUrl).orElse("#"),
                 colorForType(evaluation.getEvaluationType()), null, null);
     }
 
@@ -213,14 +226,16 @@ public class EventsResource {
 
         Set<ScheduleEventBean> events = new HashSet<>();
 
+        String url = project.getAssociatedExecutionCoursesSet().stream().findAny().map(ExecutionCourse::getSiteUrl).orElse("#");
+
         if (interval.contains(projectStart)) {
             events.add(new ScheduleEventBean(executionCourse.getPrettyAcronym(), project.getEvaluationType().toString(), project
-                    .getPresentationName(), projectStart, projectStart.plusHours(1), null, null, colorForType(project
+                    .getPresentationName(), projectStart, projectStart.plusHours(1), null, url, colorForType(project
                     .getEvaluationType()), null, null));
         }
         if (interval.contains(projectEnd)) {
             events.add(new ScheduleEventBean(executionCourse.getPrettyAcronym(), project.getEvaluationType().toString(), project
-                    .getPresentationName(), projectEnd.minusHours(1), projectEnd, null, null, colorForType(project
+                    .getPresentationName(), projectEnd.minusHours(1), projectEnd, null, url, colorForType(project
                     .getEvaluationType()), null, null));
         }
 
@@ -249,7 +264,7 @@ public class EventsResource {
     }
 
     private JsonElement toJson(LocalDate localDate) {
-        if(localDate == null) {
+        if (localDate == null) {
             return new JsonPrimitive(ISODateTimeFormat.date().print(LocalDate.now()));
         } else {
             return new JsonPrimitive(ISODateTimeFormat.date().print(localDate));
@@ -258,8 +273,8 @@ public class EventsResource {
 
     private LocalDate nearestEventDate(Collection<ScheduleEventBean> events) {
         LocalDate now = LocalDate.now();
-        LocalDate result = events.stream().map(e-> e.begin).map(DateTime::toLocalDate)
-                .collect(toCollection(TreeSet::new)).lower(now);
+        LocalDate result =
+                events.stream().map(e -> e.begin).map(DateTime::toLocalDate).collect(toCollection(TreeSet::new)).lower(now);
         return Optional.ofNullable(result).orElse(now);
     }
 }
