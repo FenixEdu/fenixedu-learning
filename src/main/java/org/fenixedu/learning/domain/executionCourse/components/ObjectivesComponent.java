@@ -20,6 +20,7 @@ package org.fenixedu.learning.domain.executionCourse.components;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -45,13 +46,9 @@ public class ObjectivesComponent extends BaseExecutionCourseComponent {
 
     private Map<CurricularCourse, Curriculum> curriculumsByCurricularCourses(ExecutionCourse executionCourse) {
         Date end = executionCourse.getExecutionPeriod().getExecutionYear().getEndDate();
-        return executionCourse
-                .getCurricularCoursesSortedByDegreeAndCurricularCourseName()
-                .stream()
+        return executionCourse.getCurricularCoursesSortedByDegreeAndCurricularCourseName().stream()
                 .filter(curricularCourse -> !curricularCourse.isBolonhaDegree())
-                .collect(
-                        Collectors.toMap(Function.identity(),
-                                curricularCourse -> curricularCourse.findLatestCurriculumModifiedBefore(end)));
+                .map(curricularCourse -> curricularCourse.findLatestCurriculumModifiedBefore(end)).filter(Objects::nonNull)
+                .collect(Collectors.toMap(Curriculum::getCurricularCourse, Function.identity()));
     }
-
 }
