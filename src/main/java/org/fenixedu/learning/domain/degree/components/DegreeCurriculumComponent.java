@@ -36,6 +36,7 @@ import java.util.stream.Stream;
 
 import org.fenixedu.academic.domain.CurricularCourse;
 import org.fenixedu.academic.domain.Degree;
+import org.fenixedu.academic.domain.DegreeCurricularPlan;
 import org.fenixedu.academic.domain.ExecutionSemester;
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.curricularPeriod.CurricularPeriod;
@@ -90,8 +91,8 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
         if (requestContext.length > 1) {
             return getDomainObject(requestContext[1]);
         } else {
-            return Optional.ofNullable(degree.getLastActiveDegreeCurricularPlan().getLastExecutionYear()).orElse(
-                    readCurrentExecutionYear());
+            return Optional.ofNullable(degree.getLastActiveDegreeCurricularPlan())
+                    .map(DegreeCurricularPlan::getLastExecutionYear).orElse(readCurrentExecutionYear());
         }
     }
 
