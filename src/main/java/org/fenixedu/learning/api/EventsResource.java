@@ -45,6 +45,7 @@ import org.fenixedu.academic.domain.Lesson;
 import org.fenixedu.academic.domain.Project;
 import org.fenixedu.academic.domain.SchoolClass;
 import org.fenixedu.academic.domain.WrittenEvaluation;
+import org.fenixedu.academic.predicate.AccessControl;
 import org.fenixedu.academic.util.EvaluationType;
 import org.fenixedu.bennu.core.groups.DynamicGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
@@ -259,7 +260,7 @@ public class EventsResource {
         boolean isCoordinator =
                 executionCourse.getDegreesSortedByDegreeName().stream()
                         .flatMap(degree -> degree.getCurrentCoordinators().stream()).map(Coordinator::getPerson)
-                        .filter(coordinator -> coordinator.equals(Authenticate.getUser().getPerson())).findFirst().isPresent();
+                        .filter(coordinator -> coordinator.equals(AccessControl.getPerson())).findFirst().isPresent();
         return isOpenPeriod || (isLogged && (isAllocationManager || isCoordinator));
     }
 
