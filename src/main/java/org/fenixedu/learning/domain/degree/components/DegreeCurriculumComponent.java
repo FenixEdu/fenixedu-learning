@@ -34,6 +34,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
+import com.google.common.base.Strings;
 import org.fenixedu.academic.domain.CurricularCourse;
 import org.fenixedu.academic.domain.Degree;
 import org.fenixedu.academic.domain.DegreeCurricularPlan;
@@ -60,7 +61,7 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
     public void handle(Page page, TemplateContext componentContext, TemplateContext globalContext) {
         Degree degree = degree(page);
         String pageUrl = pageForComponent(page.getSite(), CurricularCourseComponent.class).map(Page::getAddress).orElse(null);
-        ExecutionYear selectedYear = selectedYear(globalContext.getRequestContext(), degree);
+        ExecutionYear selectedYear = selectedYear((String) globalContext.get("year"), degree);
         globalContext.put("courseGroups", courseGroups(degree, selectedYear, pageUrl));
         globalContext.put("allCurricularCourses",
                 allCurricularCourses(courseGroups(degree, selectedYear, pageUrl).collect(toSet())));
@@ -87,12 +88,16 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
                 .map(plan -> new CourseGroupWrap(null, plan.getRoot(), year.getFirstExecutionPeriod(), pageUrl));
     }
 
-    ExecutionYear selectedYear(String[] requestContext, Degree degree) {
-        if (requestContext.length > 1) {
-            return getDomainObject(requestContext[1]);
+    ExecutionYear selectedYear(String year, Degree degree) {
+        if (!Strings.isNullOrEmpty(year)) {
+            return getDomainObject(year);
         } else {
-            return Optional.ofNullable(degree.getLastActiveDegreeCurricularPlan())
-                    .map(DegreeCurricularPlan::getLastExecutionYear).orElse(readCurrentExecutionYear());
+            if(degree.getLastActiveDegreeCurricularPlan() != null) {
+                return degree.getLastActiveDegreeCurricularPlan().getLastExecutionYear();
+            }
+            else {
+                return readCurrentExecutionYear();
+            }
         }
     }
 
