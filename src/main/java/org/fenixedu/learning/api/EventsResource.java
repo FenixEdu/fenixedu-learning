@@ -256,7 +256,7 @@ public class EventsResource {
     private boolean hasPermissionToViewSchedule(ExecutionCourse executionCourse) {
         boolean isOpenPeriod = !executionCourse.getExecutionPeriod().isNotOpen();
         boolean isLogged = Authenticate.isLogged();
-        boolean isAllocationManager = DynamicGroup.get("resourceAllocationManager").isMember(Authenticate.getUser());
+        boolean isAllocationManager = isLogged && DynamicGroup.get("resourceAllocationManager").isMember(Authenticate.getUser());
         boolean isCoordinator =
                 executionCourse.getDegreesSortedByDegreeName().stream()
                         .flatMap(degree -> degree.getCurrentCoordinators().stream()).map(Coordinator::getPerson)
