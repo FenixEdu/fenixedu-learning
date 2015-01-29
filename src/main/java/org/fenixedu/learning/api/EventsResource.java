@@ -18,33 +18,13 @@
  */
 package org.fenixedu.learning.api;
 
-import static com.google.common.collect.Sets.newHashSet;
-import static java.util.stream.Collectors.toCollection;
-import static java.util.stream.Collectors.toList;
-import static org.fenixedu.academic.domain.ExecutionYear.COMPARATOR_BY_YEAR;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-
-import org.fenixedu.academic.domain.Coordinator;
-import org.fenixedu.academic.domain.Degree;
-import org.fenixedu.academic.domain.ExecutionCourse;
-import org.fenixedu.academic.domain.Lesson;
-import org.fenixedu.academic.domain.Project;
-import org.fenixedu.academic.domain.SchoolClass;
-import org.fenixedu.academic.domain.WrittenEvaluation;
+import com.google.common.base.Strings;
+import com.google.common.collect.Sets;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import org.fenixedu.academic.domain.*;
 import org.fenixedu.academic.predicate.AccessControl;
 import org.fenixedu.academic.util.EvaluationType;
 import org.fenixedu.bennu.core.groups.DynamicGroup;
@@ -58,15 +38,45 @@ import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 import org.joda.time.format.ISODateTimeFormat;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Sets;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
+import javax.ws.rs.*;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.google.common.collect.Sets.newHashSet;
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toList;
+import static org.fenixedu.academic.domain.ExecutionYear.COMPARATOR_BY_YEAR;
 
 @Path("/fenixedu-learning/events")
 public class EventsResource {
+
+    private static Collection<ScheduleEventBean> projectEvents(Project project, ExecutionCourse executionCourse,
+            Interval interval) {
+        DateTime projectStart = project.getProjectBeginDateTime();
+        DateTime projectEnd = project.getProjectEndDateTime();
+
+        Set<ScheduleEventBean> events = new HashSet<>();
+
+        String url = project.getAssociatedExecutionCoursesSet().stream().findAny().map(ExecutionCourse::getSiteUrl).orElse("#");
+
+        if (interval.contains(projectStart)) {
+            events.add(new ScheduleEventBean(executionCourse.getPrettyAcronym(), project.getEvaluationType().toString(),
+                    project.getPresentationName(), projectStart, projectStart.plusHours(1), null, url,
+                    colorForType(project.getEvaluationType()), null, null));
+        }
+        if (interval.contains(projectEnd)) {
+            events.add(new ScheduleEventBean(executionCourse.getPrettyAcronym(), project.getEvaluationType().toString(),
+                    project.getPresentationName(), projectEnd.minusHours(1), projectEnd, null, url,
+                    colorForType(project.getEvaluationType()), null, null));
+        }
+
+        return events;
+    }
+
+    private static String colorForType(EvaluationType type) {
+        return ScheduleEventBean.COLORS[type.getType() % ScheduleEventBean.COLORS.length];
+    }
 
     @GET
     @Path("/executionCourse/{course}")
@@ -177,8 +187,9 @@ public class EventsResource {
         events.forEach(event -> {
             JsonObject ev = new JsonObject();
             ev.addProperty("id", event.id);
-            ev.addProperty("start", event.begin.getMillis());
-            ev.addProperty("end", event.end.getMillis());
+
+            ev.addProperty("start", event.begin.toDateTimeISO().toString());
+            ev.addProperty("end", event.end.toDateTimeISO().toString());
             ev.addProperty("url", event.url);
             ev.addProperty("title", event.getTitle());
             ev.addProperty("description", event.getDescription());
@@ -219,32 +230,6 @@ public class EventsResource {
             }
         });
         return projects;
-    }
-
-    private static Collection<ScheduleEventBean> projectEvents(Project project, ExecutionCourse executionCourse, Interval interval) {
-        DateTime projectStart = project.getProjectBeginDateTime();
-        DateTime projectEnd = project.getProjectEndDateTime();
-
-        Set<ScheduleEventBean> events = new HashSet<>();
-
-        String url = project.getAssociatedExecutionCoursesSet().stream().findAny().map(ExecutionCourse::getSiteUrl).orElse("#");
-
-        if (interval.contains(projectStart)) {
-            events.add(new ScheduleEventBean(executionCourse.getPrettyAcronym(), project.getEvaluationType().toString(), project
-                    .getPresentationName(), projectStart, projectStart.plusHours(1), null, url, colorForType(project
-                    .getEvaluationType()), null, null));
-        }
-        if (interval.contains(projectEnd)) {
-            events.add(new ScheduleEventBean(executionCourse.getPrettyAcronym(), project.getEvaluationType().toString(), project
-                    .getPresentationName(), projectEnd.minusHours(1), projectEnd, null, url, colorForType(project
-                    .getEvaluationType()), null, null));
-        }
-
-        return events;
-    }
-
-    private static String colorForType(EvaluationType type) {
-        return ScheduleEventBean.COLORS[type.getType() % ScheduleEventBean.COLORS.length];
     }
 
     private Stream<ExecutionCourse> allExecutionCourses(Degree degree) {
