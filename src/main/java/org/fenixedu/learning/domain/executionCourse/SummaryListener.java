@@ -53,50 +53,6 @@ public class SummaryListener {
         post.setCreationDate(summary.getSummaryDateTime());
 
         post.addCategories(site.getOrCreateCategoryForSlug(SUMMARIES_CATEGORY, SUMMARIES_TITLE));
-
-        Professorship professorship = summary.getProfessorship();
-        Teacher teacher = summary.getTeacher();
-        if (professorship != null || teacher != null) {
-            Person professor = professorship != null ? professorship.getPerson() : teacher.getPerson();
-            post.setCreatedBy(Optional.ofNullable(professor.getUser()).orElse(Authenticate.getUser()));
-            LocalizedString professorName = makeLocalized(professor.getPresentationName());
-            post.addCategories(site.getOrCreateCategoryForSlug("summary-professor-" + professor.getExternalId(), professorName));
-        }
-
-        if (summary.getShift() != null) {
-            LocalizedString summaryShiftName = makeLocalized(summary.getShift().getPresentationName());
-            post.addCategories(site.getOrCreateCategoryForSlug("summary-shift-" + summary.getShift().getOid(), summaryShiftName));
-        }
-
-        ShiftType summaryType = summary.getSummaryType();
-        if (summaryType != null) {
-            LocalizedString summaryTypeName = makeLocalized(summaryType.getFullNameTipoAula());
-            post.addCategories(site.getOrCreateCategoryForSlug("summary-type-" + summaryType.getSiglaTipoAula(), summaryTypeName));
-        }
-
-        Space room = summary.getRoom();
-        Optional<LocalizedString> roomName = tryGetRoomName(room);
-        if (roomName.isPresent()) {
-            post.addCategories(site.getOrCreateCategoryForSlug("summary-room-" + room.getExternalId(), roomName.get()));
-        }
-    }
-
-    private static Optional<LocalizedString> tryGetRoomName(Space room) {
-        try {
-            if (room != null && !Strings.isNullOrEmpty(room.getName())) {
-                return Optional.of(makeLocalized(room.getName()));
-            }
-        } catch (Exception e) {
-        }
-        return Optional.empty();
-    }
-
-    private static LocalizedString makeLocalized(String value) {
-        LocalizedString.Builder builder = new LocalizedString.Builder();
-        for (Locale locale : CoreConfiguration.supportedLocales()) {
-            builder.with(locale, value);
-        }
-        return builder.build();
     }
 
 }
