@@ -72,7 +72,10 @@
 						{{professorship.person.name}}
 					{% endif %}
 					<div>
-					{{professorship.person.profile.email}}
+						{% if professorship.person.defaultEmailAddress is not empty and
+						professorship.person.defaultEmailAddress.visibleToPublic %}
+						{{professorship.person.defaultEmailAddress.presentationValue}}
+						{% endif %}
 					</div>
 			</div>
 	</div>
