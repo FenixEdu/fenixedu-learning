@@ -2,7 +2,7 @@
 {% import "fenixedu-learning-theme/view.html" %}
 
 {% block contentTitle %}
-	Últimos anúncios
+	{{ i18n('resources.FenixEduLearningResources', 'label.latestAnnouncements') }}
 {% endblock contentTitle %}
 
 {% block content %}
@@ -66,7 +66,7 @@
 						<a href="{{professorship.person.homepageWebAddress}}">{{professorship.person.profile.displayName}}</a>
 						
 						{% if professorship.responsibleFor %}
-						<p class="badge" style="font-weight:400; background:#aaa; font-size:11px; padding-left:10px; padding-right:10px; margin-left:5px; margin-bottom:0px;">{{ i18n('resources.ApplicationResources', 'label.responsible') }}</p>
+						<p class="badge" style="font-weight:400; background:#aaa; font-size:11px; padding-left:10px; padding-right:10px; margin-left:5px; margin-bottom:0px;">{{ i18n('resources.FenixEduLearningResources', 'label.senior.lecture') }}</p>
 					{% endif %}
 					{% else %}
 						{{professorship.person.name}}
