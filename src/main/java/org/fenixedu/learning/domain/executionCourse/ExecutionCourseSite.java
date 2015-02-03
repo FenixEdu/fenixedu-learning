@@ -35,6 +35,7 @@ import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.groups.AnyoneGroup;
 import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.bennu.core.groups.LoggedGroup;
+import org.fenixedu.bennu.core.groups.NobodyGroup;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.bennu.portal.domain.MenuContainer;
@@ -58,6 +59,8 @@ public class ExecutionCourseSite extends ExecutionCourseSite_Base {
         setPublished(true);
         setFolder(folderForPath(PortalConfiguration.getInstance().getMenu(), "courses"));
         setSlug(on("-").join(getExecutionCourse().getSigla(), getExecutionCourse().getExternalId()));
+        setCanAdminGroup(NobodyGroup.get());
+        setCanPostGroup(NobodyGroup.get());
         setBennu(Bennu.getInstance());
 
         executionCourse.setSiteUrl(getFullUrl());
