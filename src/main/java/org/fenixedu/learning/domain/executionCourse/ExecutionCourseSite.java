@@ -59,6 +59,8 @@ public class ExecutionCourseSite extends ExecutionCourseSite_Base {
         setFolder(folderForPath(PortalConfiguration.getInstance().getMenu(), "courses"));
         setSlug(on("-").join(getExecutionCourse().getSigla(), getExecutionCourse().getExternalId()));
         setBennu(Bennu.getInstance());
+
+        executionCourse.setSiteUrl(getFullUrl());
     }
 
     @Override
