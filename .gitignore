@@ -1,10 +1,24 @@
-target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.next
-release.properties
-.classpath
-.project
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Eclipse #
 .settings/
-/bin
-fenixedu-cms.iml
+.project
+.classpath
+output/
+
+# IntelliJ #
+
+.idea/
+*.iml
+
+# Maven #
+target/
+bin/
+
+/target
+/target/
