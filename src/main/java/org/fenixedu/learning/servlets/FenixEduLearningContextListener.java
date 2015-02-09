@@ -18,6 +18,9 @@
  */
 package org.fenixedu.learning.servlets;
 
+import java.util.Locale;
+import java.util.Optional;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -25,20 +28,32 @@ import javax.servlet.annotation.WebListener;
 import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.academic.domain.Summary;
 import org.fenixedu.academic.domain.thesis.Thesis;
+import org.fenixedu.academic.service.services.manager.MergeExecutionCourses;
 import org.fenixedu.academic.service.services.teacher.PublishMarks;
 import org.fenixedu.academic.service.services.teacher.PublishMarks.MarkPublishingBean;
 import org.fenixedu.academic.util.Bundle;
+import org.fenixedu.bennu.core.groups.AnyoneGroup;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.io.domain.GroupBasedFile;
 import org.fenixedu.bennu.signals.DomainObjectEvent;
 import org.fenixedu.bennu.signals.Signal;
 import org.fenixedu.cms.domain.Category;
+import org.fenixedu.cms.domain.Menu;
+import org.fenixedu.cms.domain.MenuItem;
+import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.Post;
+import org.fenixedu.cms.domain.Site;
+import org.fenixedu.cms.domain.component.Component;
+import org.fenixedu.cms.domain.component.StaticPost;
 import org.fenixedu.commons.i18n.I18N;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.learning.domain.executionCourse.ExecutionCourseListener;
+import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 import org.fenixedu.learning.domain.executionCourse.SummaryListener;
 import org.joda.time.DateTime;
 
+import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.FenixFramework;
 
 import com.google.common.base.Strings;
@@ -71,6 +86,25 @@ public class FenixEduLearningContextListener implements ServletContextListener {
                 executionCourse.getSite().delete();
             }
         });
+
+        MergeExecutionCourses.registerMergeHandler(FenixEduLearningContextListener::copyExecutionCoursesSites);
+    }
+
+    private static void copyExecutionCoursesSites(ExecutionCourse from, ExecutionCourse to) {
+        Menu newMenu = to.getSite().getMenusSet().stream().findAny().get();
+
+        LocalizedString newPageName =
+                new LocalizedString().with(Locale.getDefault(), from.getName() + "(" + from.getDegreePresentationString() + ")");
+
+        MenuItem emptyPageParent = PagesAdminService.create(to.getSite(), null, newPageName, new LocalizedString()).get();
+
+        emptyPageParent.getPage().setPublished(false);
+        emptyPageParent.setTop(newMenu);
+
+        for (Menu oldMenu : from.getSite().getMenusSet()) {
+            oldMenu.getToplevelItemsSorted().forEach(
+                    menuItem -> PagesAdminService.copyStaticPage(menuItem, to.getSite(), newMenu, emptyPageParent));
+        }
     }
 
     private static void handleMarksPublishment(MarkPublishingBean bean) {
@@ -138,6 +172,90 @@ public class FenixEduLearningContextListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent event) {
+
+    }
+
+    private static class PagesAdminService {
+
+        @Atomic(mode = Atomic.TxMode.WRITE)
+        protected static Optional<MenuItem> create(Site site, MenuItem parent, LocalizedString name, LocalizedString body) {
+            Menu menu = site.getMenusSet().stream().findFirst().orElse(null);
+            Page page = Page.create(site, menu, parent, Post.sanitize(name), true, "view", Authenticate.getUser());
+            Category category =
+                    site.getOrCreateCategoryForSlug("content", new LocalizedString().with(I18N.getLocale(), "Content"));
+            Post post = Post.create(site, page, Post.sanitize(name), Post.sanitize(body), category, true, Authenticate.getUser());
+            page.addComponents(new StaticPost(post));
+            MenuItem menuItem = page.getMenuItemsSet().stream().findFirst().get();
+            if (parent != null) {
+                parent.add(menuItem);
+            } else {
+                menu.add(menuItem);
+            }
+            return Optional.of(menuItem);
+        }
+
+        protected static void copyStaticPage(MenuItem oldMenuItem, ExecutionCourseSite newSite, Menu newMenu, MenuItem newParent) {
+            if (oldMenuItem.getPage() != null) {
+                Page oldPage = oldMenuItem.getPage();
+                staticPost(oldPage).ifPresent(oldPost -> {
+                    Page newPage = new Page(newSite);
+                    newPage.setName(oldPage.getName());
+                    newPage.setTemplate(newSite.getTheme().templateForType(oldPage.getTemplate().getType()));
+                    newPage.setCreatedBy(Authenticate.getUser());
+                    newPage.setPublished(false);
+
+                    for (Component component : oldPage.getComponentsSet()) {
+                        if (component instanceof StaticPost) {
+                            StaticPost staticPostComponent = (StaticPost) component;
+                            Post newPost = clonePost(staticPostComponent.getPost(), newSite);
+                            newPost.setActive(true);
+                            StaticPost newComponent = new StaticPost(newPost);
+                            newPage.addComponents(newComponent);
+                        }
+                    }
+
+                    MenuItem newMenuItem = MenuItem.create(newMenu, newPage, oldMenuItem.getName(), newParent);
+                    newMenuItem.setPosition(oldMenuItem.getPosition());
+                    newMenuItem.setUrl(oldMenuItem.getUrl());
+                    newMenuItem.setFolder(oldMenuItem.getFolder());
+
+                    oldMenuItem.getChildrenSet().stream().forEach(child -> copyStaticPage(child, newSite, newMenu, newMenuItem));
+                });
+            }
+        }
+
+        private static Post clonePost(Post oldPost, Site newSite) {
+            Post newPost = new Post(newSite);
+            newPost.setName(oldPost.getName());
+            newPost.setBody(oldPost.getBody());
+            newPost.setCreationDate(new DateTime());
+            newPost.setCreatedBy(Authenticate.getUser());
+            newPost.setActive(oldPost.getActive());
+
+            for (Category oldCategory : oldPost.getCategoriesSet()) {
+                Category newCategory = newSite.getOrCreateCategoryForSlug(oldCategory.getSlug(), oldCategory.getName());
+                newPost.addCategories(newCategory);
+            }
+
+            for (int i = 0; i < oldPost.getAttachments().getFiles().size(); ++i) {
+                GroupBasedFile file = oldPost.getAttachments().getFiles().get(i);
+                GroupBasedFile attachmentCopy =
+                        new GroupBasedFile(file.getDisplayName(), file.getFilename(), file.getContent(), AnyoneGroup.get());
+                newPost.getAttachments().putFile(attachmentCopy, i);
+            }
+
+            for (GroupBasedFile file : oldPost.getPostFiles().getFiles()) {
+                GroupBasedFile postFileCopy =
+                        new GroupBasedFile(file.getDisplayName(), file.getFilename(), file.getContent(), AnyoneGroup.get());
+                newPost.getPostFiles().putFile(postFileCopy);
+            }
+            return newPost;
+        }
+
+        private static Optional<Post> staticPost(Page page) {
+            return page.getComponentsSet().stream().filter(StaticPost.class::isInstance).map(StaticPost.class::cast)
+                    .map(StaticPost::getPost).findFirst();
+        }
 
     }
 }
