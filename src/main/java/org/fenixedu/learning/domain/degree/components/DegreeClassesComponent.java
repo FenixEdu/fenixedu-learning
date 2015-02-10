@@ -81,7 +81,7 @@ public class DegreeClassesComponent extends DegreeSiteComponent {
 
     private ExecutionSemester getOtherExecutionSemester(ExecutionSemester semester) {
         ExecutionSemester next = semester.getNextExecutionPeriod();
-        return canViewNextExecutionSemester(next) ? next : semester.getPreviousExecutionPeriod();
+        return next != null && canViewNextExecutionSemester(next) ? next : semester.getPreviousExecutionPeriod();
     }
 
     private boolean canViewNextExecutionSemester(ExecutionSemester nextExecutionSemester) {

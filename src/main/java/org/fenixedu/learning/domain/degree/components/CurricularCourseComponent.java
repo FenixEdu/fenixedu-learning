@@ -49,7 +49,7 @@ public class CurricularCourseComponent extends DegreeSiteComponent {
 
     private ExecutionSemester getExecutionSemester(CurricularCourse curricularCourse, String[] request) {
         return request.length > 2 ? getDomainObject(request[2]) : curricularCourse.getParentDegreeCurricularPlan()
-                .getFirstExecutionDegree().getExecutionYear().getFirstExecutionPeriod();
+                .getMostRecentExecutionYear().getLastExecutionPeriod();
     }
 
     private HashMap<String, Object> createWrap(CurricularCourse curricularCourse, ExecutionSemester period) {
