@@ -37,14 +37,16 @@ public class LessonPlanComponent extends BaseExecutionCourseComponent {
     @Override
     public void handle(Page page, TemplateContext componentContext, TemplateContext globalContext) {
         ExecutionCourse executionCourse = ((ExecutionCourseSite) page.getSite()).getExecutionCourse();
-        Map<ShiftType, List<LessonPlanning>> lessonPlanningsMap = Maps.newHashMap();
-        for (ShiftType shiftType : executionCourse.getShiftTypes()) {
-            List<LessonPlanning> lessonPlanningsOrderedByOrder = executionCourse.getLessonPlanningsOrderedByOrder(shiftType);
-            if (!lessonPlanningsOrderedByOrder.isEmpty()) {
-                lessonPlanningsMap.put(shiftType, lessonPlanningsOrderedByOrder);
+        if (executionCourse.getLessonPlanningAvailable()) {
+            Map<ShiftType, List<LessonPlanning>> lessonPlanningsMap = Maps.newHashMap();
+            for (ShiftType shiftType : executionCourse.getShiftTypes()) {
+                List<LessonPlanning> lessonPlanningsOrderedByOrder = executionCourse.getLessonPlanningsOrderedByOrder(shiftType);
+                if (!lessonPlanningsOrderedByOrder.isEmpty()) {
+                    lessonPlanningsMap.put(shiftType, lessonPlanningsOrderedByOrder);
+                }
             }
+            globalContext.put("lessonPlanningsMap", lessonPlanningsMap);
         }
-        globalContext.put("lessonPlanningsMap", lessonPlanningsMap);
     }
 
 }
