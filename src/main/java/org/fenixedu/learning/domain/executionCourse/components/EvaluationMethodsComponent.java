@@ -33,11 +33,20 @@ public class EvaluationMethodsComponent extends BaseExecutionCourseComponent {
     @Override
     public void handle(Page page, TemplateContext componentContext, TemplateContext globalContext) {
         ExecutionCourse executionCourse = ((ExecutionCourseSite) page.getSite()).getExecutionCourse();
+        LocalizedString evaluationMethod = getEvaluationMethod(executionCourse);
         globalContext.put("evaluationMethod", executionCourse.getEvaluationMethod());
-        LocalizedString ls =
-                new LocalizedString.Builder().with(new Locale("pt"), executionCourse.getEvaluationMethodText())
-                        .with(new Locale("en"), executionCourse.getEvaluationMethodTextEn()).build();
-        globalContext.put("evaluationMethodText", executionCourse.getEvaluationMethodText());
-        globalContext.put("evaluationMethodLocalizedString", ls);
+        globalContext.put("evaluationMethodText", evaluationMethod.getContent());
+        globalContext.put("evaluationMethodLocalizedString", evaluationMethod);
+    }
+
+    private LocalizedString getEvaluationMethod(ExecutionCourse executionCourse) {
+        if (executionCourse.getEvaluationMethod() != null) {
+            return executionCourse.getEvaluationMethod().getEvaluationElements().toLocalizedString();
+        } else {
+            String competenceMethod =
+                    !executionCourse.getCompetenceCourses().isEmpty() ? executionCourse.getCompetenceCourses().iterator().next()
+                            .getEvaluationMethod() : "";
+            return new LocalizedString(Locale.getDefault(), competenceMethod);
+        }
     }
 }
