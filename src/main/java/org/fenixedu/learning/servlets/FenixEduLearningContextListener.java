@@ -54,8 +54,10 @@ public class FenixEduLearningContextListener implements ServletContextListener {
         });
         FenixFramework.getDomainModel().registerDeletionListener(Summary.class, (summary) -> {
             Post post = summary.getPost();
-            summary.setPost(null);
-            post.delete();
+            if(post!=null) {
+                summary.setPost(null);
+                post.delete();
+            }
         });
         Signal.register(Summary.EDIT_SIGNAL, (DomainObjectEvent<Summary> event) -> {
             SummaryListener.updatePost(event.getInstance().getPost(), event.getInstance());
