@@ -3,33 +3,44 @@
 {% block content %}
 
 <!-- Execution courses by semester and curricular year -->
+
+
 {% for executionCourseBySemesterAndCurricularYear in  entries(executionCoursesBySemesterAndCurricularYear) %}
 	{% set semester = executionCourseBySemesterAndCurricularYear.key %}
 	{% set executionCoursesByCurricularYears = executionCourseBySemesterAndCurricularYear.value %}
-	{% set numExecutionCourses = entries(executionCoursesByCurricularYears).size %}
-		<h3>{{ semester.qualifiedName }}</h3>
+<div class="row" id="{{ semester.externalId }}">
 
-		<div class="row">
-			{% for executionCoursesByYear in entries(executionCoursesByCurricularYears) %}
-				{% set year = executionCoursesByYear.key %}
-				{% set executionCourses = executionCoursesByYear.value %}
-				<div class="col-sm-12">
-					<h4>
-						{{ i18n('resources.PublicDegreeInformation', 'public.degree.information.label.year') }} {{ year }}
-					</h4>
-
-					<ul>
-					{% for executionCourseWrap in executionCourses %}
-						<li><a href="{{ executionCourseWrap.executionCourse.site.fullUrl }}">{{ executionCourseWrap.executionCourseName }}</a></li>
-					{% endfor %}
-					</ul>
-				</div>
-			{% else %}
-				<div class="col-sm-12">
-					<p class="text-center"><em>There are no executions of curricular units for this execution period.</em></p>
-				</div>
+	<h3>{{ semester.qualifiedName }}
+		<div class="btn-group pull-right">
+			{% for executionCourseBySemesterAndCurricularYear in entries(executionCoursesBySemesterAndCurricularYear) %}
+			<a class="btn btn-default btn-sm {{semester equals executionCourseBySemesterAndCurricularYear.key ? 'disabled' : ''}}"
+			   href="#{{executionCourseBySemesterAndCurricularYear.key.externalId}}">
+				{{executionCourseBySemesterAndCurricularYear.key.name}}</a>
 			{% endfor %}
 		</div>
+	</h3>
+
+	{% for executionCoursesByYear in entries(executionCoursesByCurricularYears) %}
+	{% set year = executionCoursesByYear.key %}
+	{% set executionCourses = executionCoursesByYear.value %}
+	<div class="col-sm-12">
+		<h4>
+			{{ i18n('resources.PublicDegreeInformation', 'public.degree.information.label.year') }} {{ year }}
+		</h4>
+
+		<ul>
+			{% for executionCourseWrap in executionCourses %}
+			<li><a href="{{ executionCourseWrap.executionCourse.site.fullUrl }}">{{ executionCourseWrap.executionCourseName }}</a>
+			</li>
+			{% endfor %}
+		</ul>
+		</div>
+	{% else %}
+	<div class="col-sm-12">
+		<p class="text-center"><em>There are no executions of curricular units for this execution period.</em></p>
+	</div>
+	{% endfor %}
+</div>
 {% endfor %}
 
 {% endblock content %}
