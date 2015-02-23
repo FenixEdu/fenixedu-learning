@@ -30,6 +30,8 @@
     {% if attendsMap is not empty and entries(attendsMap) is not empty %}
 
         <p><em>{{ i18n('resources.ApplicationResources', 'classification.nonOfficial.information') }}</em></p>
+        <p><i>({{ i18n('resources.FenixEduLearningResources', 'label.students.number') }}: {{ entries(attendsMap).size }})</i></p>
+
         <table class="table table-condensed table-bordered">
             <tr>
                 <th nowrap>{{ i18n('resources.ApplicationResources', 'label.username') }}</th>
@@ -59,5 +61,6 @@
     {% else %}
         <i>{{ i18n('resources.ApplicationResources', 'label.Degree') }}</i>
     {% endif %}
+
 
 {% endblock content %}
