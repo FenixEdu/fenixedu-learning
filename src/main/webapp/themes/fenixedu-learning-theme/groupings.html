@@ -54,7 +54,7 @@
 
 	<section id="shifts">
 		{% for grouping in groupings %}
-			<div grouping="{{ grouping.externalId }}" class="hide">
+			<div grouping="{{ grouping.externalId }}">
 				<h4><strong>{{ grouping.name }}</strong></h4>
 				
 				{% if entries(grouping.studentGroupsIndexedByShift) is not empty %}
