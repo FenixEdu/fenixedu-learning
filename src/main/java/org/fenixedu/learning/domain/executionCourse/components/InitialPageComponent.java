@@ -18,9 +18,6 @@
  */
 package org.fenixedu.learning.domain.executionCourse.components;
 
-import java.util.Comparator;
-import java.util.stream.Collectors;
-
 import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.academic.domain.Professorship;
 import org.fenixedu.bennu.core.domain.User;
@@ -29,6 +26,13 @@ import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
 import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
+import static org.fenixedu.academic.domain.ExecutionCourse.EXECUTION_COURSE_EXECUTION_PERIOD_COMPARATOR;
 
 @ComponentType(name = "InitialPage", description = "Provides the information needed for the initial page of an Execution Course")
 public class InitialPageComponent extends BaseExecutionCourseComponent {
@@ -46,6 +50,13 @@ public class InitialPageComponent extends BaseExecutionCourseComponent {
                                 .thenComparing(Professorship.COMPARATOR_BY_PERSON_NAME)).collect(Collectors.toList()));
         globalContext.put("isStudent", isStudent(Authenticate.getUser()));
         globalContext.put("executionCourse", executionCourse);
+        globalContext.put("previousExecutionCourses", previousExecutionCourses(executionCourse));
+    }
+
+    private List<ExecutionCourse> previousExecutionCourses(ExecutionCourse executionCourse) {
+        return executionCourse.getAssociatedCurricularCoursesSet().stream()
+                .flatMap(c -> c.getAssociatedExecutionCoursesSet().stream()).distinct().filter(e -> !executionCourse.equals(e))
+                .sorted(EXECUTION_COURSE_EXECUTION_PERIOD_COMPARATOR.reversed()).collect(toList());
     }
 
     private boolean isStudent(User user) {
