@@ -84,14 +84,115 @@
 	
 
 {% endif %}
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<spanaria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					{{ i18n('resources.FenixEduLearningResources', 'label.moreInfo') }}
+				</h4>
+			</div>
+			<div class="modal-body">
+				<div role="tabpanel">
+
+					<!-- Nav tabs -->
+					<ul class="nav nav-tabs" role="tablist">
+						<li role="presentation" class="active">
+							<a href="#info" aria-controls="home" role="tab" data-toggle="tab">
+								{{ i18n('resources.FenixEduLearningResources', 'label.details') }}
+							</a>
+						</li>
+						<li role="presentation">
+							<a href="#older" aria-controls="profile" role="tab" data-toggle="tab">
+								{{ i18n('resources.FenixEduLearningResources', 'label.previousYears') }}
+							</a>
+						</li>
+						<li role="presentation">
+							<a href="#courses" aria-controls="messages" role="tab" data-toggle="tab">
+								{{ i18n('resources.FenixEduLearningResources', 'label.degrees') }}
+							</a>
+						</li>
+					</ul>
+
+					<!-- Tab panes -->
+					<div class="tab-content">
+
+						<!-- extra information -->
+						<div role="tabpanel" class="tab-pane active" id="info">
+							{% if site.description is not empty %}
+								<h5>{{ i18n('resources.FenixEduLearningResources', 'degree.description.title') }}:</h5>
+								{{ site.description.content }}
+							{% endif %}
+
+							{% if executionCourse.email is not empty %}
+								<h5>{{ i18n('resources.FenixEduLearningResources', 'label.email') }}:</h5>
+								<a href="mailto:{{executionCourse.email}}">{{executionCourse.email}}</a>
+							{% endif %}
+						</div>
+
+						<!-- Previous execution courses -->
+						<div role="tabpanel" class="tab-pane" id="older">
+							<p>
+								{% if previousExecutionCourses is not empty %}
+									<ul class="list-unstyled">
+										{% for previousExecuionCourse in previousExecutionCourses %}
+											{% if previousExecuionCourse.siteUrl is not empty %}
+											<li>
+												<a href="{{ previousExecuionCourse.siteUrl }}">
+													{{ previousExecuionCourse.executionYear.year }}
+													-
+													{{ previousExecuionCourse.executionPeriod.name }}
+												</a>
+											</li>
+											{% endif %}
+										{% endfor %}
+									</ul>
+								{% endif %}
+							</p>
+						</div>
+
+						<!-- Degrees -->
+						<div role="tabpanel" class="tab-pane" id="courses">
+							<p>
+								{% if executionCourse.executionDegrees is not empty %}
+									<ul class="list-unstyled">
+										{% for executionDegree in executionCourse.executionDegrees %}
+											{% if executionDegree.degree.siteUrl is not empty %}
+												<li>
+													<a href="{{executionDegree.degree.siteUrl}}">
+														{{executionDegree.presentationName}}
+													</a>
+												</li>
+											{% else %}
+												<li>{{executionDegree.presentationName}}</li>
+											{% endif %}
+										{% endfor %}
+									</ul>
+								{% endif %}
+							</p>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					{{ i18n('resources.ApplicationResources', 'label.back') }}
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 {% endblock content %}
 
 
 	{% block titleLink %}
-{% if executionCourse.email is not empty %}
-   <a style="padding-left:20px; font-size:15px; color:#009EE2; font-weight:300" href="mailto:{{executionCourse.email}}">+ Email</a>
-   {% endif %}
+<a style="padding-left:20px; font-size:15px; color:#009EE2; font-weight:300" href="#" data-toggle="modal" data-target="#myModal">+
+	Info</a>
 {% endblock titleLink %}
-
-
-   
