@@ -28,24 +28,14 @@
             {% endif %}
 
         {% else %}
-
-            {% if request.user.isAuthenticated %}
-                
+            <p>
+                {{ i18n('CmsExceptionResources', 'label.unautenticated.private.post') }} {{ post.visibilityGroup }}
+            </p>
+            {% if request.user is empty or not request.user.isAuthenticated %}
                 <p>
-                    {{ i18n('CmsExceptionResources', 'label.autenticated.private.post') }}
+                    <a href="{{request.contextPath}}/login?callback={{ request.url }}">Login</a>
                 </p>
-
-            {% else %}
-
-                <p>
-                    {{ i18n('CmsExceptionResources', 'label.unautenticated.private.post') }} {{ post.visibilityGroup }}
-                </p>
-
-                <p>
-                    <a href="/login?callback={{ request.url }}">Login</a>
-                </p>    
-
-            {% endif %}    
+            {% endif %}
 
         {% endif %}
 
