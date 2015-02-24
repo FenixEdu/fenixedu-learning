@@ -120,7 +120,7 @@ public class ScheduleEventBean implements Comparable<ScheduleEventBean> {
 
     private static ScheduleEventBean scheduleEvent(Shift shift, Lesson lesson, Interval interval) {
         String shiftAcronym = shift.getShiftTypesCodePrettyPrint();
-        String url = lesson.getLessonSpaceOccupation() != null ? lesson.getLessonSpaceOccupation().getUrl() : null;
+        String url = "#";
         String roomName = lesson.getSala() != null ? lesson.getSala().getName() : null;
         String shiftTypesPrettyPrint = shift.getShiftTypesPrettyPrint();
         String color = ScheduleEventBean.COLORS[shift.getSortedTypes().stream().findFirst().get().ordinal()];
