@@ -46,8 +46,10 @@ public class DegreeCurricularPlansComponent extends DegreeSiteComponent {
             globalContext.put("executionYear", executionYear.get());
         } else {
             DegreeCurricularPlan degreeCurricularPlan = degree.getMostRecentDegreeCurricularPlan();
-            globalContext.put("degreeCurricularPlan", degree.getMostRecentDegreeCurricularPlan());
-            globalContext.put("executionYear", degreeCurricularPlan.getMostRecentExecutionYear());
+            if (degreeCurricularPlan != null) {
+                globalContext.put("degreeCurricularPlan", degree.getMostRecentDegreeCurricularPlan());
+                globalContext.put("executionYear", degreeCurricularPlan.getMostRecentExecutionYear());
+            }
         }
         globalContext.put("executionYears", degree.getDegreeCurricularPlansExecutionYears());
     }
