@@ -45,7 +45,7 @@ import com.google.common.collect.Sets;
  */
 public class ScheduleEventBean implements Comparable<ScheduleEventBean> {
     public static final String[] COLORS = new String[] { "#f44336", "#607d8b", "#9c27b0", "#673ab7", "#3f51b5", "#2196f3",
-            "#03a9f4", "#00bcd4", "#009688", "#4caf50" };
+            "#03a9f4", "#00bcd4", "#009688", "#4caf50", "#6d7297" };
     private static final String COLOR_BLACK = "333";
 
     public final LocalizedString title;
