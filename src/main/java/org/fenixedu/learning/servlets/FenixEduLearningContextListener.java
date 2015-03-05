@@ -76,7 +76,8 @@ public class FenixEduLearningContextListener implements ServletContextListener {
     }
 
     private static void handleMarksPublishment(MarkPublishingBean bean) {
-        if (!Strings.isNullOrEmpty(bean.getEvaluation().getPublishmentMessage()) && bean.getCourse().getSite() != null) {
+        String publishmentMessage = bean.getEvaluation().getPublishmentMessage();
+        if (publishmentMessage != null && !Strings.isNullOrEmpty(publishmentMessage.trim()) && bean.getCourse().getSite() != null) {
             Category cat = bean.getCourse().getSite().categoryForSlug("announcement");
             if (cat != null) {
                 Post post = new Post(bean.getCourse().getSite());
