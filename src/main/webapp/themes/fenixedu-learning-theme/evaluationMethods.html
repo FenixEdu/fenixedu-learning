@@ -2,10 +2,9 @@
 
 {% block content %}
 
-	{% if evaluationMethod is not empty and evaluationMethod.evaluationElements is not empty %}
-		<p>{{ evaluationMethod.evaluationElements.content | raw }}</p>
-	{% elseif evaluationMethodText is not empty %}
-		<p>{{ evaluationMethodText | raw }}</p>
+    {% set evaluationContent = evaluationMethodLocalizedString.content %}
+	{% if evaluationContent is not empty %}
+		<p>{{ evaluationContent | raw }}</p>
 	{% else %}
 		<i>{{ i18n('resources.ApplicationResources', 'message.evaluation.not.available') }}</i>
 	{% endif %}

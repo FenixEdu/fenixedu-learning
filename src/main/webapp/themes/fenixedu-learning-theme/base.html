@@ -8,7 +8,6 @@
     <meta name="Description" content="FenixEdu™ is an open-source academic information platform." />
     <meta name="Keywords" content="FenixEdu, open-source, academic, information, platform, academic administration, higher education, e-learning" />
     <meta name="Language" content="{{app.locale}}" />
-    <meta name="Robots" content="all" />
     <meta name="Author" content="FenixEdu" />
     <meta name="Email" content="hello@fenixedu.org" />
     <meta name="Copyright" content="Técnico Lisboa - Instituto Superior Técnico" />
@@ -61,6 +60,8 @@
     <!-- Header -->
     {% block header %}{% endblock header %}
     <!-- End Header -->
+    
+    <link rel="shortcut icon" type="image/x-icon" href="{{request.contextPath}}/api/bennu-portal/configuration/favicon">
   </head>
 
   <body>
@@ -71,7 +72,7 @@
 		<div class="container">
 			
 
-		<div class="row" style="padding-top:60px; padding-bottom:30px;" >
+		<div class="row" style="padding-top:50px; padding-bottom:25px;" >
 			<div class="col-sm-9">
         <div>
 				  <img class="logo" src="{{request.contextPath}}/api/bennu-portal/configuration/logo" />
@@ -91,12 +92,12 @@
         <div class="col-sm-9">
           <h2 style="font-weight:300;" class="site-header"><a href="{{site.address}}">{{ site.name.content }}</a> {% block titleLink %}{% endblock titleLink %} </h2>
           
-            <div style="font-size:15px; color:#888; margin-top:10px; margin-bottom:20px;"><small>
+            <div style="font-size:15px; color:#888; margin-top:5px; margin-bottom:15px;"><small>
               {% if site.siteObject.executionPeriod is not empty %}{{site.siteObject.executionPeriod.semester}}º semestre {{site.siteObject.executionPeriod.executionYear.year}}{% else %}&nbsp;{% endif %}</small></div>          
         </div>
         <div class="col-sm-3 hidden-xs">
-              <div style="margin-top: 6px; margin-top: 25px;">
-                <i class="glyphicon glyphicon-globe" style="padding-right:10px; color:#009EE2"></i>
+              <div style="margin-top: 25px;">
+                <img src="{{staticDir}}/images/icon_global.svg" width="13" height="13" style="margin-bottom:2px;margin-right:10px"/>
                   {% for locale in app.supportedLocales %}
                       <a class="locale-changer {% if locale == app.locale %}active{% endif %}" title="{{locale.displayName}}" onclick="setLang('{{locale}}')">{{locale.language}}</a>
                   {% endfor %}
@@ -125,10 +126,10 @@
 
     <footer class="container" style="border-top:1px solid #ddd; margin-top:30px">
       <div class="col-sm-9">
-        <a class="brand" href="http://fenixedu.org"><img width="150" src="{{staticDir}}/images/logo_fenixedu_footer.svg" alt="Powered by FenixEdu"></a>
+        <a class="brand" href="http://fenixedu.org"><img width="150" height="34" src="{{staticDir}}/images/logo_fenixedu_footer.svg" alt="Powered by FenixEdu"></a>
       </div>
 
-      <div class="col-sm-3 text-left" style="color:#888">
+      <div class="col-sm-3" style="color:#888">
         <span style="padding-left:15px;">{{app.copyright.content}}</span>
       </div>
       

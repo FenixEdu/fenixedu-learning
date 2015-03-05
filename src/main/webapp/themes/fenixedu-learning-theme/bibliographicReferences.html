@@ -9,7 +9,11 @@
 {% endmacro %}
 
 {% macro reference(ref) %}
-	<a href="{{ ref.url is empty ? "'#'" : ref.url }}"><span>{{ ref.title | raw }}</span></a>
+    {% if ref.url is empty %}
+        <strong>{{ ref.title | raw }}: </strong>
+    {% else %}
+        <a href="{{ ref.url }}"><strong>{{ ref.title | raw }}: </strong></a>
+    {% endif %}
 	<span>{{ ref.authors | raw }}</span>
 	<span>{{ ref.year | raw }}</span>
 	<span>{{ ref.reference | raw }}</span>

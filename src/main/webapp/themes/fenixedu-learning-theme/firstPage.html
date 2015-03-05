@@ -44,6 +44,12 @@
 		</div>
 {% endif %}
 
+{% if executionCourse.site.alternativeSite is not empty %}
+    <h3 style="font-weight:300; margin-bottom: 22px; margin-top:45px;">
+        {{i18n('resources.ApplicationResources', 'link.alternative')}}
+    </h3>
+    <a href="{{executionCourse.site.alternativeSite}}" target="_blank">{{executionCourse.site.alternativeSite}}</a>
+{% endif %}
 
 {% if professorships is not empty %}
           <h3 style="font-weight:300; margin-bottom: 22px; margin-top:45px;">            

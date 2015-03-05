@@ -60,58 +60,6 @@ main>div>.top-lead {
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.009);
 }
 
-.fenixedu-bar{
-	min-height:0;
-	margin-bottom:0;
-	border:none;
-	background:#444;
-	border-radius: 0;
-}
-.fenixedu-bar .navbar-text{
-	margin-top:8px;
-	margin-bottom:8px;
-	margin-left:20px;
-	color:#ddd;
-}
-
-.fenixedu-bar a,.fenixedu-bar li a,.fenixedu-bar .navbar-brand{
-	padding-top:8px;
-	padding-bottom:8px;color:#ddd !important;
-}
-
-.fenixedu-bar .navbar-brand{
-	height:auto;
-	font-size:14px;
-}
-
-.fenixedu-bar .navbar-nav>.active>a{
-	padding-top:4px;
-	padding-bottom:4px;
-	margin:4px 5px 0 5px;
-	background-color:#666;
-}
-
-.fenixedu-bar .navbar-nav>.active>a:hover{
-	background-color:#3a3a3a;
-}
-
-.fenixedu-bar .navbar-toggle {
-	margin-top: 0;
-	margin-bottom: 0;
-}
-
-.fenixedu-bar .navbar-toggle .icon-bar {
-	background-color: #ddd;
-}
-
-.fenixedu-bar .devmode{
-	font-size:12px
-}
-
-nav {
-
-}
-
 .main-content {
 	border-right: 1px solid #eee;
 }
@@ -128,6 +76,12 @@ nav {
 	}
 	.blog-main {
 		padding-top: 10px;
+	}
+	footer {
+	    text-align: center;
+	}
+	#content-block {
+	    min-height: 0 !important;
 	}
 }
 
@@ -182,49 +136,56 @@ li li>a{
 	padding:0px;
 	margin:0px;
 	background: none;
-	color:#333;
+	color:#bbb;
 	border-radius: none;
 	float: right;
 	margin-top:-34px;
+	background:none!important;
 }
 
-.rsslink:hover{
-	background: none !important;
+.rsslink i {
+    width: 10px;
+    background-size: 10px 10px;
+    background-repeat: no-repeat;
+    background-image: url(../images/icon_rss_inactive.svg);
 }
 
-.active .rsslink{
-	background: none !important;
-	color:#009EE2!important;
+.active .rsslink i, .rsslink i:hover{
+    background-image: url(../images/icon_rss.svg);
 }
 
-#content-block {
-	background: white;
-	border-top: 1px solid #009EE2;
-	border-right: 1px solid #E5E5E5;
-	border-bottom: 1px solid #E5E5E5;
-	padding-left: 50px;
-	padding-right: 50px;
-	padding-top: 60px;
-	padding-bottom: 60px;
-	min-height: 800px;
-	overflow: auto;
-	position: relative;
+ul.courses li {
+    padding-bottom: 3px;
 }
 
-#content-block:after {
-	content: "";
-	pointer-events: none;
-	position: absolute;
-	width: 25px;
-	height: 100%;
-	top: 0;
-	right: 0;
-	// Safari 5.1-6, Chrome 10+
-	background-image: -webkit-linear-gradient(right, rgba(255, 255, 255, 1)  , rgba(255, 255, 255, 0)  , 0%, 100%); 
-	// Opera 12
-	background-image: -o-linear-gradient(right, rgba(255, 255, 255, 1)  , rgba(255, 255, 255, 0)  , 0%, 100%);
-	// Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
-	background-image: linear-gradient(to left, rgba(255, 255, 255, 1)  , rgba(255, 255, 255, 0), 0%, 100%);
-	background-repeat: repeat-x;
-	filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=1)",argb(rgba(255, 255, 255, 0)  ),argb(rgba(255, 255, 255, 1)  )));
-}
+      #content-block {
+        background: white;
+        border-top: 1px solid #009EE2;
+        border-right: 1px solid #E5E5E5;
+        border-bottom: 1px solid #E5E5E5;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 60px;
+        padding-bottom: 60px;
+        min-height: 800px;
+        overflow: auto;
+        position: relative;
+      }
+      #content-block:after {
+        content: "";
+        pointer-events: none;
+        position: absolute;
+        width: 25px;
+        height: 100%;
+        top: 0;
+        right: 0;
+        // Safari 5.1-6, Chrome 10+
+        background-image: -webkit-linear-gradient(right, rgba(255, 255, 255, 1)  , rgba(255, 255, 255, 0)  , 0%, 100%); 
+        // Opera 12
+        background-image: -o-linear-gradient(right, rgba(255, 255, 255, 1)  , rgba(255, 255, 255, 0)  , 0%, 100%);
+        // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+        background-image: linear-gradient(to left, rgba(255, 255, 255, 1)  , rgba(255, 255, 255, 0), 0%, 100%);
+        background-repeat: repeat-x;
+        filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=1)",argb(rgba(255, 255, 255, 0)  ),argb(rgba(255, 255, 255, 1)  )));
+      }
+

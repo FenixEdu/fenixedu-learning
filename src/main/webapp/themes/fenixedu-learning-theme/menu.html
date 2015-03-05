@@ -17,7 +17,7 @@
     <a class="item" href="{{ item.address }}">
       {{ item.name.content }}
       {% if item.rssUrl != null %}
-        <a class="rsslink" href="{{item.rssUrl}}"><i style="float:right;" class="fa fa-rss"></i></a>
+        <a class="rsslink" href="{{item.rssUrl}}"><i style="float:right;">&nbsp;</i></a>
       {% endif %}
     </a>
     {{ menuChildren(item.children) }}
@@ -47,12 +47,13 @@
 </nav>
 
 <script type="text/javascript">
+(function() {
   $('.menuFolder:not(.open)>.children').hide();
   $('.menuFolder>p').click(function(event){
     $(this).parent().toggleClass('open');
     $(this).parent().children('.children').slideToggle();
     event.preventDefault();
   });
+  setLang=function(l){$.post('{{request.contextPath}}/api/bennu-core/profile/locale/'+l.replace('_', '-')).always(function(){location.reload();})}
+})();
 </script>
-<link rel="stylesheet" href="{{request.contextPath}}/static/css/font-awesome.css"/>
-<script>setLang=function(l){$.post('{{request.contextPath}}/api/bennu-core/profile/locale/'+l.replace('_', '-')).always(function(){location.reload();});}</script>
