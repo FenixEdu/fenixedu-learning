@@ -26,7 +26,7 @@
 {% endmacro %}
 
 {% macro descriptionSection(key, localizedContent) %}
-	 {% if localizedContent is not empty %}
+	 {% if (localizedContent is not empty) and (localizedContent.isEmpty equals false) %}
 	 	<h3 style="font-weight:300; margin-bottom: 30px; margin-top:45px;">
           {{ i18n('resources.PublicDegreeInformation',key) }}</h3>
 		<p>{{ localizedContent.content | raw }}</p>
