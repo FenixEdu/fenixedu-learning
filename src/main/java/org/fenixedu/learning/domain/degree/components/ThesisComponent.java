@@ -25,6 +25,7 @@ import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.CMSComponent;
 import org.fenixedu.cms.domain.component.ComponentType;
+import org.fenixedu.cms.exceptions.ResourceNotFoundException;
 import org.fenixedu.cms.rendering.TemplateContext;
 
 import pt.ist.fenixframework.FenixFramework;
@@ -34,7 +35,14 @@ public class ThesisComponent implements CMSComponent {
 
     @Override
     public void handle(Page page, TemplateContext componentContext, TemplateContext globalContext) {
-        Thesis thesis = FenixFramework.getDomainObject((String) globalContext.getRequestContext()[1]);
+        String[] ctx = globalContext.getRequestContext();
+        if (ctx.length < 2) {
+            throw new ResourceNotFoundException();
+        }
+        Thesis thesis = FenixFramework.getDomainObject(ctx[1]);
+        if (!FenixFramework.isDomainObjectValid(thesis)) {
+            throw new ResourceNotFoundException();
+        }
         globalContext.put("thesis", thesis);
         globalContext.put("states", getThesisStateMapping());
         globalContext.put("isAccessible", isAccessible(thesis));
