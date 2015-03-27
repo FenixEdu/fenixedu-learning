@@ -83,10 +83,11 @@
     <section>
         <h4>{{ i18n('resources.ApplicationResources', 'title.thesis.details.orientation') }}</h4>
         <div class="participants">
-            {% set size = thesis.coorientator is null ? 6 : 4 %}
+            {% set size = 4 %}
             {{ orientatorCard(thesis.student.person, 'STUDENT', null, null, size) }}
-            {{ orientatorCard(thesis.orientator.person, thesis.orientator.type.name, thesis.orientator.affiliation, thesis.orientator.category, size) }}
-            {{ orientatorCard(thesis.coorientator.person, thesis.coorientator.type.name, thesis.coorientator.affiliation, thesis.coorientator.category, size) }}
+            {% for advisor in thesis.orientation %}
+                {{ orientatorCard(advisor.person, advisor.type.name, advisor.affiliation, advisor.category, size) }}
+            {% endfor %}
         </div>
     </section>
 
