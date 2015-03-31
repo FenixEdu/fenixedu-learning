@@ -13,16 +13,26 @@
     </style>
 {% endblock header %}
 
-{% macro orientatorCard(person, type, affiliation, category, size) %}
+{% macro orientatorCard(advisor, size, misteryMan) %}
+    {{ personCard(advisor.name, advisor.person.homepageWebAddress, advisor.person is null ? misteryMan : advisor.person.user.profile.avatarUrl , advisor.type.name, advisor.affiliation, advisor.category, size) }}
+{% endmacro %}
+
+{% macro studentCard(student, size) %}
+    {{ personCard(student.person.presentationName, student.person.homepageWebAddress, student.person.user.profile.avatarUrl, 'STUDENT', null, null, size) }}
+{% endmacro %}
+
+{% macro personCard(name, homepageWebAddress, avatarUrl, type, affiliation, category, size) %}
 <div class="participant-card col-md-{{ size }} row text-center">
 
     <div class="person-photo row">
-        <a href="{{ person.homepageWebAddress }}"><img class="img-circle" alt="{{ person.presentationName }}" src="{{ person.user.profile.avatarUrl }}"/></a>
+        <a href="{{ homepageWebAddress }}">
+            <img class="img-circle" height='100' width='100' alt="{{ name }}" src="{{ avatarUrl }}"/>
+        </a>
     </div>
 
     <div class="person-details row">
-        <p><span class="label label-info">{{ type }}</span></p>
-        <p><a href="{{ person.homepageWebAddress }}">{{ person.profile.displayName }}</a></p>
+        <p><span class="label label-info">{{ i18n('resources.ApplicationResources', 'label.thesis.participant.type.' + type) }}</span></p>
+        <p><a href="{{ homepageWebAddress }}">{{ name }}</a></p>
 
         {% if affiliation is not empty %}
             <p>{{ affiliation }}</p>
@@ -84,9 +94,9 @@
         <h4>{{ i18n('resources.ApplicationResources', 'title.thesis.details.orientation') }}</h4>
         <div class="participants">
             {% set size = 4 %}
-            {{ orientatorCard(thesis.student.person, 'STUDENT', null, null, size) }}
+            {{ studentCard(thesis.student, size) }}
             {% for advisor in thesis.orientation %}
-                {{ orientatorCard(advisor.person, advisor.type.name, advisor.affiliation, advisor.category, size) }}
+                {{ orientatorCard(advisor, size, request.contextPath + '/img/mysteryman.png') }}
             {% endfor %}
         </div>
     </section>
