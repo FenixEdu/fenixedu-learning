@@ -31,6 +31,7 @@ import org.fenixedu.academic.domain.accessControl.StudentGroup;
 import org.fenixedu.academic.domain.accessControl.StudentSharingDegreeOfCompetenceOfExecutionCourseGroup;
 import org.fenixedu.academic.domain.accessControl.StudentSharingDegreeOfExecutionCourseGroup;
 import org.fenixedu.academic.domain.accessControl.TeacherGroup;
+import org.fenixedu.academic.domain.accessControl.TeacherResponsibleOfExecutionCourseGroup;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.groups.AnyoneGroup;
 import org.fenixedu.bennu.core.groups.DynamicGroup;
@@ -63,6 +64,7 @@ public class ExecutionCourseSite extends ExecutionCourseSite_Base {
 
         setCreationDate(new DateTime());
         setCanAdminGroup(DynamicGroup.get("managers"));
+        setCanPostGroup(TeacherResponsibleOfExecutionCourseGroup.get(executionCourse));
 
         setPublished(true);
         setBennu(Bennu.getInstance());
