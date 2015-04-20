@@ -27,8 +27,11 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.fenixedu.academic.domain.Degree;
+import org.fenixedu.academic.domain.accessControl.CoordinatorGroup;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.groups.DynamicGroup;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.bennu.portal.domain.MenuContainer;
 import org.fenixedu.bennu.portal.domain.PortalConfiguration;
 import org.fenixedu.cms.domain.CMSFolder;
@@ -50,6 +53,7 @@ public class DegreeSite extends DegreeSite_Base {
 
         setCreationDate(new DateTime());
         setCanAdminGroup(DynamicGroup.get("managers"));
+        setCanPostGroup(CoordinatorGroup.get(degree));
 
         setPublished(true);
         setBennu(Bennu.getInstance());
@@ -91,9 +95,18 @@ public class DegreeSite extends DegreeSite_Base {
     }
 
     private CMSFolder folderForPath(MenuContainer parent, String path) {
+
+        LocalizedString.Builder description = new LocalizedString.Builder();
+        CoreConfiguration
+                .supportedLocales()
+                .stream()
+                .forEach(
+                        l -> description.with(l,
+                                BundleUtil.getString("resources.FenixEduLearningResources", l, "label.degree.folder.description")));
+
         return parent.getOrderedChild().stream().filter(item -> item.getPath().equals(path))
-                .map(item -> item.getAsMenuFunctionality().getCmsFolder()).findFirst()
-                .orElseThrow(() -> new RuntimeException("no.degree.site.folder.was.found"));
+                .map(item -> item.getAsMenuFunctionality().getCmsFolder()).findAny()
+                .orElseGet(() -> new CMSFolder(parent, path, description.build()));
     }
 
 }
