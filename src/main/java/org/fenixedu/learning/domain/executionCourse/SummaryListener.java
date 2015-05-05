@@ -43,16 +43,17 @@ public class SummaryListener {
     public static final String SUMMARIES_CATEGORY = "summary";
 
     public static void updatePost(Post post, Summary summary) {
-        ExecutionCourseSite site = summary.getExecutionCourse().getSite();
+	summary.setPost(post);
+	if (post != null) {
+	    ExecutionCourseSite site = summary.getExecutionCourse().getSite();
+	    post.setSlug("summary-" + summary.getExternalId());
+	    post.setName(summary.getTitle().toLocalizedString());
 
-        summary.setPost(post);
-        post.setSlug("summary-" + summary.getOid());
-        post.setName(summary.getTitle().toLocalizedString());
+	    post.setBody(summary.getSummaryText().toLocalizedString());
+	    post.setCreationDate(summary.getSummaryDateTime());
 
-        post.setBody(summary.getSummaryText().toLocalizedString());
-        post.setCreationDate(summary.getSummaryDateTime());
-
-        post.addCategories(site.getOrCreateCategoryForSlug(SUMMARIES_CATEGORY, SUMMARIES_TITLE));
+	    post.addCategories(site.getOrCreateCategoryForSlug(SUMMARIES_CATEGORY, SUMMARIES_TITLE));
+	}
     }
 
 }
