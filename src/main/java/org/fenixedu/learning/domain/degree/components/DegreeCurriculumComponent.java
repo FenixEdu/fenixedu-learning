@@ -35,7 +35,6 @@ import java.util.stream.Stream;
 
 import org.fenixedu.academic.domain.CurricularCourse;
 import org.fenixedu.academic.domain.Degree;
-import org.fenixedu.academic.domain.ExecutionSemester;
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.curricularPeriod.CurricularPeriod;
 import org.fenixedu.academic.domain.degreeStructure.Context;
@@ -88,7 +87,7 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
 
     Stream<CourseGroupWrap> courseGroups(Degree degree, ExecutionYear year, String pageUrl) {
         return degree.getDegreeCurricularPlansForYear(year).stream().filter(plan -> plan.isApproved() && plan.isActive())
-                .map(plan -> new CourseGroupWrap(null, plan.getRoot(), year.getFirstExecutionPeriod(), pageUrl));
+                .map(plan -> new CourseGroupWrap(null, plan.getRoot(), year, pageUrl));
     }
 
     ExecutionYear selectedYear(String year, Degree degree) {
@@ -105,12 +104,12 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
 
     private class CourseGroupWrap extends Wrap {
 
-        private final ExecutionSemester executionInterval;
+        private final ExecutionYear executionInterval;
         private final CourseGroup courseGroup;
         private final Context previous;
         private final String pageUrl;
 
-        public CourseGroupWrap(Context previous, CourseGroup courseGroup, ExecutionSemester executionInterval, String pageUrl) {
+        public CourseGroupWrap(Context previous, CourseGroup courseGroup, ExecutionYear executionInterval, String pageUrl) {
             this.executionInterval = executionInterval;
             this.courseGroup = courseGroup;
             this.previous = previous;
@@ -131,7 +130,7 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
         }
 
         public Stream<CurricularCourseWrap> getCurricularCourses() {
-            return courseGroup.getSortedOpenChildContextsWithCurricularCourses(executionInterval.getExecutionYear()).stream()
+            return courseGroup.getSortedOpenChildContextsWithCurricularCourses(executionInterval).stream()
                     .map(context -> new CurricularCourseWrap(context, executionInterval, pageUrl));
         }
 
@@ -146,11 +145,11 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
 
     private class CurricularCourseWrap extends Wrap implements Comparable<CurricularCourseWrap> {
         private final Context context;
-        private final ExecutionSemester executionInterval;
+        private final ExecutionYear executionInterval;
         private final CurricularCourse curricularCourse;
         private final String pageUrl;
 
-        public CurricularCourseWrap(Context context, ExecutionSemester executionInterval, String pageUrl) {
+        public CurricularCourseWrap(Context context, ExecutionYear executionInterval, String pageUrl) {
             this.context = context;
             this.pageUrl = pageUrl;
             this.curricularCourse = (CurricularCourse) context.getChildDegreeModule();
@@ -175,11 +174,11 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
         }
 
         public boolean isSemestrial() {
-            return curricularCourse.isSemestrial(executionInterval.getExecutionYear());
+            return curricularCourse.isSemestrial(executionInterval);
         }
 
         public boolean hasRegime() {
-            return !isOptional() && curricularCourse.hasRegime(executionInterval.getExecutionYear());
+            return !isOptional() && curricularCourse.hasRegime(executionInterval);
         }
 
         public String getRegime() {
