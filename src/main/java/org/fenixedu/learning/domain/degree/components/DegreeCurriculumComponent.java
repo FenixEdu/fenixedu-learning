@@ -192,20 +192,20 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
         }
 
         public String getContactLoad() {
-            Double load = curricularCourse.getContactLoad(context.getCurricularPeriod(), executionInterval);
+            Double load = curricularCourse.getContactLoad(null, executionInterval);
             return new BigDecimal(load).setScale(2, RoundingMode.HALF_EVEN).toPlainString();
         }
 
         public String getAutonomousWorkHours() {
-            return curricularCourse.getAutonomousWorkHours(context.getCurricularPeriod(), executionInterval).toString();
+            return curricularCourse.getAutonomousWorkHours(null, executionInterval).toString();
         }
 
         public String getTotalLoad() {
-            return curricularCourse.getTotalLoad(context.getCurricularPeriod(), executionInterval).toString();
+            return curricularCourse.getTotalLoad(null, executionInterval).toString();
         }
 
         public String getECTS() {
-            return curricularCourse.getEctsCredits(context.getCurricularPeriod(), executionInterval).toString();
+            return curricularCourse.getEctsCredits((CurricularPeriod) null, executionInterval).toString();
         }
 
         public boolean hasCompentenceCourse() {
