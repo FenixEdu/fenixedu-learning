@@ -18,24 +18,46 @@
  */
 package org.fenixedu.learning.domain.degree;
 
-import org.fenixedu.academic.domain.Degree;
-import org.fenixedu.bennu.core.domain.Bennu;
-import org.fenixedu.cms.domain.Category;
-import org.fenixedu.cms.domain.wraps.Wrap;
-import org.fenixedu.commons.i18n.LocalizedString;
-import pt.ist.fenixframework.DomainObject;
+import static com.google.common.base.Joiner.on;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.fenixedu.academic.domain.Degree;
+import org.fenixedu.academic.domain.accessControl.CoordinatorGroup;
+import org.fenixedu.bennu.core.domain.Bennu;
+import org.fenixedu.bennu.core.groups.DynamicGroup;
+import org.fenixedu.bennu.core.i18n.BundleUtil;
+import org.fenixedu.bennu.core.util.CoreConfiguration;
+import org.fenixedu.bennu.portal.domain.MenuContainer;
+import org.fenixedu.bennu.portal.domain.PortalConfiguration;
+import org.fenixedu.cms.domain.CMSFolder;
+import org.fenixedu.cms.domain.Category;
+import org.fenixedu.cms.domain.wraps.Wrap;
+import org.fenixedu.commons.i18n.LocalizedString;
+import org.joda.time.DateTime;
+
+import pt.ist.fenixframework.DomainObject;
+
 public class DegreeSite extends DegreeSite_Base {
 
     public DegreeSite(Degree degree) {
-        super();
+        checkNotNull(degree);
         setDegree(degree);
+
+        setFolder(folderForPath(PortalConfiguration.getInstance().getMenu(), "degrees"));
+        setSlug(on("-").join(degree.getSigla(), degree.getExternalId()));
+
+        setCreationDate(new DateTime());
+        setCanAdminGroup(DynamicGroup.get("managers"));
+        setCanPostGroup(CoordinatorGroup.get(degree));
+
+        setPublished(true);
         setBennu(Bennu.getInstance());
+        degree.setSiteUrl(getFullUrl());
     }
 
     @Override
@@ -70,6 +92,21 @@ public class DegreeSite extends DegreeSite_Base {
 
     public Stream<Wrap> getCategoriesToShow() {
         return Stream.of(categoryForSlug("announcement")).filter(Objects::nonNull).map(Category::makeWrap);
+    }
+
+    private CMSFolder folderForPath(MenuContainer parent, String path) {
+
+        LocalizedString.Builder description = new LocalizedString.Builder();
+        CoreConfiguration
+                .supportedLocales()
+                .stream()
+                .forEach(
+                        l -> description.with(l,
+                                BundleUtil.getString("resources.FenixEduLearningResources", l, "label.degree.folder.description")));
+
+        return parent.getOrderedChild().stream().filter(item -> item.getPath().equals(path))
+                .map(item -> item.getAsMenuFunctionality().getCmsFolder()).findAny()
+                .orElseGet(() -> new CMSFolder(parent, path, description.build()));
     }
 
 }

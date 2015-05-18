@@ -31,11 +31,12 @@ import org.fenixedu.academic.domain.accessControl.StudentGroup;
 import org.fenixedu.academic.domain.accessControl.StudentSharingDegreeOfCompetenceOfExecutionCourseGroup;
 import org.fenixedu.academic.domain.accessControl.StudentSharingDegreeOfExecutionCourseGroup;
 import org.fenixedu.academic.domain.accessControl.TeacherGroup;
+import org.fenixedu.academic.domain.accessControl.TeacherResponsibleOfExecutionCourseGroup;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.groups.AnyoneGroup;
+import org.fenixedu.bennu.core.groups.DynamicGroup;
 import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.bennu.core.groups.LoggedGroup;
-import org.fenixedu.bennu.core.groups.NobodyGroup;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.bennu.portal.domain.MenuContainer;
@@ -44,6 +45,7 @@ import org.fenixedu.cms.domain.CMSFolder;
 import org.fenixedu.cms.domain.Category;
 import org.fenixedu.cms.domain.wraps.Wrap;
 import org.fenixedu.commons.i18n.LocalizedString;
+import org.joda.time.DateTime;
 
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.DomainObject;
@@ -56,13 +58,16 @@ public class ExecutionCourseSite extends ExecutionCourseSite_Base {
     public ExecutionCourseSite(ExecutionCourse executionCourse) {
         checkNotNull(executionCourse);
         setExecutionCourse(executionCourse);
-        setPublished(true);
+
         setFolder(folderForPath(PortalConfiguration.getInstance().getMenu(), "courses"));
         setSlug(on("-").join(getExecutionCourse().getSigla(), getExecutionCourse().getExternalId()));
-        setCanAdminGroup(NobodyGroup.get());
-        setCanPostGroup(NobodyGroup.get());
-        setBennu(Bennu.getInstance());
 
+        setCreationDate(new DateTime());
+        setCanAdminGroup(DynamicGroup.get("managers"));
+        setCanPostGroup(TeacherResponsibleOfExecutionCourseGroup.get(executionCourse));
+
+        setPublished(true);
+        setBennu(Bennu.getInstance());
         executionCourse.setSiteUrl(getFullUrl());
     }
 

@@ -25,6 +25,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import org.fenixedu.academic.domain.Degree;
 import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.academic.domain.Summary;
 import org.fenixedu.academic.domain.thesis.Thesis;
@@ -48,6 +49,7 @@ import org.fenixedu.cms.domain.component.Component;
 import org.fenixedu.cms.domain.component.StaticPost;
 import org.fenixedu.commons.i18n.I18N;
 import org.fenixedu.commons.i18n.LocalizedString;
+import org.fenixedu.learning.domain.degree.DegreeSiteListener;
 import org.fenixedu.learning.domain.executionCourse.ExecutionCourseListener;
 import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 import org.fenixedu.learning.domain.executionCourse.SummaryListener;
@@ -77,10 +79,12 @@ public class FenixEduLearningContextListener implements ServletContextListener {
         Signal.register(Summary.EDIT_SIGNAL, (DomainObjectEvent<Summary> event) -> {
             SummaryListener.updatePost(event.getInstance().getPost(), event.getInstance());
         });
-
         Signal.register(ExecutionCourse.CREATED_SIGNAL, (DomainObjectEvent<ExecutionCourse> event) -> {
             ExecutionCourseListener.create(event.getInstance());
         });
+        Signal.register(Degree.CREATED_SIGNAL, (DomainObjectEvent<Degree> event) -> {
+            DegreeSiteListener.create(event.getInstance());
+        });        
         Signal.register(PublishMarks.MARKS_PUBLISHED_SIGNAL, FenixEduLearningContextListener::handleMarksPublishment);
         Signal.register(Thesis.PROPOSAL_APPROVED_SIGNAL, FenixEduLearningContextListener::handleThesisProposalApproval);
         FenixFramework.getDomainModel().registerDeletionListener(ExecutionCourse.class, (executionCourse) -> {
