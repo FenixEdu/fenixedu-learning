@@ -19,8 +19,8 @@
 			</small>
 		</h2>
 		
-		{% if degreeCurricularPlan.description is not empty %}
-			<p>{{ degreeCurricularPlan.description | raw }}</p>
+		{% if degreeCurricularPlan.DescriptionI18N is not empty %}
+			<p>{{ degreeCurricularPlan.DescriptionI18N.content | raw }}</p>
 		{% else %}
 			<p><i>{{ i18n(bundle, 'not.available') }}</i></p>
 		{% endif %}
