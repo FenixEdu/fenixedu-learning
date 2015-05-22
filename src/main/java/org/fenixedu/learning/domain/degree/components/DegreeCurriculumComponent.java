@@ -42,14 +42,13 @@ import org.fenixedu.academic.domain.degreeStructure.CourseGroup;
 import org.fenixedu.academic.domain.degreeStructure.RegimeType;
 import org.fenixedu.academic.util.CurricularPeriodLabelFormatter;
 import org.fenixedu.academic.util.CurricularRuleLabelFormatter;
+import org.fenixedu.academic.util.MultiLanguageString;
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.domain.wraps.Wrap;
 import org.fenixedu.cms.rendering.TemplateContext;
 import org.fenixedu.commons.i18n.I18N;
 import org.fenixedu.commons.i18n.LocalizedString;
-
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 import com.google.common.base.Strings;
 

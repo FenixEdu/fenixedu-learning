@@ -31,6 +31,7 @@ import org.fenixedu.academic.domain.accessControl.StudentGroup;
 import org.fenixedu.academic.domain.accessControl.StudentSharingDegreeOfCompetenceOfExecutionCourseGroup;
 import org.fenixedu.academic.domain.accessControl.StudentSharingDegreeOfExecutionCourseGroup;
 import org.fenixedu.academic.domain.accessControl.TeacherGroup;
+import org.fenixedu.academic.util.MultiLanguageString;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.groups.AnyoneGroup;
 import org.fenixedu.bennu.core.groups.Group;
@@ -47,7 +48,6 @@ import org.fenixedu.commons.i18n.LocalizedString;
 
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.DomainObject;
-import pt.utl.ist.fenix.tools.util.i18n.MultiLanguageString;
 
 import com.google.common.collect.Lists;
 
