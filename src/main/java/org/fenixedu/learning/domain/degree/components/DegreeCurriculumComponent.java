@@ -196,7 +196,7 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
         }
 
         public String getAutonomousWorkHours() {
-            return curricularCourse.getAutonomousWorkHours(null, executionInterval).toString();
+            return curricularCourse.getAutonomousWorkHours(context.getCurricularPeriod(), executionInterval).toString();
         }
 
         public String getTotalLoad() {
