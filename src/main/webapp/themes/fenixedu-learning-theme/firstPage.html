@@ -72,10 +72,14 @@
 						<a href="{{professorship.person.homepageWebAddress}}">{{professorship.person.profile.displayName}}</a>
 						
 						{% if professorship.responsibleFor %}
-						<p class="badge" style="font-weight:400; background:#aaa; font-size:11px; padding-left:10px; padding-right:10px; margin-left:5px; margin-bottom:0px;">{{ i18n('resources.FenixEduLearningResources', 'label.senior.lecture') }}</p>
-					{% endif %}
+							<p class="badge" style="font-weight:400; background:#aaa; font-size:11px; padding-left:10px; padding-right:10px; margin-left:5px; margin-bottom:0px;">{{ i18n('resources.FenixEduLearningResources', 'label.senior.lecture') }}</p>
+						{% endif %}
 					{% else %}
 						{{professorship.person.name}}
+
+						{% if professorship.responsibleFor %}
+							<p class="badge" style="font-weight:400; background:#aaa; font-size:11px; padding-left:10px; padding-right:10px; margin-left:5px; margin-bottom:0px;">{{ i18n('resources.FenixEduLearningResources', 'label.senior.lecture') }}</p>
+						{% endif %}
 					{% endif %}
 					<div>
 						{% if professorship.person.defaultEmailAddress is not empty and
