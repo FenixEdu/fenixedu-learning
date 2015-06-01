@@ -25,12 +25,12 @@
 	{% set executionCourses = executionCoursesByYear.value %}
 	<div class="col-sm-12">
 		<h4>
-			{{ i18n('resources.PublicDegreeInformation', 'public.degree.information.label.year') }} {{ year }}
+			{{ i18n('resources.ApplicationResources', 'label.curricular.year') }} {{ year }}
 		</h4>
 
 		<ul>
-			{% for executionCourseWrap in executionCourses %}
-			<li><a href="{{ executionCourseWrap.executionCourse.site.fullUrl }}">{{ executionCourseWrap.executionCourseName }}</a>
+			{% for executionCourse in executionCourses %}
+			<li><a href="{{ executionCourse.site.fullUrl }}">{{ executionCourse.name }}</a>
 			</li>
 			{% endfor %}
 		</ul>
