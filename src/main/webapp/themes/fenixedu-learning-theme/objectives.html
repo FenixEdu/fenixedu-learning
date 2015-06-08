@@ -8,7 +8,7 @@
 
                     {% set degree = curricularCourse.degreeCurricularPlan.degree %}
                     <h4>
-                        {{ i18n('resources.EnumerationResources', degree.degreeType.name) }}
+                        {{ degree.degreeType.name.content }}
                         {{ i18n('resources.ApplicationResources', 'label.in') }} {{ degree.nameI18N }}
                     </h4>
 
@@ -23,7 +23,7 @@
 			{% set curriculum = entry.value %}
 			{% set degree = curricularCourse.degreeCurricularPlan.degree %}
 			
-			<h4>{{ i18n('resources.EnumerationResources', degree.degreeType.name) }}
+			<h4>{{ degree.degreeType.name.content }}
 				 {{ i18n('resources.ApplicationResources', 'label.in') }} {{ degree.nameI18N }}</h4>
 
 			{% if curriculum is not empty %}
