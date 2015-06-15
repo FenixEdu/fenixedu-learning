@@ -93,19 +93,27 @@ public class FenixEduLearningContextListener implements ServletContextListener {
     }
 
     private static void copyExecutionCoursesSites(ExecutionCourse from, ExecutionCourse to) {
-        Menu newMenu = to.getSite().getMenusSet().stream().findAny().get();
+        if (from.getSite() != null) {
+            if (to.getSite() != null) {
+                Menu newMenu = to.getSite().getMenusSet().stream().findAny().get();
 
-        LocalizedString newPageName =
-                new LocalizedString().with(Locale.getDefault(), from.getName() + "(" + from.getDegreePresentationString() + ")");
+                LocalizedString newPageName =
+                        new LocalizedString().with(Locale.getDefault(), from.getName() + "(" + from.getDegreePresentationString()
+                                + ")");
 
-        MenuItem emptyPageParent = PagesAdminService.create(to.getSite(), null, newPageName, new LocalizedString()).get();
+                MenuItem emptyPageParent = PagesAdminService.create(to.getSite(), null, newPageName, new LocalizedString()).get();
 
-        emptyPageParent.getPage().setPublished(false);
-        emptyPageParent.setTop(newMenu);
+                emptyPageParent.getPage().setPublished(false);
+                emptyPageParent.setTop(newMenu);
 
-        for (Menu oldMenu : from.getSite().getMenusSet()) {
-            oldMenu.getToplevelItemsSorted().forEach(
-                    menuItem -> PagesAdminService.copyStaticPage(menuItem, to.getSite(), newMenu, emptyPageParent));
+                for (Menu oldMenu : from.getSite().getMenusSet()) {
+                    oldMenu.getToplevelItemsSorted().forEach(
+                            menuItem -> PagesAdminService.copyStaticPage(menuItem, to.getSite(), newMenu, emptyPageParent));
+                }
+            } else {
+                to.setSite(from.getSite());
+                from.setSite(null);
+            }
         }
     }
 
