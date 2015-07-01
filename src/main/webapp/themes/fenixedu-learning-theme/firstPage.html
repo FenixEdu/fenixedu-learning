@@ -150,13 +150,15 @@
 							<p>
 								{% if previousExecutionCourses is not empty %}
 									<ul class="list-unstyled">
-										{% for previousExecuionCourse in previousExecutionCourses %}
-											{% if previousExecuionCourse.siteUrl is not empty %}
+										{% for previousExecutionCourse in previousExecutionCourses %}
+											{% if previousExecutionCourse.siteUrl is not empty %}
 											<li>
-												<a href="{{ previousExecuionCourse.siteUrl }}">
-													{{ previousExecuionCourse.executionYear.year }}
+												<a href="{{ previousExecutionCourse.siteUrl }}">
+													{{ previousExecutionCourse.executionYear.year }} 
 													-
-													{{ previousExecuionCourse.executionPeriod.name }}
+													{{ previousExecutionCourse.executionPeriod.name }} 
+													--
+													({{ previousExecutionCourse.degreePresentationString}})
 												</a>
 											</li>
 											{% endif %}
