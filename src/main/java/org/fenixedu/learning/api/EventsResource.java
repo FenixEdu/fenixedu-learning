@@ -40,7 +40,6 @@ import org.joda.time.format.ISODateTimeFormat;
 
 import javax.ws.rs.*;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.google.common.collect.Sets.newHashSet;
@@ -58,16 +57,14 @@ public class EventsResource {
 
         Set<ScheduleEventBean> events = new HashSet<>();
 
-        String url = project.getAssociatedExecutionCoursesSet().stream().findAny().map(ExecutionCourse::getSiteUrl).orElse("#");
-
         if (interval.contains(projectStart)) {
-            events.add(new ScheduleEventBean(executionCourse.getPrettyAcronym(), project.getEvaluationType().toString(),
-                    project.getPresentationName(), projectStart, projectStart.plusHours(1), null, url,
+            events.add(new ScheduleEventBean(executionCourse.getPrettyAcronym(), project.getEvaluationType().toString(), project
+                    .getPresentationName(), projectStart, projectStart.plusHours(1), null, executionCourse.getSiteUrl(),
                     colorForType(project.getEvaluationType()), null, null));
         }
         if (interval.contains(projectEnd)) {
-            events.add(new ScheduleEventBean(executionCourse.getPrettyAcronym(), project.getEvaluationType().toString(),
-                    project.getPresentationName(), projectEnd.minusHours(1), projectEnd, null, url,
+            events.add(new ScheduleEventBean(executionCourse.getPrettyAcronym(), project.getEvaluationType().toString(), project
+                    .getPresentationName(), projectEnd.minusHours(1), projectEnd, null, executionCourse.getSiteUrl(),
                     colorForType(project.getEvaluationType()), null, null));
         }
 
@@ -207,19 +204,21 @@ public class EventsResource {
     }
 
     private Collection<ScheduleEventBean> writtenEvaluations(Degree degree, Interval interval) {
-        return allExecutionCourses(degree)
-                .flatMap(executionCourse -> executionCourse.getAssociatedWrittenEvaluations().stream())
-                .filter(writtenEval -> writtenEval.getBeginningDateTime() != null
-                        && interval.contains(writtenEval.getBeginningDateTime())).map(this::createEventBean)
-                .collect(Collectors.toSet());
+        Set<ScheduleEventBean> events = new HashSet<>();
+        allExecutionCourses(degree).forEach(
+                executionCourse -> executionCourse
+                        .getAssociatedWrittenEvaluations()
+                        .stream()
+                        .filter(writtenEval -> writtenEval.getBeginningDateTime() != null
+                                && interval.contains(writtenEval.getBeginningDateTime()))
+                        .forEach(writtenEval -> events.add(createEventBean(executionCourse, writtenEval))));
+        return events;
     }
 
-    private ScheduleEventBean createEventBean(WrittenEvaluation evaluation) {
-        ExecutionCourse ec = evaluation.getAssociatedExecutionCoursesSet().stream().findFirst().get();
-        return new ScheduleEventBean(ec.getPrettyAcronym(), evaluation.getEvaluationType().toString(), evaluation.getFullName(),
-                evaluation.getBeginningDateTime(), evaluation.getEndDateTime(), null, evaluation
-                        .getAssociatedExecutionCoursesSet().stream().findAny().map(ExecutionCourse::getSiteUrl).orElse("#"),
-                colorForType(evaluation.getEvaluationType()), null, null);
+    private ScheduleEventBean createEventBean(ExecutionCourse executionCourse, WrittenEvaluation evaluation) {
+        return new ScheduleEventBean(executionCourse.getPrettyAcronym(), evaluation.getEvaluationType().toString(),
+                executionCourse.getName(), evaluation.getBeginningDateTime(), evaluation.getEndDateTime(), null,
+                executionCourse.getSiteUrl(), colorForType(evaluation.getEvaluationType()), null, null);
     }
 
     private Collection<ScheduleEventBean> projects(Degree degree, Interval interval) {
