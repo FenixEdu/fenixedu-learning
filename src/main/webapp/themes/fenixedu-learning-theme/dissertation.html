@@ -88,7 +88,8 @@
             </div>
             <p class="text-center"><small>{{ i18n('resources.ResearcherResources', 'label.publication.subject.to.copyright') }}</small></p>
         </section>
-    {% elseif thesis.dissertation is not empty and thesis.dissertation is not null %}
+    {% endif %}
+    {% if not isAccessible and thesis.dissertation is not empty %}
         <div class="alert alert-warning">
             {{ i18n('resources.FenixEduLearningResources', 'thesis.documents.unavailable.public') }}
         </div>
