@@ -31,14 +31,13 @@ import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
 import org.fenixedu.learning.domain.executionCourse.CompetenceCourseBean;
-import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 
 @ComponentType(name = "CompetenceCourse", description = "Competence Course information for an Execution Course")
 public class ObjectivesComponent extends BaseExecutionCourseComponent {
 
     @Override
     public void handle(Page page, TemplateContext componentContext, TemplateContext globalContext) {
-        ExecutionCourse executionCourse = ((ExecutionCourseSite) page.getSite()).getExecutionCourse();
+        ExecutionCourse executionCourse = page.getSite().getExecutionCourse();
         globalContext.put("executionPeriod", executionCourse.getExecutionPeriod());
         globalContext.put("competenceCourseBeans", CompetenceCourseBean.approvedCompetenceCourses(executionCourse));
         globalContext.put("curriculumByCurricularCourse", curriculumsByCurricularCourses(executionCourse));

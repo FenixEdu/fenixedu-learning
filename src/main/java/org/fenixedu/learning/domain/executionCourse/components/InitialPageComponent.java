@@ -25,7 +25,6 @@ import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
-import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 
 import java.util.Comparator;
 import java.util.List;
@@ -40,7 +39,7 @@ public class InitialPageComponent extends BaseExecutionCourseComponent {
 
     @Override
     public void handle(Page page, TemplateContext componentContext, TemplateContext globalContext) {
-        ExecutionCourse executionCourse = ((ExecutionCourseSite) page.getSite()).getExecutionCourse();
+        ExecutionCourse executionCourse = page.getSite().getExecutionCourse();
         globalContext.put(
                 "professorships",
                 executionCourse

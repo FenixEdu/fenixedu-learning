@@ -27,7 +27,6 @@ import org.fenixedu.academic.domain.ShiftType;
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
-import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 
 import com.google.common.collect.Maps;
 
@@ -36,7 +35,7 @@ public class LessonPlanComponent extends BaseExecutionCourseComponent {
 
     @Override
     public void handle(Page page, TemplateContext componentContext, TemplateContext globalContext) {
-        ExecutionCourse executionCourse = ((ExecutionCourseSite) page.getSite()).getExecutionCourse();
+        ExecutionCourse executionCourse = page.getSite().getExecutionCourse();
         if (executionCourse.getLessonPlanningAvailable()) {
             Map<ShiftType, List<LessonPlanning>> lessonPlanningsMap = Maps.newHashMap();
             for (ShiftType shiftType : executionCourse.getShiftTypes()) {

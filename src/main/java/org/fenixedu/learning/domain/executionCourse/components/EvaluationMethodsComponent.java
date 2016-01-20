@@ -25,14 +25,13 @@ import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
 import org.fenixedu.commons.i18n.LocalizedString;
-import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 
 @ComponentType(name = "EvaluationMethods", description = "Evaluation Methods for an Execution Course")
 public class EvaluationMethodsComponent extends BaseExecutionCourseComponent {
 
     @Override
     public void handle(Page page, TemplateContext componentContext, TemplateContext globalContext) {
-        ExecutionCourse executionCourse = ((ExecutionCourseSite) page.getSite()).getExecutionCourse();
+        ExecutionCourse executionCourse =page.getSite().getExecutionCourse();
         LocalizedString evaluationMethod = getEvaluationMethod(executionCourse);
         globalContext.put("evaluationMethod", executionCourse.getEvaluationMethod());
         globalContext.put("evaluationMethodText", evaluationMethod.getContent());

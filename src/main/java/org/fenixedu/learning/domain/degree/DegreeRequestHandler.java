@@ -16,23 +16,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with FenixEdu Learning.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.fenixedu.learning.domain.executionCourse.components;
+package org.fenixedu.learning.domain.degree;
 
-import org.fenixedu.academic.domain.ExecutionCourse;
-import org.fenixedu.bennu.core.util.CoreConfiguration;
 import org.fenixedu.cms.domain.Page;
-import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
+import org.fenixedu.cms.routing.CMSRenderer;
 
-@ComponentType(name = "Execution Course Schedule", description = "Schedule of an execution course")
-public class ScheduleComponent extends BaseExecutionCourseComponent {
-
+public class DegreeRequestHandler implements CMSRenderer.RenderingPageHandler {
     @Override
-    public void handle(Page page, TemplateContext componentContext, TemplateContext globalContext) {
-        ExecutionCourse executionCourse = page.getSite().getExecutionCourse();
-        globalContext.put("defaultView", "agendaWeek");
-        globalContext.put("eventsUrl", CoreConfiguration.getConfiguration().applicationUrl()
-                + "/api/fenixedu-learning/events/executionCourse/" + executionCourse.getExternalId());
+    public void accept(Page page, TemplateContext templateContext) {
+        if(page.getSite().getDegree() !=null ){
+            templateContext.put("siteObject",page.getSite().getDegree());
+        }
     }
-
 }

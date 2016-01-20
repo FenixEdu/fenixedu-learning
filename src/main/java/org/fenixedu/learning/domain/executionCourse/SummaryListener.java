@@ -18,23 +18,14 @@
  */
 package org.fenixedu.learning.domain.executionCourse;
 
-import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
-
-import java.util.Locale;
-import java.util.Optional;
-
-import org.fenixedu.academic.domain.Person;
-import org.fenixedu.academic.domain.Professorship;
-import org.fenixedu.academic.domain.ShiftType;
 import org.fenixedu.academic.domain.Summary;
-import org.fenixedu.academic.domain.Teacher;
-import org.fenixedu.bennu.core.security.Authenticate;
-import org.fenixedu.bennu.core.util.CoreConfiguration;
+import org.fenixedu.bennu.signals.DomainObjectEvent;
+import org.fenixedu.bennu.signals.Signal;
 import org.fenixedu.cms.domain.Post;
+import org.fenixedu.cms.domain.Site;
 import org.fenixedu.commons.i18n.LocalizedString;
-import org.fenixedu.spaces.domain.Space;
 
-import com.google.common.base.Strings;
+import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
 
 public class SummaryListener {
 
@@ -43,17 +34,18 @@ public class SummaryListener {
     public static final String SUMMARIES_CATEGORY = "summary";
 
     public static void updatePost(Post post, Summary summary) {
-	summary.setPost(post);
-	if (post != null) {
-	    ExecutionCourseSite site = summary.getExecutionCourse().getSite();
-	    post.setSlug("summary-" + summary.getExternalId());
-	    post.setName(summary.getTitle().toLocalizedString());
+		summary.setPost(post);
+		if (post != null) {
+			Site site = summary.getExecutionCourse().getSite();
+			post.setSlug("summary-" + summary.getExternalId());
+			post.setName(summary.getTitle().toLocalizedString());
 
-	    post.setBody(summary.getSummaryText().toLocalizedString());
-	    post.setCreationDate(summary.getSummaryDateTime());
+			post.setBody(summary.getSummaryText().toLocalizedString());
+			post.setCreationDate(summary.getSummaryDateTime());
 
-	    post.addCategories(site.getOrCreateCategoryForSlug(SUMMARIES_CATEGORY, SUMMARIES_TITLE));
-	}
+			post.addCategories(site.getOrCreateCategoryForSlug(SUMMARIES_CATEGORY, SUMMARIES_TITLE));
+		}
+		Signal.emit(Post.SIGNAL_EDITED, new DomainObjectEvent<>(post));
     }
 
 }

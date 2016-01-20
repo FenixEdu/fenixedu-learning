@@ -13,7 +13,8 @@
                     <span>{{post.createdBy.displayName}}</span>
                 </p>
             {% endif %}
-
+            <p>{{post.excerpt.content | raw}}</p>
+            <hr/>
             <p>{{post.body.content | raw}}</p>
 
             {% if post.attachments.size != 0 %}

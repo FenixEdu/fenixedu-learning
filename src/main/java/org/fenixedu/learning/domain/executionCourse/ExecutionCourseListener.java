@@ -18,10 +18,12 @@
  */
 package org.fenixedu.learning.domain.executionCourse;
 
+import static com.google.common.base.Joiner.on;
 import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
 import static org.fenixedu.cms.domain.component.Component.forType;
 
 import org.fenixedu.academic.domain.ExecutionCourse;
+import org.fenixedu.academic.util.MultiLanguageString;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.cms.domain.CMSTheme;
@@ -44,6 +46,9 @@ import org.fenixedu.learning.domain.executionCourse.components.MarksComponent;
 import org.fenixedu.learning.domain.executionCourse.components.ObjectivesComponent;
 import org.fenixedu.learning.domain.executionCourse.components.ScheduleComponent;
 
+import java.util.Objects;
+import java.util.Optional;
+
 public class ExecutionCourseListener {
     public static final String BUNDLE = "resources.FenixEduLearningResources";
 
@@ -64,16 +69,27 @@ public class ExecutionCourseListener {
     private static final LocalizedString SHIFTS_TITLE = getLocalizedString(BUNDLE, "label.shifts");
     public static final LocalizedString MENU_TITLE = getLocalizedString("resources.FenixEduLearningResources", "label.menu");
 
-    public static ExecutionCourseSite create(ExecutionCourse executionCourse) {
-        final ExecutionCourseSite newSite = new ExecutionCourseSite(executionCourse);
+    public static Site create(ExecutionCourse executionCourse) {
+        final Site newSite = new Site(executionCourse.getNameI18N().toLocalizedString(),
+                getObjectives(executionCourse).orElseGet(() -> executionCourse.getNameI18N().toLocalizedString()));
         executionCourse.setSite(newSite);
-        final Menu menu = new Menu(newSite);
+        newSite.setSlug(formatSlugForExecutionCourse(executionCourse));
+        final Menu menu = new Menu(newSite, executionCourse.getNameI18N().toLocalizedString());
         menu.setName(MENU_TITLE);
         newSite.setTheme(CMSTheme.forType("fenixedu-learning-theme"));
         createDefaultContents(newSite, menu, Authenticate.getUser());
         return newSite;
     }
 
+    private static String formatSlugForExecutionCourse(ExecutionCourse executionCourse) {
+        return on("-").join(executionCourse.getSigla(), executionCourse.getExternalId());
+    }
+
+    private static Optional<LocalizedString> getObjectives(ExecutionCourse executionCourse) {
+        return executionCourse.getCompetenceCourses().stream()
+                .map(competenceCourse -> competenceCourse.getObjectivesI18N(executionCourse.getExecutionPeriod()))
+                .filter(Objects::nonNull).map(MultiLanguageString::toLocalizedString).findFirst();
+    }
     public static void createDefaultContents(Site site, Menu menu, User author) {
 
         Category summariesCategory = site.getOrCreateCategoryForSlug("summary", SUMMARIES_TITLE);
@@ -88,9 +104,8 @@ public class ExecutionCourseListener {
         //Component inquiriesResultsComponent = forType(InquiriesResultsComponent.class);
         Component homeComponent = forType(InitialPageComponent.class);
 
-        Page initialPage =
-                Page.create(site, menu, null, INITIAL_PAGE_TITLE, true, "firstPage", author, homeComponent,
-                        announcementsComponent);
+        Page initialPage = Page.create(site, menu, null, INITIAL_PAGE_TITLE, true, "firstPage", author, homeComponent,
+                announcementsComponent);
         Page.create(site, menu, null, GROUPS_TITLE, true, "groupings", author, forType(GroupsComponent.class));
         Page.create(site, menu, null, EVALUATIONS_TITLE, true, "evaluations", author, forType(EvaluationsComponent.class));
         Page.create(site, menu, null, REFERENCES_TITLE, true, "bibliographicReferences", author, referencesComponent);
@@ -108,5 +123,10 @@ public class ExecutionCourseListener {
         //TODO content search
         site.setInitialPage(initialPage);
 
+    }
+
+    public static void updateSiteSlug(ExecutionCourse instance) {
+        instance.getSite().setSlug(formatSlugForExecutionCourse(instance));
+        instance.setSiteUrl(instance.getSite().getFullUrl());
     }
 }

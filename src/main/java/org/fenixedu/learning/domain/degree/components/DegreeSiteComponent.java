@@ -26,13 +26,12 @@ import org.fenixedu.cms.domain.Site;
 import org.fenixedu.cms.domain.component.CMSComponent;
 import org.fenixedu.cms.domain.component.Component;
 import org.fenixedu.cms.exceptions.ResourceNotFoundException;
-import org.fenixedu.learning.domain.degree.DegreeSite;
 
 public abstract class DegreeSiteComponent implements CMSComponent {
 
     protected Degree degree(Page page) {
-        if (page.getSite() instanceof DegreeSite) {
-            return ((DegreeSite) page.getSite()).getDegree();
+        if (page.getSite().getDegree()!=null) {
+            return page.getSite().getDegree();
         }
         throw new ResourceNotFoundException();
     }
@@ -49,7 +48,7 @@ public abstract class DegreeSiteComponent implements CMSComponent {
     }
 
     public static boolean supportsSite(Site site) {
-        return site instanceof DegreeSite;
+        return site!=null;
     }
 
 }

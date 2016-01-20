@@ -1,8 +1,5 @@
-package org.fenixedu.learning.domain;
+  package org.fenixedu.learning.domain;
 
-
-class executionCourse.ExecutionCourseSite extends .org.fenixedu.cms.domain.Site {}
-class degree.DegreeSite extends .org.fenixedu.cms.domain.Site {}
 
 relation SummaryPost {
 	.org.fenixedu.academic.domain.Summary playsRole;
@@ -10,19 +7,19 @@ relation SummaryPost {
 }
 
 relation DegreeSiteHasDegree {
-    degree.DegreeSite playsRole site {
-        multiplicity 0..1;
+    .org.fenixedu.cms.domain.Site playsRole site {
+        multiplicity 1..1;
     }
     .org.fenixedu.academic.domain.Degree playsRole degree {
-        multiplicity 1..1;
+        multiplicity 0..1;
     }
 }
 
 relation ExecutionCourseFenixEduExecutionCourseSite {
-	executionCourse.ExecutionCourseSite playsRole site {
-	    multiplicity 0..1;
+    .org.fenixedu.cms.domain.Site playsRole site {
+        multiplicity 1..1;
     }
 	.org.fenixedu.academic.domain.ExecutionCourse playsRole executionCourse {
-	    multiplicity 1..1;
+	    multiplicity 0..1;
     }
 }
