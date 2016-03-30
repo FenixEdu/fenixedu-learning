@@ -45,7 +45,7 @@ public class EvaluationMethodsComponent extends BaseExecutionCourseComponent {
         } else {
             String competenceMethod =
                     !executionCourse.getCompetenceCourses().isEmpty() ? executionCourse.getCompetenceCourses().iterator().next()
-                            .getEvaluationMethod() : "";
+                            .getEvaluationMethod(executionCourse.getExecutionPeriod()) : "";
             return new LocalizedString(Locale.getDefault(), competenceMethod);
         }
     }
