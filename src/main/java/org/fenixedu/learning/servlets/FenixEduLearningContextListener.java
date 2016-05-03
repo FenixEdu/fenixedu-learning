@@ -18,6 +18,7 @@
  */
 package org.fenixedu.learning.servlets;
 
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -148,11 +149,10 @@ public class FenixEduLearningContextListener implements ServletContextListener {
                     BundleUtil.getLocalizedString(Bundle.MESSAGING, "thesis.announcement.subject", thesis.getStudent()
                             .getPerson().getName());
 
-            LocalizedString body =
-                    BundleUtil.getLocalizedString(Bundle.MESSAGING, "thesis.announcement.body", thesis.getStudent().getPerson()
-                            .getName(), getDate(thesis.getProposedDiscussed()), String.valueOf(hasPlace(thesis)),
-                            thesis.getProposedPlace(), String.valueOf(hasTime(thesis.getProposedDiscussed())),
-                            getTime(thesis.getProposedDiscussed()), thesis.getTitle().getContent());
+            LocalizedString body = BundleUtil.getLocalizedString(Bundle.MESSAGING, "thesis.announcement.body");
+            body = body.map(bodyFormat -> MessageFormat.format(bodyFormat, thesis.getStudent().getPerson().getName(),
+                    getDate(thesis.getProposedDiscussed()), hasPlace(thesis), thesis.getProposedPlace(),
+                    hasTime(thesis.getProposedDiscussed()), getTime(thesis.getProposedDiscussed()), thesis.getTitle()));
 
             post.setName(subject);
             post.setBody(body);
