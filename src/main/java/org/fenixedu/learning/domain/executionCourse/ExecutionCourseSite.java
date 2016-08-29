@@ -58,12 +58,16 @@ public class ExecutionCourseSite extends ExecutionCourseSite_Base {
         setExecutionCourse(executionCourse);
         setPublished(true);
         setFolder(folderForPath(PortalConfiguration.getInstance().getMenu(), "courses"));
-        setSlug(on("-").join(getExecutionCourse().getSigla(), getExecutionCourse().getExternalId()));
+        setSlug(formatSlug(getExecutionCourse()));
         setCanAdminGroup(NobodyGroup.get());
         setCanPostGroup(NobodyGroup.get());
         setBennu(Bennu.getInstance());
 
         executionCourse.setSiteUrl(getFullUrl());
+    }
+
+    private String formatSlug(ExecutionCourse executionCourse) {
+        return on("-").join(executionCourse.getSigla(), executionCourse.getExternalId());
     }
 
     @Override
@@ -125,4 +129,8 @@ public class ExecutionCourseSite extends ExecutionCourseSite_Base {
                 .map(Category::makeWrap);
     }
 
+    public void updateSiteUrl(ExecutionCourse executionCourse) {
+        setSlug(formatSlug(executionCourse));
+        executionCourse.setSiteUrl(getFullUrl());
+    }
 }
