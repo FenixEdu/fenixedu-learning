@@ -42,7 +42,7 @@ public class SummaryListener {
 
 			post.setBody(summary.getSummaryText().toLocalizedString());
 			post.setCreationDate(summary.getSummaryDateTime());
-
+			post.setActive(true);
 			post.addCategories(site.getOrCreateCategoryForSlug(SUMMARIES_CATEGORY, SUMMARIES_TITLE));
 		}
 		Signal.emit(Post.SIGNAL_EDITED, new DomainObjectEvent<>(post));
