@@ -44,6 +44,8 @@ import org.fenixedu.learning.domain.degree.components.DescriptionComponent;
 import org.fenixedu.learning.domain.degree.components.LatestAnnouncementsComponent;
 import org.fenixedu.learning.domain.degree.components.ThesisComponent;
 
+import java.util.Locale;
+
 /**
  * Created by borgez on 24-11-2014.
  */
@@ -66,10 +68,11 @@ public class DegreeSiteListener {
     private static final LocalizedString TITLE_COURSE = getLocalizedString(BUNDLE, "department.course");
     private static final LocalizedString TITLE_CURRICULAR_COURSE = getLocalizedString(BUNDLE, "degree.curricularCourse.title");
 
-    public static DegreeSite create(Degree degree) {
-        DegreeSite newSite = new DegreeSite(degree);
+
+    public static Site create(Degree degree) {
+        Site newSite = new Site(getName(degree),getName(degree));
         newSite.setName(degree.getNameI18N().toLocalizedString());
-        Menu menu = new Menu(newSite);
+        Menu menu = new Menu(newSite, degree.getNameI18N().toLocalizedString());
         menu.setName(MENU_TITLE);
 
         newSite.setTheme(CMSTheme.forType("fenixedu-learning-theme"));
@@ -79,13 +82,21 @@ public class DegreeSiteListener {
         return newSite;
     }
 
+
+    private static LocalizedString getName(Degree degree) {
+        if (degree.getPhdProgram() != null) {
+            return new LocalizedString().with(Locale.getDefault(), degree.getPhdProgram().getPresentationName());
+        } else {
+            return new LocalizedString().with(Locale.getDefault(), degree.getPresentationName());
+        }
+    }
+
     public static void createDefaultContents(Site newSite, Menu menu, User user) {
         Component announcementsComponent =
                 new ListCategoryPosts(newSite.getOrCreateCategoryForSlug("announcement", ANNOUNCEMENTS_TITLE));
 
-        Page initialPage =
-                Page.create(newSite, menu, null, DESCRIPTION_TITLE, true, "degreeDescription", user,
-                        forType(DescriptionComponent.class), forType(LatestAnnouncementsComponent.class));
+        Page initialPage = Page.create(newSite, menu, null, DESCRIPTION_TITLE, true, "degreeDescription", user,
+                forType(DescriptionComponent.class), forType(LatestAnnouncementsComponent.class));
         Page.create(newSite, menu, null, ANNOUNCEMENTS_TITLE, true, "category", user, announcementsComponent);
         Page.create(newSite, menu, null, TITLE_CURRICULUM, true, "degreeCurriculum", user,
                 forType(DegreeCurriculumComponent.class));

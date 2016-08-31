@@ -30,7 +30,6 @@ import org.fenixedu.academic.domain.Project;
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
-import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 
 @ComponentType(name = "Evaluations", description = "Evaluations for an Execution Course")
 public class EvaluationsComponent extends BaseExecutionCourseComponent {
@@ -42,7 +41,7 @@ public class EvaluationsComponent extends BaseExecutionCourseComponent {
 
     @Override
     public void handle(Page page, TemplateContext componentContext, TemplateContext globalContext) {
-        ExecutionCourse executionCourse = ((ExecutionCourseSite) page.getSite()).getExecutionCourse();
+        ExecutionCourse executionCourse = page.getSite().getExecutionCourse();
         globalContext.put("comment", executionCourse.getComment());
         globalContext.put("adHocEvaluations", executionCourse.getOrderedAssociatedAdHocEvaluations());
         globalContext.put("projects",

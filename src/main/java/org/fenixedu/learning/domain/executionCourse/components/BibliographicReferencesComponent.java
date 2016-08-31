@@ -27,7 +27,6 @@ import org.fenixedu.academic.domain.degreeStructure.CompetenceCourseInformation;
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
-import org.fenixedu.learning.domain.executionCourse.ExecutionCourseSite;
 
 import com.google.common.collect.Lists;
 
@@ -36,7 +35,7 @@ public class BibliographicReferencesComponent extends BaseExecutionCourseCompone
 
     @Override
     public void handle(Page page, TemplateContext componentContext, TemplateContext globalContext) {
-        ExecutionCourse executionCourse = ((ExecutionCourseSite) page.getSite()).getExecutionCourse();
+        ExecutionCourse executionCourse = page.getSite().getExecutionCourse();
         globalContext.put("executionCourse", executionCourse);
         globalContext.put("mainReferences", mainReferences(executionCourse));
         globalContext.put("secondaryReferences", secundaryReferences(executionCourse));
