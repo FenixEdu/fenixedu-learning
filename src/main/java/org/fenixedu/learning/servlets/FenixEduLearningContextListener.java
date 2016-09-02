@@ -26,6 +26,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import org.fenixedu.academic.domain.Degree;
 import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.academic.domain.Summary;
 import org.fenixedu.academic.domain.thesis.Thesis;
@@ -92,10 +93,22 @@ public class FenixEduLearningContextListener implements ServletContextListener {
         Signal.register(PublishMarks.MARKS_PUBLISHED_SIGNAL, FenixEduLearningContextListener::handleMarksPublishment);
         Signal.register(Thesis.PROPOSAL_APPROVED_SIGNAL, FenixEduLearningContextListener::handleThesisProposalApproval);
         FenixFramework.getDomainModel().registerDeletionListener(ExecutionCourse.class, (executionCourse) -> {
-            if (executionCourse != null) {
-                executionCourse.delete();
+            if (executionCourse.getSite() != null) {
+                Site site = executionCourse.getSite();
+                executionCourse.setSite(null);
+                site.delete();
             }
         });
+
+
+        FenixFramework.getDomainModel().registerDeletionListener(Degree.class, (degree) -> {
+            if (degree.getSite() != null) {
+                Site site = degree.getSite();
+                degree.setSite(null);
+                site.delete();
+            }
+        });
+
 
         MergeExecutionCourses.registerMergeHandler(FenixEduLearningContextListener::copyExecutionCoursesSites);
 
