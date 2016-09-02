@@ -77,7 +77,7 @@ public class EventsResource {
 
     @GET
     @Path("/executionCourse/{course}")
-    @Produces(value = "application/json; charset=utf-8")
+    @Produces("application/json; charset=utf-8")
     public String executionCourseEvents(@PathParam("course") ExecutionCourse course, @QueryParam("start") String start,
             @QueryParam("end") String end) {
         return toJson(
@@ -87,7 +87,7 @@ public class EventsResource {
 
     @GET
     @Path("/executionCourse/{course}/nearestEvent")
-    @Produces()
+    @Produces("application/json; charset=utf-8")
     public String nearestExecutionCourseEvent(@PathParam("course") ExecutionCourse course) {
         LocalDate date = LocalDate.now();
         if (hasPermissionToViewSchedule(course)) {
