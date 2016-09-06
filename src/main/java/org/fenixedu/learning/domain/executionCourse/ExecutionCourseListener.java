@@ -20,17 +20,19 @@ package org.fenixedu.learning.domain.executionCourse;
 
 import static com.google.common.base.Joiner.on;
 import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
+import static org.fenixedu.bennu.portal.domain.MenuFunctionality.findFunctionality;
 import static org.fenixedu.cms.domain.component.Component.forType;
 
+import org.fenixedu.academic.domain.DegreeInfo;
 import org.fenixedu.academic.domain.ExecutionCourse;
+import org.fenixedu.academic.domain.exceptions.DomainException;
 import org.fenixedu.academic.util.MultiLanguageString;
+import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
-import org.fenixedu.cms.domain.CMSTheme;
-import org.fenixedu.cms.domain.Category;
-import org.fenixedu.cms.domain.Menu;
-import org.fenixedu.cms.domain.Page;
-import org.fenixedu.cms.domain.Site;
+import org.fenixedu.bennu.portal.domain.MenuFunctionality;
+import org.fenixedu.bennu.portal.domain.MenuFunctionality_Base;
+import org.fenixedu.cms.domain.*;
 import org.fenixedu.cms.domain.component.Component;
 import org.fenixedu.cms.domain.component.ListCategoryPosts;
 import org.fenixedu.cms.domain.component.ViewPost;
@@ -45,11 +47,16 @@ import org.fenixedu.learning.domain.executionCourse.components.LessonPlanCompone
 import org.fenixedu.learning.domain.executionCourse.components.MarksComponent;
 import org.fenixedu.learning.domain.executionCourse.components.ObjectivesComponent;
 import org.fenixedu.learning.domain.executionCourse.components.ScheduleComponent;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 public class ExecutionCourseListener {
+
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DegreeInfo.class);
+
     public static final String BUNDLE = "resources.FenixEduLearningResources";
 
     public static final LocalizedString ANNOUNCEMENTS_TITLE = getLocalizedString(BUNDLE, "label.announcements");
@@ -77,7 +84,13 @@ public class ExecutionCourseListener {
         final Menu menu = new Menu(newSite, executionCourse.getNameI18N().toLocalizedString());
         menu.setName(MENU_TITLE);
         newSite.setTheme(CMSTheme.forType("fenixedu-learning-theme"));
+        MenuFunctionality functionality = MenuFunctionality.findFunctionality("cms", "disciplinas");
+        if (functionality == null || functionality.getCmsFolder() == null){
+            throw new DomainException("site.folder.not.found");
+        }
+        newSite.setFolder(functionality.getCmsFolder());
         createDefaultContents(newSite, menu, Authenticate.getUser());
+        logger.info("Created site for execution course " + executionCourse.getSigla());
         return newSite;
     }
 
