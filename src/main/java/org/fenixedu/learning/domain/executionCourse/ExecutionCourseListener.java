@@ -18,40 +18,28 @@
  */
 package org.fenixedu.learning.domain.executionCourse;
 
-import static com.google.common.base.Joiner.on;
-import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
-import static org.fenixedu.bennu.portal.domain.MenuFunctionality.findFunctionality;
-import static org.fenixedu.cms.domain.component.Component.forType;
-
 import org.fenixedu.academic.domain.DegreeInfo;
 import org.fenixedu.academic.domain.ExecutionCourse;
+import org.fenixedu.academic.domain.accessControl.TeacherGroup;
 import org.fenixedu.academic.domain.exceptions.DomainException;
 import org.fenixedu.academic.util.MultiLanguageString;
-import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.portal.domain.MenuFunctionality;
-import org.fenixedu.bennu.portal.domain.MenuFunctionality_Base;
 import org.fenixedu.cms.domain.*;
 import org.fenixedu.cms.domain.component.Component;
 import org.fenixedu.cms.domain.component.ListCategoryPosts;
 import org.fenixedu.cms.domain.component.ViewPost;
 import org.fenixedu.commons.i18n.LocalizedString;
-import org.fenixedu.learning.domain.executionCourse.components.BibliographicReferencesComponent;
-import org.fenixedu.learning.domain.executionCourse.components.EvaluationMethodsComponent;
-import org.fenixedu.learning.domain.executionCourse.components.EvaluationsComponent;
-import org.fenixedu.learning.domain.executionCourse.components.ExecutionCourseComponent;
-import org.fenixedu.learning.domain.executionCourse.components.GroupsComponent;
-import org.fenixedu.learning.domain.executionCourse.components.InitialPageComponent;
-import org.fenixedu.learning.domain.executionCourse.components.LessonPlanComponent;
-import org.fenixedu.learning.domain.executionCourse.components.MarksComponent;
-import org.fenixedu.learning.domain.executionCourse.components.ObjectivesComponent;
-import org.fenixedu.learning.domain.executionCourse.components.ScheduleComponent;
+import org.fenixedu.learning.domain.executionCourse.components.*;
 import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.logging.Logger;
+
+import static com.google.common.base.Joiner.on;
+import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
+import static org.fenixedu.cms.domain.component.Component.forType;
 
 public class ExecutionCourseListener {
 
@@ -75,23 +63,49 @@ public class ExecutionCourseListener {
     private static final LocalizedString SUMMARIES_TITLE = getLocalizedString(BUNDLE, "label.summaries");
     private static final LocalizedString SHIFTS_TITLE = getLocalizedString(BUNDLE, "label.shifts");
     public static final LocalizedString MENU_TITLE = getLocalizedString("resources.FenixEduLearningResources", "label.menu");
+    public static final LocalizedString EXTRA_MENU_TITLE = getLocalizedString("resources.FenixEduLearningResources", "label.extra.menu");
 
     public static Site create(ExecutionCourse executionCourse) {
         final Site newSite = new Site(executionCourse.getNameI18N().toLocalizedString(),
                 getObjectives(executionCourse).orElseGet(() -> executionCourse.getNameI18N().toLocalizedString()));
         executionCourse.setSite(newSite);
         newSite.setSlug(formatSlugForExecutionCourse(executionCourse));
-        final Menu menu = new Menu(newSite, executionCourse.getNameI18N().toLocalizedString());
-        menu.setName(MENU_TITLE);
         newSite.setTheme(CMSTheme.forType("fenixedu-learning-theme"));
+
+        final Menu menu = createSiteMenu(executionCourse, newSite);
+        createDefaultContents(newSite, menu, Authenticate.getUser());
+        createSiteRoles(executionCourse, newSite);
+
         MenuFunctionality functionality = MenuFunctionality.findFunctionality("cms", "disciplinas");
         if (functionality == null || functionality.getCmsFolder() == null){
             throw new DomainException("site.folder.not.found");
         }
         newSite.setFolder(functionality.getCmsFolder());
-        createDefaultContents(newSite, menu, Authenticate.getUser());
+        newSite.setPublished(true);
+
         logger.info("Created site for execution course " + executionCourse.getSigla());
         return newSite;
+    }
+
+    private static Menu createSiteMenu(ExecutionCourse executionCourse, Site newSite) {
+        final Menu menu = new Menu(newSite, executionCourse.getNameI18N().toLocalizedString());
+        menu.setName(MENU_TITLE);
+        menu.setPrivileged(true);
+        menu.setOrder(0);
+
+        final Menu extraPages = new Menu(newSite, executionCourse.getNameI18N().toLocalizedString());
+        extraPages.setName(EXTRA_MENU_TITLE);
+        extraPages.setOrder(1);
+        return menu;
+    }
+
+    private static void createSiteRoles(ExecutionCourse executionCourse, Site newSite) {
+        new Role(DefaultRoles.getInstance().getAuthorRole(), newSite);
+        new Role(DefaultRoles.getInstance().getContributorRole(), newSite);
+        new Role(DefaultRoles.getInstance().getEditorRole(), newSite);
+
+        Role teacherRole = new Role(DefaultTeacherRole.getInstance().getTeacherRole(), newSite);
+        teacherRole.setGroup(TeacherGroup.get(executionCourse).toPersistentGroup());
     }
 
     private static String formatSlugForExecutionCourse(ExecutionCourse executionCourse) {
