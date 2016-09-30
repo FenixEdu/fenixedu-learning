@@ -1,0 +1,48 @@
+
+<div class="modal fade" id="degree-new-site" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="degree new site">
+    <div class="modal-dialog" role="document">
+        <form class="form-inline" id="degree-site-form" method="post" action="{{request.contextPath}}/api/learning/sites/degree">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Select degree to create site to.
+                </div>
+                <div class="modal-body">
+                    <p>If the degree already has a site, you will be redirected to the existing site.</p>
+                    <div class="form-group">
+                        <label for="degreeName">Degree acronym</label>
+                        <input class="form-control" type="text" name="dsigla" id="degreeName" placeholder="degree"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create site</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="modal fade" id="execution-course-new-site" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="execution course new site">
+    <div class="modal-dialog" role="document">
+        <form class="form-inline" id="execution-course-site-form" method="post" action="{{request.contextPath}}/api/learning/sites/executionCourse">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Select course to create site to.
+                </div>
+                <div class="modal-body">
+                    <p>If the course already has a site, you will be redirected to the existing site.</p>
+                    <div class="form-group">
+                        <label for="executionCourseName">Course acronym</label>
+                        <input class="form-control"  type="text" name="ecsigla" id="executionCourseName"  placeholder="course"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create site</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

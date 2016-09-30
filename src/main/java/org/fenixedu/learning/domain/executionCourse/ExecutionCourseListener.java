@@ -20,10 +20,13 @@ package org.fenixedu.learning.domain.executionCourse;
 
 import org.fenixedu.academic.domain.DegreeInfo;
 import org.fenixedu.academic.domain.ExecutionCourse;
+import org.fenixedu.academic.domain.Professorship;
 import org.fenixedu.academic.domain.accessControl.TeacherGroup;
 import org.fenixedu.academic.domain.exceptions.DomainException;
 import org.fenixedu.academic.util.MultiLanguageString;
 import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.groups.Group;
+import org.fenixedu.bennu.core.groups.NobodyGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.portal.domain.MenuFunctionality;
 import org.fenixedu.cms.domain.*;
@@ -34,8 +37,10 @@ import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.learning.domain.executionCourse.components.*;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Joiner.on;
 import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
@@ -105,7 +110,16 @@ public class ExecutionCourseListener {
         new Role(DefaultRoles.getInstance().getEditorRole(), newSite);
 
         Role teacherRole = new Role(DefaultTeacherRole.getInstance().getTeacherRole(), newSite);
-        teacherRole.setGroup(TeacherGroup.get(executionCourse).toPersistentGroup());
+        Group group = NobodyGroup.get();
+
+        for(Professorship professorship : executionCourse.getProfessorshipsSet()) {
+            if (professorship.getPermissions().getSections()) {
+                User user = professorship.getPerson().getUser();
+                group = group.grant(user);
+            }
+        }
+
+        teacherRole.setGroup(group.toPersistentGroup());
     }
 
     private static String formatSlugForExecutionCourse(ExecutionCourse executionCourse) {
