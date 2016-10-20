@@ -22,12 +22,15 @@ import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
 import static org.fenixedu.cms.domain.component.Component.forType;
 
 import org.fenixedu.academic.domain.Degree;
+import org.fenixedu.academic.domain.ExecutionCourse;
+import org.fenixedu.academic.domain.Professorship;
+import org.fenixedu.academic.domain.exceptions.DomainException;
 import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.groups.Group;
+import org.fenixedu.bennu.core.groups.NobodyGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
-import org.fenixedu.cms.domain.CMSTheme;
-import org.fenixedu.cms.domain.Menu;
-import org.fenixedu.cms.domain.Page;
-import org.fenixedu.cms.domain.Site;
+import org.fenixedu.bennu.portal.domain.MenuFunctionality;
+import org.fenixedu.cms.domain.*;
 import org.fenixedu.cms.domain.component.Component;
 import org.fenixedu.cms.domain.component.ListCategoryPosts;
 import org.fenixedu.cms.domain.component.ViewPost;
@@ -43,8 +46,12 @@ import org.fenixedu.learning.domain.degree.components.DegreeExecutionCoursesComp
 import org.fenixedu.learning.domain.degree.components.DescriptionComponent;
 import org.fenixedu.learning.domain.degree.components.LatestAnnouncementsComponent;
 import org.fenixedu.learning.domain.degree.components.ThesisComponent;
+import org.fenixedu.learning.domain.executionCourse.DefaultTeacherRole;
+import pt.ist.fenixframework.Atomic;
 
 import java.util.Locale;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by borgez on 24-11-2014.
@@ -68,7 +75,7 @@ public class DegreeSiteListener {
     private static final LocalizedString TITLE_COURSE = getLocalizedString(BUNDLE, "department.course");
     private static final LocalizedString TITLE_CURRICULAR_COURSE = getLocalizedString(BUNDLE, "degree.curricularCourse.title");
 
-
+    @Atomic
     public static Site create(Degree degree) {
         Site newSite = new Site(getName(degree),getName(degree));
         newSite.setName(degree.getNameI18N().toLocalizedString());
@@ -77,8 +84,14 @@ public class DegreeSiteListener {
 
         newSite.setTheme(CMSTheme.forType("fenixedu-learning-theme"));
 
-        createDefaultContents(newSite, menu, Authenticate.getUser());
+        MenuFunctionality functionality = MenuFunctionality.findFunctionality("cms", "cursos");
+        if (functionality == null || functionality.getCmsFolder() == null){
+            throw new DomainException("site.folder.not.found");
+        }
+        newSite.setFolder(functionality.getCmsFolder());
 
+        createDefaultContents(newSite, menu, Authenticate.getUser());
+        createSiteRoles(degree,newSite);
         return newSite;
     }
 
@@ -90,6 +103,27 @@ public class DegreeSiteListener {
             return new LocalizedString().with(Locale.getDefault(), degree.getPresentationName());
         }
     }
+
+
+    private static void createSiteRoles(Degree degree, Site newSite) {
+        Role adminRole = new Role(DefaultRoles.getInstance().getAdminRole(), newSite);
+        new Role(DefaultRoles.getInstance().getAuthorRole(), newSite);
+        new Role(DefaultRoles.getInstance().getContributorRole(), newSite);
+        new Role(DefaultRoles.getInstance().getEditorRole(), newSite);
+
+        Group group = NobodyGroup.get();
+        Set<User> users = degree.getCoordinatorGroupSet().stream()
+                .flatMap(pg->pg.getMembers().stream())
+                .distinct().collect(Collectors.toSet());
+
+        for(User user : users){
+            group=group.grant(user);
+        }
+
+        adminRole.setGroup(group.toPersistentGroup());
+    }
+
+
 
     public static void createDefaultContents(Site newSite, Menu menu, User user) {
         Component announcementsComponent =
