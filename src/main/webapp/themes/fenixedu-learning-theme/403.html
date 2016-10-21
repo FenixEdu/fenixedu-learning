@@ -1,0 +1,9 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% block content %}
+    <h3 style="font-weight:300; margin-bottom: 22px; margin-top:0px;">401. <small>{{ i18n('resources.FenixEduLearningResources', 'label.forbidden.title') }}</small></h3>
+
+    <p>{{ i18n('resources.FenixEduLearningResources', 'label.forbidden') }}</p>
+
+    <p><a href="{{site.address}}" role="button">{{ i18n('resources.FenixEduLearningResources', 'label.back.to') }} {{site.name.content}}</a></p>
+{% endblock content %}
