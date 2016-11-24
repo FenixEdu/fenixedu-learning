@@ -21,6 +21,7 @@ package org.fenixedu.learning.domain.executionCourse;
 import org.fenixedu.academic.domain.DegreeInfo;
 import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.academic.domain.Professorship;
+import org.fenixedu.academic.domain.ProfessorshipPermissions;
 import org.fenixedu.academic.domain.accessControl.TeacherGroup;
 import org.fenixedu.academic.domain.exceptions.DomainException;
 import org.fenixedu.academic.util.MultiLanguageString;
@@ -36,6 +37,7 @@ import org.fenixedu.cms.domain.component.ViewPost;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.learning.domain.executionCourse.components.*;
 import org.slf4j.LoggerFactory;
+import pt.ist.fenixframework.Atomic;
 
 import java.util.List;
 import java.util.Objects;
@@ -45,6 +47,7 @@ import java.util.stream.Collectors;
 import static com.google.common.base.Joiner.on;
 import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
 import static org.fenixedu.cms.domain.component.Component.forType;
+import static org.fenixedu.cms.domain.component.Component.register;
 
 public class ExecutionCourseListener {
 
@@ -169,5 +172,23 @@ public class ExecutionCourseListener {
     public static void updateSiteSlug(ExecutionCourse instance) {
         instance.getSite().setSlug(formatSlugForExecutionCourse(instance));
         instance.setSiteUrl(instance.getSite().getFullUrl());
+    }
+
+    public static void updateProfessorship(Professorship professorship, Boolean allowAccess ) {
+        ExecutionCourse executionCourse = professorship.getExecutionCourse();
+        Role teacherRole = executionCourse.getSite().getRolesSet().stream()
+                .filter(role->role.getRoleTemplate().equals(DefaultTeacherRole.getInstance().getTeacherRole()))
+                .findAny().orElseGet(()->new Role(DefaultTeacherRole.getInstance().getTeacherRole(),executionCourse.getSite()));
+
+        Group group = teacherRole.getGroup().toGroup();
+
+        if(allowAccess){
+            group=group.grant(professorship.getPerson().getUser());
+        } else {
+            group=group.revoke(professorship.getPerson().getUser());
+        }
+
+        teacherRole.setGroup(group.toPersistentGroup());
+
     }
 }

@@ -26,9 +26,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import org.fenixedu.academic.domain.Degree;
-import org.fenixedu.academic.domain.ExecutionCourse;
-import org.fenixedu.academic.domain.Summary;
+import org.fenixedu.academic.domain.*;
 import org.fenixedu.academic.domain.thesis.Thesis;
 import org.fenixedu.academic.service.services.manager.MergeExecutionCourses;
 import org.fenixedu.academic.service.services.teacher.PublishMarks;
@@ -62,6 +60,7 @@ import com.google.common.base.Strings;
 
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.FenixFramework;
+import pt.ist.fenixframework.dml.runtime.RelationAdapter;
 
 @WebListener
 public class FenixEduLearningContextListener implements ServletContextListener {
@@ -88,8 +87,11 @@ public class FenixEduLearningContextListener implements ServletContextListener {
         });
         Signal.register(ExecutionCourse.ACRONYM_CHANGED_SIGNAL, (DomainObjectEvent<ExecutionCourse> event) -> {
             ExecutionCourseListener.updateSiteSlug(event.getInstance());
-
         });
+
+        Signal.register(ProfessorshipPermissions.PROFESSORSHIP_PERMISSIONS_CHANGED, (DomainObjectEvent<ProfessorshipPermissions> event) ->
+                ExecutionCourseListener.updateProfessorship(event.getInstance().getProfessorship(),event.getInstance().getSections()));
+
         Signal.register(PublishMarks.MARKS_PUBLISHED_SIGNAL, FenixEduLearningContextListener::handleMarksPublishment);
         Signal.register(Thesis.PROPOSAL_APPROVED_SIGNAL, FenixEduLearningContextListener::handleThesisProposalApproval);
         FenixFramework.getDomainModel().registerDeletionListener(ExecutionCourse.class, (executionCourse) -> {
@@ -97,6 +99,16 @@ public class FenixEduLearningContextListener implements ServletContextListener {
                 Site site = executionCourse.getSite();
                 executionCourse.setSite(null);
                 site.delete();
+            }
+        });
+
+        ExecutionCourse.getRelationExecutionCourseProfessorship().addListener(new RelationAdapter<Professorship, ExecutionCourse>() {
+            @Override
+            public void beforeRemove(Professorship o1, ExecutionCourse o2) {
+                if(o1!=null && o1.getExecutionCourse()!=null ) {
+                    ExecutionCourseListener.updateProfessorship(o1, false);
+                }
+                super.beforeRemove(o1,o2);
             }
         });
 
