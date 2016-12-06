@@ -52,6 +52,7 @@ public class DefaultTeacherRole  {
         permissions.add(PermissionsArray.Permission.CREATE_POST);
         permissions.add(PermissionsArray.Permission.CREATE_PAGE);
         permissions.add(PermissionsArray.Permission.SEE_PAGES);
+        permissions.add(PermissionsArray.Permission.SEE_POSTS);
         permissions.add(PermissionsArray.Permission.SEE_PAGE_COMPONENTS);
         permissions.add(PermissionsArray.Permission.DELETE_OTHERS_POSTS);
         permissions.add(PermissionsArray.Permission.DELETE_PAGE);
