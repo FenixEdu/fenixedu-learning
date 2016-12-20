@@ -27,7 +27,7 @@ import com.google.gson.JsonPrimitive;
 import org.fenixedu.academic.domain.*;
 import org.fenixedu.academic.predicate.AccessControl;
 import org.fenixedu.academic.util.EvaluationType;
-import org.fenixedu.bennu.core.groups.DynamicGroup;
+import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.cms.domain.Site;
 import org.fenixedu.learning.domain.ScheduleEventBean;
@@ -240,7 +240,7 @@ public class EventsResource {
     private boolean hasPermissionToViewSchedule(ExecutionCourse executionCourse) {
         boolean isOpenPeriod = !executionCourse.getExecutionPeriod().isNotOpen();
         boolean isLogged = Authenticate.isLogged();
-        boolean isAllocationManager = isLogged && DynamicGroup.get("resourceAllocationManager").isMember(Authenticate.getUser());
+        boolean isAllocationManager = isLogged && Group.dynamic("resourceAllocationManager").isMember(Authenticate.getUser());
         boolean isCoordinator =
                 executionCourse.getDegreesSortedByDegreeName().stream()
                         .flatMap(degree -> degree.getCurrentCoordinators().stream()).map(Coordinator::getPerson)

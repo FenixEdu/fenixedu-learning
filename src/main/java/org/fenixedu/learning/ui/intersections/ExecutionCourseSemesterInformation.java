@@ -8,7 +8,7 @@ import org.fenixedu.bennu.rendering.annotations.BennuIntersections;
  */
 @BennuIntersections({
         @BennuIntersection(location = "site.extra", position = "description",
-                file= "/templates/fenixedu-learning/siteExecutionCourseSemester.html")
+                file= "templates/fenixedu-learning/siteExecutionCourseSemester.html")
 })
 public class ExecutionCourseSemesterInformation {
 }

@@ -22,13 +22,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.google.common.base.MoreObjects;
 import org.fenixedu.academic.domain.CompetenceCourse;
 import org.fenixedu.academic.domain.CurricularCourse;
 import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.academic.domain.ExecutionSemester;
 import org.fenixedu.commons.i18n.LocalizedString;
-
-import com.google.common.base.Objects;
 
 public class CompetenceCourseBean {
     private final CompetenceCourse competenceCourse;
@@ -77,7 +76,7 @@ public class CompetenceCourseBean {
 
     @Override
     public String toString() {
-        return Objects.toStringHelper(this).add("name", this.name).add("objectives", this.objectives)
+        return MoreObjects.toStringHelper(this).add("name", this.name).add("objectives", this.objectives)
                 .add("executionSemester", executionSemester).add("curricularCourses", curricularCourses).toString();
     }
 

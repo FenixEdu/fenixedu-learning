@@ -9,7 +9,7 @@ import org.fenixedu.bennu.rendering.annotations.BennuIntersections;
 
 @BennuIntersections({
         @BennuIntersection(location = "sites.manage", position = "creation.templates",
-                file= "/templates/fenixedu-learning/executionCourseAndDegreeCreation.html")
+                file= "templates/fenixedu-learning/executionCourseAndDegreeCreation.html")
 })
 public class ExecutionCourseAndDegreeSiteCreationIntersection {
 }

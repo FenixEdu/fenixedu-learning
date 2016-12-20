@@ -26,8 +26,8 @@ import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.academic.domain.Professorship;
 import org.fenixedu.academic.domain.exceptions.DomainException;
 import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
 import org.fenixedu.bennu.core.groups.Group;
-import org.fenixedu.bennu.core.groups.NobodyGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.portal.domain.MenuFunctionality;
 import org.fenixedu.cms.domain.*;
@@ -111,14 +111,7 @@ public class DegreeSiteListener {
         new Role(DefaultRoles.getInstance().getContributorRole(), newSite);
         new Role(DefaultRoles.getInstance().getEditorRole(), newSite);
 
-        Group group = NobodyGroup.get();
-        Set<User> users = degree.getCoordinatorGroupSet().stream()
-                .flatMap(pg->pg.getMembers().stream())
-                .distinct().collect(Collectors.toSet());
-
-        for(User user : users){
-            group=group.grant(user);
-        }
+        Group group = Group.users(degree.getCoordinatorGroupSet().stream().flatMap(PersistentGroup::getMembers).distinct());
 
         adminRole.setGroup(group.toPersistentGroup());
     }

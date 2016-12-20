@@ -27,7 +27,6 @@ import org.fenixedu.academic.domain.exceptions.DomainException;
 import org.fenixedu.academic.util.MultiLanguageString;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.groups.Group;
-import org.fenixedu.bennu.core.groups.NobodyGroup;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.bennu.portal.domain.MenuFunctionality;
 import org.fenixedu.cms.domain.*;
@@ -113,14 +112,8 @@ public class ExecutionCourseListener {
         new Role(DefaultRoles.getInstance().getEditorRole(), newSite);
 
         Role teacherRole = new Role(DefaultTeacherRole.getInstance().getTeacherRole(), newSite);
-        Group group = NobodyGroup.get();
-
-        for(Professorship professorship : executionCourse.getProfessorshipsSet()) {
-            if (professorship.getPermissions().getSections()) {
-                User user = professorship.getPerson().getUser();
-                group = group.grant(user);
-            }
-        }
+        Group group = Group.users(executionCourse.getProfessorshipsSet().stream().filter(p -> p.getPermissions().getSections())
+                .map(p -> p.getPerson().getUser()));
 
         teacherRole.setGroup(group.toPersistentGroup());
     }

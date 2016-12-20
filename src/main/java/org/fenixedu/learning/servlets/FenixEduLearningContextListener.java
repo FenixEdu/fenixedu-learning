@@ -18,6 +18,7 @@
  */
 package org.fenixedu.learning.servlets;
 
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Optional;
@@ -32,12 +33,12 @@ import org.fenixedu.academic.service.services.manager.MergeExecutionCourses;
 import org.fenixedu.academic.service.services.teacher.PublishMarks;
 import org.fenixedu.academic.service.services.teacher.PublishMarks.MarkPublishingBean;
 import org.fenixedu.academic.util.Bundle;
-import org.fenixedu.bennu.core.groups.AnyoneGroup;
+import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.bennu.core.i18n.BundleUtil;
 import org.fenixedu.bennu.core.security.Authenticate;
+import org.fenixedu.bennu.core.signals.DomainObjectEvent;
+import org.fenixedu.bennu.core.signals.Signal;
 import org.fenixedu.bennu.io.domain.GroupBasedFile;
-import org.fenixedu.bennu.signals.DomainObjectEvent;
-import org.fenixedu.bennu.signals.Signal;
 import org.fenixedu.cms.domain.Category;
 import org.fenixedu.cms.domain.Menu;
 import org.fenixedu.cms.domain.MenuItem;
@@ -48,6 +49,7 @@ import org.fenixedu.cms.domain.Site;
 import org.fenixedu.cms.domain.component.Component;
 import org.fenixedu.cms.domain.component.StaticPost;
 import org.fenixedu.cms.routing.CMSRenderer;
+import org.fenixedu.cms.ui.AdminThemes;
 import org.fenixedu.commons.i18n.I18N;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.learning.domain.degree.DegreeRequestHandler;
@@ -58,13 +60,18 @@ import org.joda.time.DateTime;
 
 import com.google.common.base.Strings;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pt.ist.fenixframework.Atomic;
 import pt.ist.fenixframework.FenixFramework;
 import pt.ist.fenixframework.dml.runtime.RelationAdapter;
 
 @WebListener
 public class FenixEduLearningContextListener implements ServletContextListener {
-
+    
+    private final static Logger logger = LoggerFactory.getLogger(FenixEduLearningContextListener.class);
+    
+    
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         Signal.register(Summary.CREATE_SIGNAL, (DomainObjectEvent<Summary> event) -> {
@@ -286,9 +293,16 @@ public class FenixEduLearningContextListener implements ServletContextListener {
             }
 
             oldPost.getFilesSet().stream().map(postFile -> postFile.getFiles())
-                    .forEach(file -> new PostFile(newPost,
-                            new GroupBasedFile(file.getDisplayName(), file.getFilename(), file.getContent(), AnyoneGroup.get()),
-                            false, file.getPostFile().getIndex()));
+                    .forEach(file -> {
+                        try {
+                            new PostFile(newPost,
+                                    new GroupBasedFile(file.getDisplayName(), file.getFilename(), file.getStream(), Group.anyone()),
+                                    false, file.getPostFile().getIndex());
+                        } catch (IOException e) {
+                          logger.warn("could not clone file " + file.getDisplayName()
+                                  + " from post "+ newPost.getSlug() + " on site " +  newPost.getSite().getSlug());
+                        }
+                    });
 
             return newPost;
         }
