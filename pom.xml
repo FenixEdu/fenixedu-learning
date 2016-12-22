@@ -1,26 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.fenixedu</groupId>
         <artifactId>fenix-framework-project</artifactId>
         <version>2.2.0</version>
+        <relativePath />
     </parent>
 
     <artifactId>fenixedu-learning</artifactId>
     <version>2.3.0-SNAPSHOT</version>
-    <inceptionYear>2015</inceptionYear>
+    <packaging>jar</packaging>
 
     <name>FenixEdu Learning</name>
+    <url>http://fenixedu.org</url>
+    <inceptionYear>2015</inceptionYear>
 
     <properties>
         <version.org.fenixedu.academic>5.4.0</version.org.fenixedu.academic>
         <version.org.fenixedu.fenixedu-cms>2.2.0</version.org.fenixedu.fenixedu-cms>
+        <version.org.fenixedu.fenixedu-spaces>1.6.1</version.org.fenixedu.fenixedu-spaces>
+        <version.org.fenixedu.bennu>3.4.0</version.org.fenixedu.bennu>
         <version.org.fenixedu.bennu-signals>1.0.0</version.org.fenixedu.bennu-signals>
-        <version.org.jsoup.jsoup>1.7.2</version.org.jsoup.jsoup>
+        <version.org.fenixedu.bennu-modular-rendering>1.0.0</version.org.fenixedu.bennu-modular-rendering>
+        <version.org.fenixedu.bennu-social>1.0.0</version.org.fenixedu.bennu-social>
+        <version.org.fenixedu.fenixedu-commons>1.1.1</version.org.fenixedu.fenixedu-commons>
+        <version.com.google.guava.guava>17.0</version.com.google.guava.guava>
+        <version.joda.time.joda.time>2.3</version.joda.time.joda.time>
+        <version.com.google.code.gson.gson>2.2.4</version.com.google.code.gson.gson>
+        <version.javax.ws.rs.javax.ws.rs.api>2.0</version.javax.ws.rs.javax.ws.rs.api>
     </properties>
+
+    <issueManagement>
+        <system>JIRA</system>
+        <url>https://jira.fenixedu.org/browse/LRN</url>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License v3.0</name>
+            <url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <ciManagement>
+        <system>Travis CI</system>
+        <url>https://travis-ci.org/FenixEdu/fenixedu-learning</url>
+    </ciManagement>
 
     <scm>
         <connection>scm:git:git@github.com:fenixedu/fenixedu-learning.git</connection>
@@ -39,9 +67,7 @@
                         <phase>prepare-package</phase>
                         <configuration>
                             <target>
-                                <zip
-                                    destfile="${project.build.directory}/classes/META-INF/resources/WEB-INF/fenixedu-learning-theme.zip"
-                                    basedir="${project.basedir}/src/main/webapp/themes/fenixedu-learning-theme"></zip>
+                                <zip destfile="${project.build.directory}/classes/META-INF/resources/WEB-INF/fenixedu-learning-theme.zip" basedir="${project.basedir}/src/main/webapp/themes/fenixedu-learning-theme" />
                             </target>
                         </configuration>
                         <goals>
@@ -56,28 +82,71 @@
     <dependencies>
         <dependency>
             <groupId>org.fenixedu</groupId>
-            <artifactId>bennu-signals</artifactId>
-            <version>${version.org.fenixedu.bennu-signals}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.fenixedu</groupId>
             <artifactId>fenixedu-academic</artifactId>
             <version>${version.org.fenixedu.academic}</version>
         </dependency>
-
         <dependency>
             <groupId>org.fenixedu</groupId>
             <artifactId>fenixedu-cms</artifactId>
             <version>${version.org.fenixedu.fenixedu-cms}</version>
         </dependency>
-
         <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>${version.org.jsoup.jsoup}</version>
+            <groupId>org.fenixedu</groupId>
+            <artifactId>fenixedu-spaces</artifactId>
+            <version>${version.org.fenixedu.fenixedu-spaces}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fenixedu</groupId>
+            <artifactId>bennu-core</artifactId>
+            <version>${version.org.fenixedu.bennu}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fenixedu</groupId>
+            <artifactId>bennu-portal</artifactId>
+            <version>${version.org.fenixedu.bennu}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fenixedu</groupId>
+            <artifactId>bennu-io</artifactId>
+            <version>${version.org.fenixedu.bennu}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fenixedu</groupId>
+            <artifactId>bennu-signals</artifactId>
+            <version>${version.org.fenixedu.bennu-signals}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fenixedu</groupId>
+            <artifactId>bennu-modular-rendering</artifactId>
+            <version>${version.org.fenixedu.bennu-modular-rendering}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fenixedu</groupId>
+            <artifactId>fenixedu-commons</artifactId>
+            <version>${version.org.fenixedu.fenixedu-commons}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${version.com.google.guava.guava}</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>${version.joda.time.joda.time}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${version.com.google.code.gson.gson}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>${version.javax.ws.rs.javax.ws.rs.api}</version>
         </dependency>
     </dependencies>
+
     <repositories>
         <repository>
             <id>fenixedu-maven-repository</id>
