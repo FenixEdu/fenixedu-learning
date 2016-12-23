@@ -1,7 +1,8 @@
 
 <div class="modal fade" id="degree-new-site" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="degree new site">
     <div class="modal-dialog" role="document">
-        <form class="form-inline" id="degree-site-form" method="post" action="{{request.contextPath}}/api/learning/sites/degree">
+        <form class="form-inline" id="degree-site-form" method="post" action="{{request.contextPath}}/learning/sites/degree">
+            {{ csrfField | raw }}
             <div class="modal-content">
                 <div class="modal-header">
                     Select degree to create site to.
@@ -25,7 +26,8 @@
 
 <div class="modal fade" id="execution-course-new-site" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="execution course new site">
     <div class="modal-dialog" role="document">
-        <form class="form-inline" id="execution-course-site-form" method="post" action="{{request.contextPath}}/api/learning/sites/executionCourse">
+        <form class="form-inline" id="execution-course-site-form" method="post" action="{{request.contextPath}}/learning/sites/executionCourse">
+            {{csrfField}}
             <div class="modal-content">
                 <div class="modal-header">
                     Select course to create site to.

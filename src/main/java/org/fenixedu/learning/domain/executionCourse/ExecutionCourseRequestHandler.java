@@ -18,33 +18,9 @@
  */
 package org.fenixedu.learning.domain.executionCourse;
 
-import com.google.common.collect.Lists;
-import org.fenixedu.academic.domain.ExecutionCourse;
-import org.fenixedu.academic.domain.accessControl.StudentGroup;
-import org.fenixedu.academic.domain.accessControl.StudentSharingDegreeOfCompetenceOfExecutionCourseGroup;
-import org.fenixedu.academic.domain.accessControl.StudentSharingDegreeOfExecutionCourseGroup;
-import org.fenixedu.academic.domain.accessControl.TeacherGroup;
-import org.fenixedu.academic.util.MultiLanguageString;
-import org.fenixedu.bennu.core.domain.Bennu;
-import org.fenixedu.bennu.core.i18n.BundleUtil;
-import org.fenixedu.bennu.core.util.CoreConfiguration;
-import org.fenixedu.bennu.portal.domain.MenuContainer;
-import org.fenixedu.bennu.portal.domain.PortalConfiguration;
-import org.fenixedu.cms.domain.CMSFolder;
 import org.fenixedu.cms.domain.Page;
-import org.fenixedu.cms.domain.Site;
 import org.fenixedu.cms.rendering.TemplateContext;
 import org.fenixedu.cms.routing.CMSRenderer;
-import org.fenixedu.commons.i18n.LocalizedString;
-import pt.ist.fenixframework.Atomic;
-import pt.ist.fenixframework.DomainObject;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import static com.google.common.base.Joiner.on;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 public class ExecutionCourseRequestHandler implements CMSRenderer.RenderingPageHandler {
     @Override
