@@ -18,40 +18,19 @@
  */
 package org.fenixedu.learning.domain.degree;
 
-import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
-import static org.fenixedu.cms.domain.component.Component.forType;
-
 import org.fenixedu.academic.domain.Degree;
-import org.fenixedu.academic.domain.ExecutionCourse;
-import org.fenixedu.academic.domain.Professorship;
 import org.fenixedu.academic.domain.exceptions.DomainException;
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
 import org.fenixedu.bennu.core.groups.Group;
-import org.fenixedu.bennu.core.security.Authenticate;
-import org.fenixedu.bennu.portal.domain.MenuFunctionality;
-import org.fenixedu.cms.domain.*;
-import org.fenixedu.cms.domain.component.Component;
-import org.fenixedu.cms.domain.component.ListCategoryPosts;
-import org.fenixedu.cms.domain.component.ViewPost;
+import org.fenixedu.cms.domain.Role;
+import org.fenixedu.cms.domain.RoleTemplate;
+import org.fenixedu.cms.domain.Site;
 import org.fenixedu.commons.i18n.LocalizedString;
-import org.fenixedu.learning.domain.degree.components.ClassScheduleComponent;
-import org.fenixedu.learning.domain.degree.components.CurricularCourseComponent;
-import org.fenixedu.learning.domain.degree.components.DegreeClassesComponent;
-import org.fenixedu.learning.domain.degree.components.DegreeCurricularPlansComponent;
-import org.fenixedu.learning.domain.degree.components.DegreeCurriculumComponent;
-import org.fenixedu.learning.domain.degree.components.DegreeDissertationsComponent;
-import org.fenixedu.learning.domain.degree.components.DegreeEvaluations;
-import org.fenixedu.learning.domain.degree.components.DegreeExecutionCoursesComponent;
-import org.fenixedu.learning.domain.degree.components.DescriptionComponent;
-import org.fenixedu.learning.domain.degree.components.LatestAnnouncementsComponent;
-import org.fenixedu.learning.domain.degree.components.ThesisComponent;
-import org.fenixedu.learning.domain.executionCourse.DefaultTeacherRole;
 import pt.ist.fenixframework.Atomic;
 
 import java.util.Locale;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Optional;
+
+import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
 
 /**
  * Created by borgez on 24-11-2014.
@@ -77,76 +56,29 @@ public class DegreeSiteListener {
 
     @Atomic
     public static Site create(Degree degree) {
-        Site newSite = new Site(getName(degree),getName(degree));
-        newSite.setName(degree.getNameI18N().toLocalizedString());
-        Menu menu = new Menu(newSite, degree.getNameI18N().toLocalizedString());
-        menu.setName(MENU_TITLE);
-
-        newSite.setTheme(CMSTheme.forType("fenixedu-learning-theme"));
-
-        MenuFunctionality functionality = MenuFunctionality.findFunctionality("cms", "cursos");
-        if (functionality == null || functionality.getCmsFolder() == null){
-            throw new DomainException("site.folder.not.found");
-        }
-        newSite.setFolder(functionality.getCmsFolder());
-
-        createDefaultContents(newSite, menu, Authenticate.getUser());
-        createSiteRoles(degree,newSite);
-        return newSite;
-    }
-
-
-    private static LocalizedString getName(Degree degree) {
+        LocalizedString name;
+    
         if (degree.getPhdProgram() != null) {
-            return new LocalizedString().with(Locale.getDefault(), degree.getPhdProgram().getPresentationName());
+            name = new LocalizedString().with(Locale.getDefault(), degree.getPhdProgram().getPresentationName());
         } else {
-            return new LocalizedString().with(Locale.getDefault(), degree.getPresentationName());
+            name = new LocalizedString().with(Locale.getDefault(), degree.getPresentationName());
         }
+    
+        Site site = DegreeSiteBuilder.getInstance().create(name);
+    
+        RoleTemplate defaultTemplate = site.getDefaultRoleTemplate();
+        if (defaultTemplate != null ) {
+            Role role = new Role(defaultTemplate, site);
+            
+            role.setGroup(degree.getCoordinatorGroupSet().stream()
+                    .filter(pg -> pg.getResponsible()).map(pg -> pg.toGroup()).findAny().orElseGet(() -> Group.managers()));
+        } else {
+            throw new DomainException("no.default.role");
+        }
+        return site;
     }
 
 
-    private static void createSiteRoles(Degree degree, Site newSite) {
-        Role adminRole = new Role(DefaultRoles.getInstance().getAdminRole(), newSite);
-        new Role(DefaultRoles.getInstance().getAuthorRole(), newSite);
-        new Role(DefaultRoles.getInstance().getContributorRole(), newSite);
-        new Role(DefaultRoles.getInstance().getEditorRole(), newSite);
-
-        Group group = Group.users(degree.getCoordinatorGroupSet().stream().flatMap(PersistentGroup::getMembers).distinct());
-
-        adminRole.setGroup(group.toPersistentGroup());
-    }
-
-
-
-    public static void createDefaultContents(Site newSite, Menu menu, User user) {
-        Component announcementsComponent =
-                new ListCategoryPosts(newSite.getOrCreateCategoryForSlug("announcement", ANNOUNCEMENTS_TITLE));
-
-        Page initialPage = Page.create(newSite, menu, null, DESCRIPTION_TITLE, true, "degreeDescription", user,
-                forType(DescriptionComponent.class), forType(LatestAnnouncementsComponent.class));
-        Page.create(newSite, menu, null, ANNOUNCEMENTS_TITLE, true, "category", user, announcementsComponent);
-        Page.create(newSite, menu, null, TITLE_CURRICULUM, true, "degreeCurriculum", user,
-                forType(DegreeCurriculumComponent.class));
-
-        Page.create(newSite, null, null, VIEW_POST_TITLE, true, "view", user, forType(ViewPost.class));
-        Page.create(newSite, null, null, TITLE_THESIS, true, "dissertation", user, forType(ThesisComponent.class));
-        Page.create(newSite, null, null, TITLE_CLASS, true, "calendarEvents", user, forType(ClassScheduleComponent.class));
-        Page.create(newSite, null, null, TITLE_CURRICULAR_COURSE, true, "curricularCourse", user,
-                forType(CurricularCourseComponent.class));
-
-        Page.create(newSite, menu, null, THESES_TITLE, true, "dissertations", user, forType(DegreeDissertationsComponent.class));
-        Page.create(newSite, menu, null, REQUIREMENTS_TITLE, true, "accessRequirements", user,
-                forType(DescriptionComponent.class));
-        Page.create(newSite, menu, null, PROFESSIONAL_STATUS_TITLE, true, "professionalStatus", user,
-                forType(DescriptionComponent.class));
-        Page.create(newSite, menu, null, CURRICULAR_PLAN_TITLE, true, "curricularPlans", user,
-                forType(DegreeCurricularPlansComponent.class));
-        Page.create(newSite, menu, null, EXECUTION_COURSE_SITES_TITLE, true, "degreeExecutionCourses", user,
-                forType(DegreeExecutionCoursesComponent.class));
-        Page.create(newSite, menu, null, EVALUATIONS_TITLE, true, "calendarEvents", user, forType(DegreeEvaluations.class));
-        Page.create(newSite, menu, null, CLASSES_TITLE, true, "degreeClasses", user, forType(DegreeClassesComponent.class));
-
-        newSite.setInitialPage(initialPage);
-
-    }
+    
+    
 }

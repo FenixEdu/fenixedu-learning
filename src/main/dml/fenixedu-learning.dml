@@ -1,5 +1,11 @@
-  package org.fenixedu.learning.domain;
+package org.fenixedu.learning.domain;
 
+
+class executionCourse.ExecutionCourseSiteBuilder extends .org.fenixedu.cms.domain.SystemSiteBuilder {
+}
+
+class degree.DegreeSiteBuilder extends .org.fenixedu.cms.domain.SystemSiteBuilder {
+}
 
 relation SummaryPost {
 	.org.fenixedu.academic.domain.Summary playsRole;
@@ -21,5 +27,14 @@ relation ExecutionCourseFenixEduExecutionCourseSite {
     }
 	.org.fenixedu.academic.domain.ExecutionCourse playsRole executionCourse {
 	    multiplicity 0..1;
+    }
+}
+
+relation SiteHasSystemMenu {
+    protected .org.fenixedu.cms.domain.Site playsRole systemSite {
+        multiplicity 0..1;
+    }
+    .org.fenixedu.cms.domain.Menu playsRole systemMenu {
+         multiplicity 0..1;
     }
 }
