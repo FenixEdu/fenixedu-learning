@@ -18,10 +18,10 @@
     <inceptionYear>2015</inceptionYear>
 
     <properties>
-        <version.org.fenixedu.academic>5.4.0</version.org.fenixedu.academic>
-        <version.org.fenixedu.fenixedu-cms>2.2.0</version.org.fenixedu.fenixedu-cms>
-        <version.org.fenixedu.fenixedu-spaces>1.6.1</version.org.fenixedu.fenixedu-spaces>
-        <version.org.fenixedu.bennu>3.4.0</version.org.fenixedu.bennu>
+        <version.org.fenixedu.academic>5.5.1</version.org.fenixedu.academic>
+        <version.org.fenixedu.fenixedu-cms>2.2.2</version.org.fenixedu.fenixedu-cms>
+        <version.org.fenixedu.fenixedu-spaces>1.6.4</version.org.fenixedu.fenixedu-spaces>
+        <version.org.fenixedu.bennu>3.4.4</version.org.fenixedu.bennu>
         <version.org.fenixedu.bennu-signals>1.0.0</version.org.fenixedu.bennu-signals>
         <version.org.fenixedu.bennu-modular-rendering>1.0.0</version.org.fenixedu.bennu-modular-rendering>
         <version.org.fenixedu.bennu-social>1.0.0</version.org.fenixedu.bennu-social>
