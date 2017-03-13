@@ -1,16 +1,17 @@
 package org.fenixedu.learning.domain.executionCourse;
 
-import org.fenixedu.academic.domain.exceptions.DomainException;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
-import org.fenixedu.cms.domain.*;
+import org.fenixedu.cms.domain.Category;
+import org.fenixedu.cms.domain.Menu;
+import org.fenixedu.cms.domain.Page;
+import org.fenixedu.cms.domain.Site;
 import org.fenixedu.cms.domain.component.Component;
 import org.fenixedu.cms.domain.component.ListCategoryPosts;
 import org.fenixedu.cms.domain.component.ViewPost;
 import org.fenixedu.commons.i18n.LocalizedString;
 import org.fenixedu.learning.domain.executionCourse.components.*;
-import pt.ist.fenixframework.consistencyPredicates.ConsistencyPredicate;
 
 import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
 import static org.fenixedu.cms.domain.component.Component.forType;
@@ -36,8 +37,8 @@ public class ExecutionCourseSiteBuilder extends ExecutionCourseSiteBuilder_Base 
     private static final LocalizedString PROGRAM_TITLE = getLocalizedString(BUNDLE, "label.program");
     private static final LocalizedString SUMMARIES_TITLE = getLocalizedString(BUNDLE, "label.summaries");
     private static final LocalizedString SHIFTS_TITLE = getLocalizedString(BUNDLE, "label.shifts");
-    public static final LocalizedString MENU_TITLE = getLocalizedString("resources.FenixEduLearningResources", "label.menu");
-    public static final LocalizedString EXTRA_MENU_TITLE = getLocalizedString("resources.FenixEduLearningResources", "label.extra.menu");
+    public static final LocalizedString MENU_TITLE = getLocalizedString(BUNDLE, "label.menu");
+    public static final LocalizedString EXTRA_MENU_TITLE = getLocalizedString(BUNDLE, "label.extra.menu");
     
     private ExecutionCourseSiteBuilder(){
         super();
