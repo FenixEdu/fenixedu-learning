@@ -127,8 +127,20 @@ public class FenixEduLearningContextListener implements ServletContextListener {
                 site.delete();
             }
         });
-
-
+    
+        FenixFramework.getDomainModel().registerDeletionListener(Site.class, (site) -> {
+            if(site.getSystemMenu()!=null){
+                Menu menu = site.getSystemMenu();
+                site.setSystemMenu(null);
+            }
+        });
+    
+        FenixFramework.getDomainModel().registerDeletionListener(Menu.class, (menu) -> {
+            if( menu.getSystemSite() !=null ){
+                menu.setSystemSite(null);
+            }
+        });
+        
         MergeExecutionCourses.registerMergeHandler(FenixEduLearningContextListener::copyExecutionCoursesSites);
 
         CMSRenderer.addHandler(new ExecutionCourseRequestHandler());
