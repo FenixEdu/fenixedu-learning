@@ -20,6 +20,7 @@ package org.fenixedu.learning.domain.degree;
 
 import org.fenixedu.academic.domain.Degree;
 import org.fenixedu.academic.domain.exceptions.DomainException;
+import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
 import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.cms.domain.Role;
 import org.fenixedu.cms.domain.RoleTemplate;
@@ -36,23 +37,6 @@ import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
  * Created by borgez on 24-11-2014.
  */
 public class DegreeSiteListener {
-    private static final String BUNDLE = "resources.FenixEduLearningResources";
-    private static final LocalizedString MENU_TITLE = getLocalizedString("resources.FenixEduLearningResources", "label.menu");
-    private static final LocalizedString ANNOUNCEMENTS_TITLE = getLocalizedString(BUNDLE, "label.announcements");
-    private static final LocalizedString VIEW_POST_TITLE = getLocalizedString(BUNDLE, "label.viewPost");
-    private static final LocalizedString TITLE_CURRICULUM = getLocalizedString(BUNDLE, "degree.curriculum.title");
-    private static final LocalizedString DESCRIPTION_TITLE = getLocalizedString(BUNDLE, "degree.description.title");
-    private static final LocalizedString REQUIREMENTS_TITLE = getLocalizedString(BUNDLE, "degree.requirements.title");
-    private static final LocalizedString PROFESSIONAL_STATUS_TITLE = getLocalizedString(BUNDLE, "degree.pstatus.title");
-    private static final LocalizedString CURRICULAR_PLAN_TITLE = getLocalizedString(BUNDLE, "degree.cplan.title");
-    private static final LocalizedString EXECUTION_COURSE_SITES_TITLE = getLocalizedString(BUNDLE, "degree.ecsites.title");
-    private static final LocalizedString TITLE_CLASS = getLocalizedString(BUNDLE, "degree.class.title");
-    private static final LocalizedString CLASSES_TITLE = getLocalizedString(BUNDLE, "degree.classes.title");
-    private static final LocalizedString EVALUATIONS_TITLE = getLocalizedString(BUNDLE, "degree.evaluations.title");
-    private static final LocalizedString THESES_TITLE = getLocalizedString(BUNDLE, "degree.theses.title");
-    private static final LocalizedString TITLE_THESIS = getLocalizedString(BUNDLE, "department.thesis");
-    private static final LocalizedString TITLE_COURSE = getLocalizedString(BUNDLE, "department.course");
-    private static final LocalizedString TITLE_CURRICULAR_COURSE = getLocalizedString(BUNDLE, "degree.curricularCourse.title");
 
     @Atomic
     public static Site create(Degree degree) {
@@ -70,8 +54,8 @@ public class DegreeSiteListener {
         if (defaultTemplate != null ) {
             Role role = new Role(defaultTemplate, site);
             
-            role.setGroup(degree.getCoordinatorGroupSet().stream()
-                    .filter(pg -> pg.getResponsible()).map(pg -> pg.toGroup()).findAny().orElseGet(() -> Group.managers()));
+            Group group = Group.users(degree.getCoordinatorGroupSet().stream().flatMap(PersistentGroup::getMembers).distinct());
+            role.setGroup(group);
         } else {
             throw new DomainException("no.default.role");
         }
