@@ -31,7 +31,7 @@ relation ExecutionCourseFenixEduExecutionCourseSite {
 }
 
 relation SiteHasSystemMenu {
-    protected .org.fenixedu.cms.domain.Site playsRole systemSite {
+    .org.fenixedu.cms.domain.Site playsRole systemSite {
         multiplicity 0..1;
     }
     .org.fenixedu.cms.domain.Menu playsRole systemMenu {
