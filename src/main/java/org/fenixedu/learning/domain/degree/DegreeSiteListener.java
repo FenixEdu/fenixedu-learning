@@ -52,10 +52,8 @@ public class DegreeSiteListener {
     
         RoleTemplate defaultTemplate = site.getDefaultRoleTemplate();
         if (defaultTemplate != null ) {
-            Role role = new Role(defaultTemplate, site);
-            
             Group group = Group.users(degree.getCoordinatorGroupSet().stream().flatMap(PersistentGroup::getMembers).distinct());
-            role.setGroup(group);
+            site.getDefaultRoleTemplateRole().setGroup(group);
         } else {
             throw new DomainException("no.default.role");
         }
