@@ -59,6 +59,10 @@ public class DegreeSiteListener {
         } else {
             throw new DomainException("no.default.role");
         }
+        
+        site.setDegree(degree);
+        site.setSlug(degree.getSigla());
+        
         return site;
     }
 
