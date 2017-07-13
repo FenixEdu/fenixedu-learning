@@ -40,7 +40,7 @@ public class EvaluationMethodsComponent extends BaseExecutionCourseComponent {
 
     private LocalizedString getEvaluationMethod(ExecutionCourse executionCourse) {
         if (executionCourse.getEvaluationMethod() != null) {
-            return executionCourse.getEvaluationMethod().getEvaluationElements().toLocalizedString();
+            return executionCourse.getEvaluationMethod().getEvaluationElements();
         } else {
             String competenceMethod =
                     !executionCourse.getCompetenceCourses().isEmpty() ? executionCourse.getCompetenceCourses().iterator().next()

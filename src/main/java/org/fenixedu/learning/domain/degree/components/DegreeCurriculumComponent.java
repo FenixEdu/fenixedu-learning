@@ -42,7 +42,6 @@ import org.fenixedu.academic.domain.degreeStructure.CourseGroup;
 import org.fenixedu.academic.domain.degreeStructure.RegimeType;
 import org.fenixedu.academic.util.CurricularPeriodLabelFormatter;
 import org.fenixedu.academic.util.CurricularRuleLabelFormatter;
-import org.fenixedu.academic.util.MultiLanguageString;
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.domain.wraps.Wrap;
@@ -120,7 +119,7 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
         }
 
         public LocalizedString getName() {
-            return courseGroup.getNameI18N().toLocalizedString();
+            return courseGroup.getNameI18N();
         }
 
         public Stream<String> getRules() {
@@ -160,8 +159,8 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
         }
 
         public LocalizedString getName() {
-            MultiLanguageString mls = curricularCourse.getNameI18N(executionInterval);
-            return mls.isEmpty() ? new LocalizedString(I18N.getLocale(), "-") : mls.toLocalizedString();
+            LocalizedString name = curricularCourse.getNameI18N(executionInterval);
+            return name.isEmpty() ? new LocalizedString(I18N.getLocale(), "-") : name;
         }
 
         public String getUrl() {

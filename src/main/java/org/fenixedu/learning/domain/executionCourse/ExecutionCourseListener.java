@@ -18,29 +18,22 @@
  */
 package org.fenixedu.learning.domain.executionCourse;
 
-import org.fenixedu.academic.domain.DegreeInfo;
-import org.fenixedu.academic.domain.ExecutionCourse;
-import org.fenixedu.academic.domain.Professorship;
-import org.fenixedu.academic.domain.exceptions.DomainException;
-import org.fenixedu.academic.util.MultiLanguageString;
-import org.fenixedu.bennu.core.domain.User;
-import org.fenixedu.bennu.core.groups.Group;
-import org.fenixedu.bennu.core.security.Authenticate;
-import org.fenixedu.cms.domain.*;
-import org.fenixedu.cms.domain.component.Component;
-import org.fenixedu.cms.domain.component.ListCategoryPosts;
-import org.fenixedu.cms.domain.component.ViewPost;
-import org.fenixedu.commons.i18n.LocalizedString;
-import org.fenixedu.learning.domain.executionCourse.components.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static com.google.common.base.Joiner.on;
 
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.google.common.base.Joiner.on;
-import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
-import static org.fenixedu.cms.domain.component.Component.forType;
+import org.fenixedu.academic.domain.ExecutionCourse;
+import org.fenixedu.academic.domain.Professorship;
+import org.fenixedu.academic.domain.exceptions.DomainException;
+import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.groups.Group;
+import org.fenixedu.cms.domain.Role;
+import org.fenixedu.cms.domain.RoleTemplate;
+import org.fenixedu.cms.domain.Site;
+import org.fenixedu.commons.i18n.LocalizedString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExecutionCourseListener {
     
@@ -49,9 +42,9 @@ public class ExecutionCourseListener {
     
     public static Site create(ExecutionCourse executionCourse) {
         Site newSite = ExecutionCourseSiteBuilder.getInstance().create(
-                executionCourse.getNameI18N().toLocalizedString(),
+                executionCourse.getNameI18N(),
                 getObjectives(executionCourse)
-                        .orElseGet(() -> executionCourse.getNameI18N().toLocalizedString()),
+                        .orElseGet(() -> executionCourse.getNameI18N()),
                 formatSlugForExecutionCourse(executionCourse));
         
         executionCourse.setSite(newSite);
@@ -83,7 +76,7 @@ public class ExecutionCourseListener {
     private static Optional<LocalizedString> getObjectives(ExecutionCourse executionCourse) {
         return executionCourse.getCompetenceCourses().stream()
                 .map(competenceCourse -> competenceCourse.getObjectivesI18N(executionCourse.getExecutionPeriod()))
-                .filter(Objects::nonNull).map(MultiLanguageString::toLocalizedString).findFirst();
+                .filter(Objects::nonNull).findFirst();
     }
 
     

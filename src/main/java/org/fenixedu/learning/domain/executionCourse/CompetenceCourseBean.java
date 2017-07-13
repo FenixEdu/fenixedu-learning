@@ -42,9 +42,9 @@ public class CompetenceCourseBean {
         this.competenceCourse = competenceCourse;
         this.executionSemester = executionSemester;
         this.curricularCourses = curricularCourses;
-        this.name = competenceCourse.getNameI18N(executionSemester).toLocalizedString();
-        this.objectives = competenceCourse.getObjectivesI18N(executionSemester).toLocalizedString();
-        this.program = competenceCourse.getProgramI18N(executionSemester).toLocalizedString();
+        this.name = competenceCourse.getNameI18N(executionSemester);
+        this.objectives = competenceCourse.getObjectivesI18N(executionSemester);
+        this.program = competenceCourse.getProgramI18N(executionSemester);
     }
 
     public CompetenceCourse getCompetenceCourse() {

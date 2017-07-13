@@ -38,9 +38,9 @@ public class SummaryListener {
 		if (post != null) {
 			Site site = summary.getExecutionCourse().getSite();
 			post.setSlug("summary-" + summary.getExternalId());
-			post.setName(summary.getTitle().toLocalizedString());
+			post.setName(summary.getTitle());
 
-			post.setBody(summary.getSummaryText().toLocalizedString());
+			post.setBody(summary.getSummaryText());
 			post.setCreationDate(summary.getSummaryDateTime());
 			post.setActive(true);
 			post.addCategories(site.getOrCreateCategoryForSlug(SUMMARIES_CATEGORY, SUMMARIES_TITLE));
