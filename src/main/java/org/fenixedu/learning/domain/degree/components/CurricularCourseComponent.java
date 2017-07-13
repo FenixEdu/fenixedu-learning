@@ -55,7 +55,7 @@ public class CurricularCourseComponent extends DegreeSiteComponent {
     private HashMap<String, Object> createWrap(CurricularCourse curricularCourse, ExecutionSemester period) {
         HashMap<String, Object> wrap = Maps.newHashMap();
         wrap.put("period", period);
-        wrap.put("name", curricularCourse.getNameI18N(period).toLocalizedString());
+        wrap.put("name", curricularCourse.getNameI18N(period));
         wrap.put("degreeCurricularPlanName", curricularCourse.getDegreeCurricularPlan().getPresentationName());
         wrap.put("acronym", curricularCourse.getAcronym(period));
         wrap.put("isOptional", curricularCourse.isOptional());
@@ -66,16 +66,16 @@ public class CurricularCourseComponent extends DegreeSiteComponent {
                         .collect(toList()));
         wrap.put("parentContexts", curricularCourse.getParentContextsByExecutionYear(period.getExecutionYear()));
         wrap.put("weight", curricularCourse.getWeight(period));
-        wrap.put("prerequisites", curricularCourse.getPrerequisitesI18N().toLocalizedString());
-        wrap.put("objectives", curricularCourse.getObjectivesI18N(period).toLocalizedString());
-        wrap.put("program", curricularCourse.getProgramI18N(period).toLocalizedString());
-        wrap.put("evaluationMethod", curricularCourse.getEvaluationMethodI18N(period).toLocalizedString());
+        wrap.put("prerequisites", curricularCourse.getPrerequisitesI18N());
+        wrap.put("objectives", curricularCourse.getObjectivesI18N(period));
+        wrap.put("program", curricularCourse.getProgramI18N(period));
+        wrap.put("evaluationMethod", curricularCourse.getEvaluationMethodI18N(period));
         return wrap;
     }
 
     private Map<String, Object> createWrap(ExecutionCourse executionCourse) {
         Map<String, Object> wrap = Maps.newHashMap();
-        wrap.put("name", executionCourse.getNameI18N().toLocalizedString());
+        wrap.put("name", executionCourse.getNameI18N());
         wrap.put("executionYear", executionCourse.getExecutionYear().getYear());
         wrap.put("executionPeriod", executionCourse.getExecutionPeriod().getName());
         wrap.put("url", executionCourse.getSite() != null ? executionCourse.getSite().getFullUrl() : "#");
