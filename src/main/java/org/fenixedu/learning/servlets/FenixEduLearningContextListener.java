@@ -101,6 +101,7 @@ public class FenixEduLearningContextListener implements ServletContextListener {
 
         Signal.register(PublishMarks.MARKS_PUBLISHED_SIGNAL, FenixEduLearningContextListener::handleMarksPublishment);
         Signal.register(Thesis.PROPOSAL_APPROVED_SIGNAL, FenixEduLearningContextListener::handleThesisProposalApproval);
+        Signal.register(Site.SIGNAL_EDITED, FenixEduLearningContextListener::handleSiteEdition);
         FenixFramework.getDomainModel().registerDeletionListener(ExecutionCourse.class, (executionCourse) -> {
             if (executionCourse.getSite() != null) {
                 Site site = executionCourse.getSite();
@@ -147,8 +148,14 @@ public class FenixEduLearningContextListener implements ServletContextListener {
         CMSRenderer.addHandler(new DegreeRequestHandler());
 
     }
-
-
+    
+    private static void handleSiteEdition(DomainObjectEvent<Site>  site) {
+        if(site.getInstance().getExecutionCourse()!=null){
+            site.getInstance().getExecutionCourse().setSiteUrl(site.getInstance().getFullUrl());
+        }
+    }
+    
+    
     private static void copyExecutionCoursesSites(ExecutionCourse from, ExecutionCourse to) {
         if (from.getSite() != null) {
             if (to.getSite() != null) {
