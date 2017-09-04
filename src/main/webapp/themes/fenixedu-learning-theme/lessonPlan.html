@@ -21,12 +21,12 @@
 
 				<div class="blog-post">
 				  <h2 class="blog-post-title">
-				  	{{ lessonPlanning.title }}
+				  	{{ lessonPlanning.title.content }}
 				  </h2>
 				  <p class="small blog-post-meta">
 					{{ i18n('resources.ApplicationResources', 'label.lesson') }} {{ lessonPlanning.orderOfPlanning }}
 				  </p>
-				  <p>{{ lessonPlanning.planning }}</p>
+				  <p>{{ lessonPlanning.planning.content | raw }}</p>
 				</div>
 
 			{% endfor %}
