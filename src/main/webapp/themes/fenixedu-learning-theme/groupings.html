@@ -43,7 +43,7 @@
 					   				{{ exportGrouping.executionCourse.nome }}
 					   			{% endfor %}
 					   		{% else %}
-					   			{{ i18n('resources.ApplicationResources', 'message.project.wihtout.coavaliation') }}
+					   			{{ i18n('resources.ApplicationResources', 'message.project.wihtout.coavaliation') | raw }}
 					   		{% endif %}
 		               </td>
 					</tr>

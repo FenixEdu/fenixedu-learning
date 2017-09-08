@@ -10,7 +10,7 @@
     	{% for curricularCourse in info.curricularCourses %}
 
     		{% set degree = curricularCourse.degreeCurricularPlan.degree %}
-	    	<h4>{{ degree.degreeType.name.content }} {{ i18n('resources.ApplicationResources', 'label.in') }} {{ degree.nameI18N }}</h4>
+	    	<h4>{{ degree.degreeType.name.content }} {{ i18n('resources.ApplicationResources', 'label.in') }} {{ degree.nameI18N.content }}</h4>
 		
 		{% endfor %}
 
@@ -29,13 +29,13 @@
 		{% set curriculum = entry.value %}
 		{% set degree = curricularCourse.degreeCurricularPlan.degree %}
 		
-		<h3>{{ curricularCourse.nameI18N }}</h3>
+		<h3>{{ curricularCourse.nameI18N.content }}</h3>
 
-		<h4>{{ degree.degreeType.name.content }} {{ i18n('resources.ApplicationResources', 'label.in') }} {{ degree.nameI18N }}</h4>
+		<h4>{{ degree.degreeType.name.content }} {{ i18n('resources.ApplicationResources', 'label.in') }} {{ degree.nameI18N.content }}</h4>
 
         <h5>{{ i18n('resources.ApplicationResources', 'title.program') }}</h5>
         {% if curriculum is not empty %}
-	    	<p>{{ curriculum.programI18N }}</p>
+	    	<p>{{ curriculum.programI18N.content }}</p>
 	    {% else %}
 	    	<p>{{ i18n('resources.ApplicationResources', 'message.program.not.defined') }}</p>
 	    {% endif %}
