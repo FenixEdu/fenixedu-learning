@@ -63,7 +63,7 @@ public class DissertationsUtils {
 
     public static SortedMap<ExecutionYear, List<Thesis>> allThesesByYear(Collection<Degree> degrees) {
         TreeMap<ExecutionYear, List<Thesis>> thesesByYear = Maps.newTreeMap(REVERSE_COMPARATOR_BY_YEAR);
-        Stream<Thesis> allTheses = degrees.stream().flatMap(degree -> degree.getThesisSet().stream());
+        Stream<Thesis> allTheses = degrees.stream().flatMap(degree -> degree.getThesisSet().stream().filter(thesis -> thesis.getEnrolment()!=null));
         thesesByYear.putAll(allTheses.collect(groupingBy(Thesis::getExecutionYear)));
         return thesesByYear;
     }
