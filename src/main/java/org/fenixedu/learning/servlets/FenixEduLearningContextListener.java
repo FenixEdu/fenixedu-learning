@@ -191,6 +191,7 @@ public class FenixEduLearningContextListener implements ServletContextListener {
                 post.setName(bean.getTitle() == null ? BundleUtil.getLocalizedString("resources.ApplicationResources",
                         "message.publishment") : new LocalizedString(I18N.getLocale(), bean.getTitle()));
                 post.setBody(new LocalizedString(I18N.getLocale(), bean.getEvaluation().getPublishmentMessage()));
+                post.setActive(true);
             }
         }
     }
