@@ -16,7 +16,7 @@
 
 		<h5>{{ i18n('resources.ApplicationResources', 'title.program') }}</h5>
         {% if info.program is not empty and info.program.content is not empty %}
-		    <p>{{ info.program.content | raw }}</p>
+		    <p style="white-space: pre-line">{{ info.program.content | raw }}</p>
         {% else %}
             <p>{{ i18n('resources.ApplicationResources', 'message.program.not.defined') }}</p>
         {% endif %}
@@ -35,7 +35,7 @@
 
         <h5>{{ i18n('resources.ApplicationResources', 'title.program') }}</h5>
         {% if curriculum is not empty %}
-	    	<p>{{ curriculum.programI18N.content }}</p>
+	    	<p style="white-space: pre-line">{{ curriculum.programI18N.content }}</p>
 	    {% else %}
 	    	<p>{{ i18n('resources.ApplicationResources', 'message.program.not.defined') }}</p>
 	    {% endif %}

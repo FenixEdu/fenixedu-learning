@@ -4,7 +4,7 @@
 
     {% set evaluationContent = evaluationMethodLocalizedString.content %}
 	{% if evaluationContent is not empty %}
-		<p>{{ evaluationContent | raw }}</p>
+		<p style="white-space: pre-line">{{ evaluationContent | raw }}</p>
 	{% else %}
 		<i>{{ i18n('resources.ApplicationResources', 'message.evaluation.not.available') }}</i>
 	{% endif %}
