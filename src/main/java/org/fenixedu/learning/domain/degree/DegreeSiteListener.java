@@ -18,20 +18,17 @@
  */
 package org.fenixedu.learning.domain.degree;
 
+import java.util.Locale;
+
 import org.fenixedu.academic.domain.Degree;
+import org.fenixedu.academic.domain.accessControl.CoordinatorGroup;
 import org.fenixedu.academic.domain.exceptions.DomainException;
-import org.fenixedu.bennu.core.domain.groups.PersistentGroup;
 import org.fenixedu.bennu.core.groups.Group;
-import org.fenixedu.cms.domain.Role;
 import org.fenixedu.cms.domain.RoleTemplate;
 import org.fenixedu.cms.domain.Site;
 import org.fenixedu.commons.i18n.LocalizedString;
+
 import pt.ist.fenixframework.Atomic;
-
-import java.util.Locale;
-import java.util.Optional;
-
-import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
 
 /**
  * Created by borgez on 24-11-2014.
@@ -52,7 +49,7 @@ public class DegreeSiteListener {
     
         RoleTemplate defaultTemplate = site.getDefaultRoleTemplate();
         if (defaultTemplate != null ) {
-            Group group = Group.users(degree.getCoordinatorGroupSet().stream().flatMap(PersistentGroup::getMembers).distinct());
+            Group group = Group.users(CoordinatorGroup.get(degree).getMembers());
             site.getDefaultRoleTemplateRole().setGroup(group);
         } else {
             throw new DomainException("no.default.role");
