@@ -1,5 +1,12 @@
 package org.fenixedu.learning.domain.executionCourse;
 
+import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
+import static org.fenixedu.cms.domain.component.Component.forType;
+
+import org.fenixedu.academic.domain.accessControl.AcademicAuthorizationGroup;
+import org.fenixedu.academic.domain.accessControl.StudentGroup;
+import org.fenixedu.academic.domain.accessControl.TeacherGroup;
+import org.fenixedu.academic.domain.accessControl.academicAdministration.AcademicOperationType;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
 import org.fenixedu.bennu.core.security.Authenticate;
@@ -11,10 +18,16 @@ import org.fenixedu.cms.domain.component.Component;
 import org.fenixedu.cms.domain.component.ListCategoryPosts;
 import org.fenixedu.cms.domain.component.ViewPost;
 import org.fenixedu.commons.i18n.LocalizedString;
-import org.fenixedu.learning.domain.executionCourse.components.*;
-
-import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
-import static org.fenixedu.cms.domain.component.Component.forType;
+import org.fenixedu.learning.domain.executionCourse.components.BibliographicReferencesComponent;
+import org.fenixedu.learning.domain.executionCourse.components.EvaluationMethodsComponent;
+import org.fenixedu.learning.domain.executionCourse.components.EvaluationsComponent;
+import org.fenixedu.learning.domain.executionCourse.components.ExecutionCourseComponent;
+import org.fenixedu.learning.domain.executionCourse.components.GroupsComponent;
+import org.fenixedu.learning.domain.executionCourse.components.InitialPageComponent;
+import org.fenixedu.learning.domain.executionCourse.components.LessonPlanComponent;
+import org.fenixedu.learning.domain.executionCourse.components.MarksComponent;
+import org.fenixedu.learning.domain.executionCourse.components.ObjectivesComponent;
+import org.fenixedu.learning.domain.executionCourse.components.ScheduleComponent;
 
 /**
  * Created by diutsu on 20/01/17.
@@ -90,7 +103,11 @@ public class ExecutionCourseSiteBuilder extends ExecutionCourseSiteBuilder_Base 
         Page.create(site, menu, null, SHIFTS_TITLE, true, "shifts", author, forType(ExecutionCourseComponent.class));
         Page.create(site, menu, null, ANNOUNCEMENTS_TITLE, true, "category", author, announcementsComponent);
         Page.create(site, menu, null, SUMMARIES_TITLE, true, "category", author, summariesComponent);
-        Page.create(site, menu, null, MARKS_TITLE, true, "marks", author, forType(MarksComponent.class));
+
+        final Page marks = Page.create(site, menu, null, MARKS_TITLE, true, "marks", author, forType(MarksComponent.class));
+        marks.setCanViewGroup(TeacherGroup.get(site.getExecutionCourse()).or(StudentGroup.get(site.getExecutionCourse())).or(AcademicAuthorizationGroup.get(
+                AcademicOperationType.MANAGE_AUTHORIZATIONS)));
+        
         Page.create(site, null, null, VIEW_POST_TITLE, true, "view", author, forType(ViewPost.class));
         site.setInitialPage(initialPage);
         
@@ -98,5 +115,3 @@ public class ExecutionCourseSiteBuilder extends ExecutionCourseSiteBuilder_Base 
     }
     
 }
-
-
