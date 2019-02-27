@@ -1,8 +1,13 @@
 package org.fenixedu.learning.domain.executionCourse;
 
+import static com.google.common.base.Joiner.on;
 import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
 import static org.fenixedu.cms.domain.component.Component.forType;
 
+import java.util.Objects;
+import java.util.Optional;
+
+import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.academic.domain.accessControl.AcademicAuthorizationGroup;
 import org.fenixedu.academic.domain.accessControl.StudentGroup;
 import org.fenixedu.academic.domain.accessControl.TeacherGroup;
@@ -33,9 +38,9 @@ import org.fenixedu.learning.domain.executionCourse.components.ScheduleComponent
  * Created by diutsu on 20/01/17.
  */
 public class ExecutionCourseSiteBuilder extends ExecutionCourseSiteBuilder_Base {
-    
+
     public static final String BUNDLE = "resources.FenixEduLearningResources";
-    
+
     public static final LocalizedString ANNOUNCEMENTS_TITLE = getLocalizedString(BUNDLE, "label.announcements");
     public static final LocalizedString VIEW_POST_TITLE = getLocalizedString(BUNDLE, "label.viewPost");
     private static final LocalizedString INITIAL_PAGE_TITLE = getLocalizedString(BUNDLE, "label.initialPage");
@@ -52,44 +57,57 @@ public class ExecutionCourseSiteBuilder extends ExecutionCourseSiteBuilder_Base 
     private static final LocalizedString SHIFTS_TITLE = getLocalizedString(BUNDLE, "label.shifts");
     public static final LocalizedString MENU_TITLE = getLocalizedString(BUNDLE, "label.menu");
     public static final LocalizedString EXTRA_MENU_TITLE = getLocalizedString(BUNDLE, "label.extra.menu");
-    
-    private ExecutionCourseSiteBuilder(){
+
+    private ExecutionCourseSiteBuilder() {
         super();
         this.setSlug(ExecutionCourseSiteBuilder.class.getSimpleName());
         Bennu.getInstance().getSiteBuildersSet().add(this);
-     }
-    
-    public static ExecutionCourseSiteBuilder getInstance(){
-        return Bennu.getInstance().getSiteBuildersSet().stream().filter(siteBuilder -> siteBuilder instanceof ExecutionCourseSiteBuilder)
-                .map(siteBuilder -> (ExecutionCourseSiteBuilder) siteBuilder)
-                .findFirst().orElseGet(()->new ExecutionCourseSiteBuilder());
     }
-    
-        public Site create(LocalizedString name, LocalizedString description, String slug) {
-        Site site = super.create(name,description);
-        site.setSlug(slug);
-            
+
+    public static ExecutionCourseSiteBuilder getInstance() {
+        return Bennu.getInstance().getSiteBuildersSet().stream()
+                .filter(siteBuilder -> siteBuilder instanceof ExecutionCourseSiteBuilder)
+                .map(siteBuilder -> (ExecutionCourseSiteBuilder) siteBuilder).findFirst()
+                .orElseGet(ExecutionCourseSiteBuilder::new);
+    }
+
+    private static Optional<LocalizedString> getObjectives(ExecutionCourse executionCourse) {
+        return executionCourse.getCompetenceCourses().stream()
+                .map(competenceCourse -> competenceCourse.getObjectivesI18N(executionCourse.getExecutionPeriod()))
+                .filter(Objects::nonNull).findFirst();
+    }
+
+    public static String formatSlugForExecutionCourse(ExecutionCourse executionCourse) {
+        return on("-").join(executionCourse.getSigla(), executionCourse.getExternalId());
+    }
+
+    public Site create(ExecutionCourse executionCourse) {
+        LocalizedString name = executionCourse.getNameI18N();
+
+        Site site = super.create(name, getObjectives(executionCourse).orElse(name));
+        site.setSlug(formatSlugForExecutionCourse(executionCourse));
+
         final Menu menu = new Menu(site, MENU_TITLE);
         menu.setPrivileged(true);
         menu.setOrder(0);
-        
+
         site.setSystemMenu(menu);
-    
+
         final Menu extraPages = new Menu(site, EXTRA_MENU_TITLE);
         extraPages.setOrder(1);
-        
+
         User author = Authenticate.getUser();
-        
+
         Category summariesCategory = site.getOrCreateCategoryForSlug("summary", SUMMARIES_TITLE);
         Category announcementsCategory = site.getOrCreateCategoryForSlug("announcement", ANNOUNCEMENTS_TITLE);
-    
+
         ListCategoryPosts summariesComponent = new ListCategoryPosts(summariesCategory);
         ListCategoryPosts announcementsComponent = new ListCategoryPosts(announcementsCategory);
-    
+
         Component referencesComponent = forType(BibliographicReferencesComponent.class);
         Component evaluationMethodsComponent = forType(EvaluationMethodsComponent.class);
         Component homeComponent = forType(InitialPageComponent.class);
-    
+
         Page initialPage = Page.create(site, menu, null, INITIAL_PAGE_TITLE, true, "firstPage", author, homeComponent,
                 announcementsComponent);
         Page.create(site, menu, null, GROUPS_TITLE, true, "groupings", author, forType(GroupsComponent.class));
@@ -105,13 +123,14 @@ public class ExecutionCourseSiteBuilder extends ExecutionCourseSiteBuilder_Base 
         Page.create(site, menu, null, SUMMARIES_TITLE, true, "category", author, summariesComponent);
 
         final Page marks = Page.create(site, menu, null, MARKS_TITLE, true, "marks", author, forType(MarksComponent.class));
-        marks.setCanViewGroup(TeacherGroup.get(site.getExecutionCourse()).or(StudentGroup.get(site.getExecutionCourse())).or(AcademicAuthorizationGroup.get(
-                AcademicOperationType.MANAGE_AUTHORIZATIONS)));
-        
+        marks.setCanViewGroup(TeacherGroup.get(executionCourse).or(StudentGroup.get(executionCourse))
+                .or(AcademicAuthorizationGroup.get(AcademicOperationType.MANAGE_AUTHORIZATIONS)));
+
         Page.create(site, null, null, VIEW_POST_TITLE, true, "view", author, forType(ViewPost.class));
         site.setInitialPage(initialPage);
-        
+        site.setExecutionCourse(executionCourse);
+
         return site;
     }
-    
+
 }

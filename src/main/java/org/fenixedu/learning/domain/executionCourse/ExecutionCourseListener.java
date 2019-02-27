@@ -41,14 +41,8 @@ public class ExecutionCourseListener {
     private static final Logger logger = LoggerFactory.getLogger(ExecutionCourseListener.class);
     
     public static Site create(ExecutionCourse executionCourse) {
-        Site newSite = ExecutionCourseSiteBuilder.getInstance().create(
-                executionCourse.getNameI18N(),
-                getObjectives(executionCourse)
-                        .orElseGet(() -> executionCourse.getNameI18N()),
-                formatSlugForExecutionCourse(executionCourse));
+        Site newSite = ExecutionCourseSiteBuilder.getInstance().create(executionCourse);
         
-        executionCourse.setSite(newSite);
-    
         RoleTemplate defaultTemplate = newSite.getDefaultRoleTemplate();
         if (defaultTemplate != null ) {
             Role teacherRole =
@@ -73,20 +67,8 @@ public class ExecutionCourseListener {
     }
     
 
-    private static Optional<LocalizedString> getObjectives(ExecutionCourse executionCourse) {
-        return executionCourse.getCompetenceCourses().stream()
-                .map(competenceCourse -> competenceCourse.getObjectivesI18N(executionCourse.getExecutionPeriod()))
-                .filter(Objects::nonNull).findFirst();
-    }
-
-    
-    
-    private static String formatSlugForExecutionCourse(ExecutionCourse executionCourse) {
-        return on("-").join(executionCourse.getSigla(), executionCourse.getExternalId());
-    }
-    
     public static void updateSiteSlug(ExecutionCourse instance) {
-        instance.getSite().setSlug(formatSlugForExecutionCourse(instance));
+        instance.getSite().setSlug(ExecutionCourseSiteBuilder.formatSlugForExecutionCourse(instance));
         instance.setSiteUrl(instance.getSite().getFullUrl());
     }
 
