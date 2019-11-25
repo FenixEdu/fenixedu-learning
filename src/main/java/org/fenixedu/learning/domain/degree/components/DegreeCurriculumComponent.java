@@ -168,7 +168,7 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
         }
 
         public String getContextInformation() {
-            return CurricularPeriodLabelFormatter.getFullLabel(context.getCurricularPeriod(), true);
+            return CurricularPeriodLabelFormatter.getFullLabel(context.getCurricularPeriod(), context.getTerm(), true);
         }
 
         public boolean isSemestrial() {
