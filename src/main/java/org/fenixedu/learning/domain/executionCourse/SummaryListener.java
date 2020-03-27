@@ -27,18 +27,31 @@ import org.fenixedu.commons.i18n.LocalizedString;
 
 import static org.fenixedu.bennu.core.i18n.BundleUtil.getLocalizedString;
 
+import java.util.Locale;
+
 public class SummaryListener {
 
     public static final String BUNDLE = "resources.FenixEduLearningResources";
     public static final LocalizedString SUMMARIES_TITLE = getLocalizedString(BUNDLE, "label.summaries");
     public static final String SUMMARIES_CATEGORY = "summary";
+    public static final LocalizedString ONLINE_LESSON = getLocalizedString(BUNDLE, "label.summaries.online.class");
 
     public static void updatePost(Post post, Summary summary) {
 		summary.setPost(post);
 		if (post != null) {
 			Site site = summary.getExecutionCourse().getSite();
 			post.setSlug("summary-" + summary.getExternalId());
-			post.setName(summary.getTitle());
+			
+			LocalizedString summaryTitle = summary.getTitle();
+			if (summary.getOnlineLesson()) {
+				summaryTitle = new LocalizedString();
+				for (Locale locale : summary.getTitle().getLocales()) {
+					String content = ONLINE_LESSON.getContent(locale);
+					summaryTitle = summaryTitle.append(new LocalizedString(locale,
+							summary.getTitle().getContent(locale) + " (" + ONLINE_LESSON.getContent(locale) + ")"));
+				}
+			}
+			post.setName(summaryTitle);
 
 			post.setBody(summary.getSummaryText());
 			post.setCreationDate(summary.getSummaryDateTime());
