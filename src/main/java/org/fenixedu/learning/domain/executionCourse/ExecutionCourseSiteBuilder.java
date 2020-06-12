@@ -14,6 +14,7 @@ import org.fenixedu.academic.domain.accessControl.TeacherGroup;
 import org.fenixedu.academic.domain.accessControl.academicAdministration.AcademicOperationType;
 import org.fenixedu.bennu.core.domain.Bennu;
 import org.fenixedu.bennu.core.domain.User;
+import org.fenixedu.bennu.core.groups.Group;
 import org.fenixedu.bennu.core.security.Authenticate;
 import org.fenixedu.cms.domain.Category;
 import org.fenixedu.cms.domain.Menu;
@@ -110,7 +111,12 @@ public class ExecutionCourseSiteBuilder extends ExecutionCourseSiteBuilder_Base 
 
         Page initialPage = Page.create(site, menu, null, INITIAL_PAGE_TITLE, true, "firstPage", author, homeComponent,
                 announcementsComponent);
-        Page.create(site, menu, null, GROUPS_TITLE, true, "groupings", author, forType(GroupsComponent.class));
+
+        final Group courseMembersGroup = TeacherGroup.get(executionCourse).or(StudentGroup.get(executionCourse))
+                .or(AcademicAuthorizationGroup.get(AcademicOperationType.MANAGE_AUTHORIZATIONS));
+
+        final Page groups = Page.create(site, menu, null, GROUPS_TITLE, true, "groupings", author, forType(GroupsComponent.class));
+        groups.setCanViewGroup(courseMembersGroup);
         Page.create(site, menu, null, EVALUATIONS_TITLE, true, "evaluations", author, forType(EvaluationsComponent.class));
         Page.create(site, menu, null, REFERENCES_TITLE, true, "bibliographicReferences", author, referencesComponent);
         Page.create(site, menu, null, SCHEDULE_TITLE, true, "calendarEvents", author, forType(ScheduleComponent.class));
@@ -123,8 +129,7 @@ public class ExecutionCourseSiteBuilder extends ExecutionCourseSiteBuilder_Base 
         Page.create(site, menu, null, SUMMARIES_TITLE, true, "category", author, summariesComponent);
 
         final Page marks = Page.create(site, menu, null, MARKS_TITLE, true, "marks", author, forType(MarksComponent.class));
-        marks.setCanViewGroup(TeacherGroup.get(executionCourse).or(StudentGroup.get(executionCourse))
-                .or(AcademicAuthorizationGroup.get(AcademicOperationType.MANAGE_AUTHORIZATIONS)));
+        marks.setCanViewGroup(courseMembersGroup);
 
         Page.create(site, null, null, VIEW_POST_TITLE, true, "view", author, forType(ViewPost.class));
         site.setInitialPage(initialPage);
