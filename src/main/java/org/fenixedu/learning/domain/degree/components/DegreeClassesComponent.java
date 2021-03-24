@@ -68,8 +68,9 @@ public class DegreeClassesComponent extends DegreeSiteComponent {
     }
 
     private SortedMap<Integer, Set<SchoolClass>> classesByCurricularYear(Degree degree, ExecutionSemester semester) {
-        DegreeCurricularPlan plan = degree.getMostRecentDegreeCurricularPlan();
-        Predicate<SchoolClass> predicate = schoolClass -> schoolClass.getExecutionDegree().getDegreeCurricularPlan() == plan;
+		DegreeCurricularPlan plan = degree.getDegreeCurricularPlansForYear(semester.getExecutionYear()).stream()
+				.findFirst().orElse(degree.getMostRecentDegreeCurricularPlan());
+		Predicate<SchoolClass> predicate = schoolClass -> schoolClass.getExecutionDegree().getDegreeCurricularPlan() == plan;
         return semester
                 .getSchoolClassesSet()
                 .stream()
