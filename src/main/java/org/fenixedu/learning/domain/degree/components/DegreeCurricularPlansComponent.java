@@ -45,11 +45,13 @@ public class DegreeCurricularPlansComponent extends DegreeSiteComponent {
                     .findFirst().get());
             globalContext.put("executionYear", executionYear.get());
         } else {
-            DegreeCurricularPlan degreeCurricularPlan = degree.getMostRecentDegreeCurricularPlan();
-            if (degreeCurricularPlan != null) {
-                globalContext.put("degreeCurricularPlan", degree.getMostRecentDegreeCurricularPlan());
-                globalContext.put("executionYear", degreeCurricularPlan.getMostRecentExecutionYear());
-            }
+			DegreeCurricularPlan degreeCurricularPlan = degree
+					.getDegreeCurricularPlansForYear(ExecutionYear.readCurrentExecutionYear()).stream().findFirst()
+					.orElse(degree.getMostRecentDegreeCurricularPlan());
+			if (degreeCurricularPlan != null) {
+				globalContext.put("degreeCurricularPlan", degreeCurricularPlan);
+				globalContext.put("executionYear", degreeCurricularPlan.getMostRecentExecutionYear());
+			}
         }
         globalContext.put("executionYears", degree.getDegreeCurricularPlansExecutionYears());
     }
