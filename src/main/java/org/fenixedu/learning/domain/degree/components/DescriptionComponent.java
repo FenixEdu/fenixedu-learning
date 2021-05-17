@@ -18,15 +18,18 @@
  */
 package org.fenixedu.learning.domain.degree.components;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.fenixedu.academic.domain.Degree;
 import org.fenixedu.academic.domain.DegreeInfo;
+import org.fenixedu.academic.domain.DegreeOfficialPublication;
 import org.fenixedu.academic.domain.ExecutionDegree;
 import org.fenixedu.academic.domain.ExecutionYear;
 import org.fenixedu.academic.domain.Teacher;
+import org.fenixedu.academic.ui.struts.action.scientificCouncil.curricularPlans.OfficialPublicationBean;
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
@@ -64,7 +67,13 @@ public class DescriptionComponent extends DegreeSiteComponent {
             degreeInfo = degree.getMostRecentDegreeInfo(targetExecutionYear.getAcademicInterval());
         }
         global.put("degreeInfo", degreeInfo);
-
+                
+        Collection<OfficialPublicationBean> degreeOfficialPublications = new ArrayList<OfficialPublicationBean>();
+        for (DegreeOfficialPublication pub : degree.getOfficialPublicationSet()) {
+            OfficialPublicationBean officialPublication = new OfficialPublicationBean(pub);           
+            degreeOfficialPublications.add(officialPublication);
+        }
+        global.put("officialPublications", degreeOfficialPublications);
     }
 
     private ExecutionYear getTargetExecutionYear(TemplateContext global, Degree degree) {

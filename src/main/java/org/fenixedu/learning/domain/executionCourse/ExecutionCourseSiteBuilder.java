@@ -53,9 +53,14 @@ public class ExecutionCourseSiteBuilder extends ExecutionCourseSiteBuilder_Base 
     private static final LocalizedString OBJECTIVES_TITLE = getLocalizedString(BUNDLE, "label.objectives");
     private static final LocalizedString MARKS_TITLE = getLocalizedString(BUNDLE, "label.marks");
     private static final LocalizedString LESSON_PLAN_TITLE = getLocalizedString(BUNDLE, "label.lessonsPlanings");
-    private static final LocalizedString PROGRAM_TITLE = getLocalizedString(BUNDLE, "label.program");
+    private static final LocalizedString PROGRAM_TITLE = getLocalizedString(BUNDLE, "label.program");   
+    private static final LocalizedString PREREQUISITES_TITLE = getLocalizedString(BUNDLE, "label.prerequisites");
+    private static final LocalizedString LABORATORIALCOMPONENT_TITLE = getLocalizedString(BUNDLE, "label.laboratorialComponent");
+    private static final LocalizedString PROGRAMMINGANDCOMPUTINGCOMPONENT_TITLE = getLocalizedString(BUNDLE, "label.programmingAndComputingComponent");
+    private static final LocalizedString CROSSCOMPETENCECOMPONENT_TITLE = getLocalizedString(BUNDLE, "label.crossCompetenceComponent");
+    private static final LocalizedString ETHICALPRINCIPLES_TITLE = getLocalizedString(BUNDLE, "label.ethicalPrinciples");
     private static final LocalizedString SUMMARIES_TITLE = getLocalizedString(BUNDLE, "label.summaries");
-    private static final LocalizedString SHIFTS_TITLE = getLocalizedString(BUNDLE, "label.shifts");
+    private static final LocalizedString SHIFTS_TITLE = getLocalizedString(BUNDLE, "label.shifts");    
     public static final LocalizedString MENU_TITLE = getLocalizedString(BUNDLE, "label.menu");
     public static final LocalizedString EXTRA_MENU_TITLE = getLocalizedString(BUNDLE, "label.extra.menu");
 
@@ -127,6 +132,12 @@ public class ExecutionCourseSiteBuilder extends ExecutionCourseSiteBuilder_Base 
         Page.create(site, menu, null, SHIFTS_TITLE, true, "shifts", author, forType(ExecutionCourseComponent.class));
         Page.create(site, menu, null, ANNOUNCEMENTS_TITLE, true, "category", author, announcementsComponent);
         Page.create(site, menu, null, SUMMARIES_TITLE, true, "category", author, summariesComponent);
+        Page.create(site, menu, null, PREREQUISITES_TITLE, true, "prerequisites", author, forType(ObjectivesComponent.class));
+        Page.create(site, menu, null, LABORATORIALCOMPONENT_TITLE, true, "laboratorialComponent", author, forType(ObjectivesComponent.class));
+        Page.create(site, menu, null, PROGRAMMINGANDCOMPUTINGCOMPONENT_TITLE, true, "programmingAndComputingComponent", author, forType(ObjectivesComponent.class));
+        Page.create(site, menu, null, CROSSCOMPETENCECOMPONENT_TITLE, true, "crossCompetenceComponent", author, forType(ObjectivesComponent.class));
+        Page.create(site, menu, null, ETHICALPRINCIPLES_TITLE, true, "ethicalPrinciples", author, forType(ObjectivesComponent.class));
+        
 
         final Page marks = Page.create(site, menu, null, MARKS_TITLE, true, "marks", author, forType(MarksComponent.class));
         marks.setCanViewGroup(courseMembersGroup);

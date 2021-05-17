@@ -28,6 +28,7 @@ import java.util.Map;
 import org.fenixedu.academic.domain.CurricularCourse;
 import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.academic.domain.ExecutionSemester;
+import org.fenixedu.academic.domain.degreeStructure.CompetenceCourseInformation;
 import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
@@ -70,6 +71,10 @@ public class CurricularCourseComponent extends DegreeSiteComponent {
         wrap.put("objectives", curricularCourse.getObjectivesI18N(period));
         wrap.put("program", curricularCourse.getProgramI18N(period));
         wrap.put("evaluationMethod", curricularCourse.getEvaluationMethodI18N(period));
+        wrap.put("crossCompetenceComponent",curricularCourse.getCrossCompetenceComponentI18N(period));
+        wrap.put("laboratorialComponent",curricularCourse.getLaboratorialComponentI18N(period));
+        wrap.put("programmingAndComputingComponent",curricularCourse.getProgrammingAndComputingComponentI18N(period));
+        wrap.put("ethicalPrinciples",curricularCourse.getEthicalPrinciplesI18N(period));
         return wrap;
     }
 
