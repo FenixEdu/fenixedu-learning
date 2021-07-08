@@ -12,7 +12,18 @@
 	</h1>
 	
 	<p><small>{{ curricularCourse.degreeCurricularPlanName }}</small></p>
-	
+
+	{% if curricularCourse.competenceCourseExternalUrl is not empty %}
+		<h2>
+			{{ i18n(publicDegreeInfoBundle, 'label.information') | raw }}
+		</h2>
+		<p>
+			<a href="{{ curricularCourse.competenceCourseExternalUrl | raw }}">
+				{{ curricularCourse.competenceCourseExternalUrl | raw }}
+			</a>
+		</p>
+	{% endif %}
+
 	<!-- Optional CurricularCourse -->
 	{% if curricularCourse.isOptional %}
 		<h2>{{ i18n(bolonhaBundle, 'label.description') | raw }}</h2>
