@@ -18,13 +18,8 @@
  */
 package org.fenixedu.learning.domain.degree.components;
 
-import static java.util.stream.Collectors.toList;
-import static org.fenixedu.academic.domain.ExecutionCourse.EXECUTION_COURSE_EXECUTION_PERIOD_COMPARATOR;
-import static pt.ist.fenixframework.FenixFramework.getDomainObject;
-
-import java.util.HashMap;
-import java.util.Map;
-
+import com.google.common.collect.Maps;
+import org.fenixedu.academic.domain.CompetenceCourse;
 import org.fenixedu.academic.domain.CurricularCourse;
 import org.fenixedu.academic.domain.ExecutionCourse;
 import org.fenixedu.academic.domain.ExecutionSemester;
@@ -33,7 +28,12 @@ import org.fenixedu.cms.domain.Page;
 import org.fenixedu.cms.domain.component.ComponentType;
 import org.fenixedu.cms.rendering.TemplateContext;
 
-import com.google.common.collect.Maps;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.stream.Collectors.toList;
+import static org.fenixedu.academic.domain.ExecutionCourse.EXECUTION_COURSE_EXECUTION_PERIOD_COMPARATOR;
+import static pt.ist.fenixframework.FenixFramework.getDomainObject;
 
 /**
  * Created by borgez on 10/15/14.
@@ -75,6 +75,13 @@ public class CurricularCourseComponent extends DegreeSiteComponent {
         wrap.put("laboratorialComponent",curricularCourse.getLaboratorialComponentI18N(period));
         wrap.put("programmingAndComputingComponent",curricularCourse.getProgrammingAndComputingComponentI18N(period));
         wrap.put("ethicalPrinciples",curricularCourse.getEthicalPrinciplesI18N(period));
+        final CompetenceCourse competenceCourse = curricularCourse.getCompetenceCourse();
+        if (competenceCourse != null) {
+            final String externalUrl = competenceCourse.getExternalUrl();
+            if (externalUrl != null) {
+                wrap.put("competenceCourseExternalUrl", externalUrl);
+            }
+        }
         return wrap;
     }
 
