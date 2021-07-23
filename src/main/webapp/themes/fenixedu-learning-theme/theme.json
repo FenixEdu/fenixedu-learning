@@ -54,6 +54,31 @@
             "description": "Execution Course Program",
             "file": "program.html"
         },
+        "prerequisites": {
+            "name": "Prerequisites",
+            "description": "Execution Course Prerequisites",
+            "file": "prerequisites.html"
+        },
+         "crossCompetenceComponent": {
+            "name": "Cross Competence",
+            "description": "Execution Course Cross Competence",
+            "file": "crossCompetenceComponent.html"
+        },
+        "laboratorialComponent": {
+            "name": "Laboratorial Componente",
+            "description": "Execution Course Laboratorial Componente",
+            "file": "laboratorialComponent.html"
+        },
+        "programmingAndComputingComponent": {
+            "name": "Programming and Computing Component",
+            "description": "Execution Course Programming Computing Component",
+            "file": "programmingAndComputingComponent.html"
+        },   
+        "ethicalPrinciples": {
+            "name": "Ethical Principles",
+            "description": "Execution Course Ethical Principles",
+            "file": "ethicalPrinciples.html"
+        },           
         "lessonPlan": {
             "name": "Planning",
             "description": "Lesson Plan for an Course Program",
@@ -144,5 +169,6 @@
             "description": "Page used for homepage owner's researcher data.",
             "file": "researcherSection.html"
         }
+        
     }
 }

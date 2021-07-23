@@ -36,6 +36,12 @@ public class CompetenceCourseBean {
     private final LocalizedString name;
     private final LocalizedString objectives;
     private final LocalizedString program;
+    private final LocalizedString prerequisites;
+    private final LocalizedString laboratorialComponent;    
+    private final LocalizedString programmingAndComputingComponent;   
+    private final LocalizedString crossCompetenceComponent;  
+    private final LocalizedString ethicalPrinciples;
+ 
 
     public CompetenceCourseBean(CompetenceCourse competenceCourse, Set<CurricularCourse> curricularCourses,
             ExecutionSemester executionSemester) {
@@ -45,6 +51,12 @@ public class CompetenceCourseBean {
         this.name = competenceCourse.getNameI18N(executionSemester);
         this.objectives = competenceCourse.getObjectivesI18N(executionSemester);
         this.program = competenceCourse.getProgramI18N(executionSemester);
+        this.prerequisites=competenceCourse.getPrerequisitesI18N(executionSemester);
+        this.laboratorialComponent=competenceCourse.getLaboratorialComponentI18N(executionSemester);
+        this.programmingAndComputingComponent=competenceCourse.getProgrammingAndComputingComponentI18N(executionSemester);
+        this.crossCompetenceComponent=competenceCourse.getCrossCompetenceComponentI18N(executionSemester);
+        this.ethicalPrinciples=competenceCourse.getEthicalPrinciplesI18N(executionSemester);
+        
     }
 
     public CompetenceCourse getCompetenceCourse() {
@@ -83,4 +95,26 @@ public class CompetenceCourseBean {
     public LocalizedString getProgram() {
         return program;
     }
+
+    public LocalizedString getPrerequisites() {
+        return prerequisites;
+    }
+
+    public LocalizedString getLaboratorialComponent() {
+        return laboratorialComponent;
+    }
+
+    public LocalizedString getProgrammingAndComputingComponent() {
+        return programmingAndComputingComponent;
+    }
+
+    public LocalizedString getCrossCompetenceComponent() {
+        return crossCompetenceComponent;
+    }
+
+    public LocalizedString getEthicalPrinciples() {
+        return ethicalPrinciples;
+    }
+    
+    
 }

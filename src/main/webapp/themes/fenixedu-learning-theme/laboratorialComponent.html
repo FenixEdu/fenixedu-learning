@@ -1,0 +1,45 @@
+{% extends "fenixedu-learning-theme/base.html" %}
+
+{% block content %}
+	{% for info in competenceCourseBeans %}
+
+		{% if info.competenceCourse.isApproved %}
+			<h3>{{ info.name.content }}</h3>
+		{% endif %}
+    
+    	{% for curricularCourse in info.curricularCourses %}
+
+    		{% set degree = curricularCourse.degreeCurricularPlan.degree %}
+	    	<h4>{{ degree.degreeType.name.content }} {{ i18n('resources.ApplicationResources', 'label.in') }} {{ degree.nameI18N.content }}</h4>
+		
+		{% endfor %}
+
+		<h5>{{ i18n('resources.ApplicationResources', 'title.laboratorialComponent') }}</h5>
+        {% if info.laboratorialComponent is not empty and info.laboratorialComponent.content is not empty %}
+		    <p style="white-space: pre-line">{{ info.laboratorialComponent.content | raw }}</p>
+        {% else %}
+            <p>{{ i18n('resources.ApplicationResources', 'message.laboratorialComponent.not.defined') }}</p>
+        {% endif %}
+
+    {% endfor %}
+
+	{% for entry in curriculumByCurricularCourse.entrySet %}
+
+		{% set curricularCourse = entry.key %}
+		{% set curriculum = entry.value %}
+		{% set degree = curricularCourse.degreeCurricularPlan.degree %}
+		
+		<h3>{{ curricularCourse.nameI18N.content }}</h3>
+
+		<h4>{{ degree.degreeType.name.content }} {{ i18n('resources.ApplicationResources', 'label.in') }} {{ degree.nameI18N.content }}</h4>
+
+        <h5>{{ i18n('resources.ApplicationResources', 'title.laboratorialComponent') }}</h5>
+        {% if curriculum is not empty %}
+	    	<p style="white-space: pre-line">{{ curriculum.laboratorialComponentI18N.content }}</p>
+	    {% else %}
+	    	<p>{{ i18n('resources.ApplicationResources', 'message.laboratorialComponent.not.defined') }}</p>
+	    {% endif %}
+
+	{% endfor %}
+
+{% endblock content %}

@@ -27,7 +27,7 @@
 <div class="modal fade" id="execution-course-new-site" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="execution course new site">
     <div class="modal-dialog" role="document">
         <form class="form-inline" id="execution-course-site-form" method="post" action="{{request.contextPath}}/learning/sites/executionCourse">
-            {{csrfField}}
+            {{csrfField | raw}}
             <div class="modal-content">
                 <div class="modal-header">
                     Select course to create site to.

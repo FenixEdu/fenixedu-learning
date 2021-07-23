@@ -70,6 +70,30 @@
 			<h3>{{ i18n(bolonhaBundle, 'evaluationMethod') }}</h3>
 			<p>{{ curricularCourse.evaluationMethod.content | raw }}</p>
 		{% endif %}
+		
+		<!-- CROSS COMPETENCE COMPONENT -->
+		{% if curricularCourse.crossCompetenceComponent is not empty and curricularCourse.crossCompetenceComponent.content is not empty %}
+			<h3>{{ i18n(bolonhaBundle, 'crossCompetenceComponent') }}</h3>
+			<p>{{ curricularCourse.crossCompetenceComponent.content | raw }}</p>
+		{% endif %}
+		
+		<!-- LABORATORIAL COMPONENT -->
+		{% if curricularCourse.laboratorialComponent is not empty and curricularCourse.laboratorialComponent.content is not empty %}
+			<h3>{{ i18n(bolonhaBundle, 'laboratorialComponent') }}</h3>
+			<p>{{ curricularCourse.laboratorialComponent.content | raw }}</p>
+		{% endif %}
+		
+		<!-- PROGRAMING AND COMPUTING COMPONENT -->
+		{% if curricularCourse.programmingAndComputingComponent is not empty and curricularCourse.programmingAndComputingComponent.content is not empty %}
+			<h3>{{ i18n(bolonhaBundle, 'programmingAndComputingComponent') }}</h3>
+			<p>{{ curricularCourse.programmingAndComputingComponent.content | raw }}</p>
+		{% endif %}
+		
+		<!-- ETHICAL PRINCIPLES -->
+		{% if curricularCourse.ethicalPrinciples is not empty and curricularCourse.ethicalPrinciples.content is not empty %}
+			<h3>{{ i18n(bolonhaBundle, 'ethicalPrinciples') }}</h3>
+			<p>{{ curricularCourse.ethicalPrinciples.content | raw }}</p>
+		{% endif %}
 
 		<!-- EXECUTION COURSES -->
 		<h3>{{ i18n('resources.ApplicationResources', 'label.manager.executionCourses') }}</h3>

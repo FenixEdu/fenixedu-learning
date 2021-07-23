@@ -120,6 +120,21 @@
 		{{ descriptionSection('public.degree.information.label.operationalRegime', degreeInfo.operationalRegime) }}
 		{{ descriptionSection('public.degree.information.label.gratuity', degreeInfo.gratuity) }}
 		
+ 		<!-- Degree Official Publications -->
+		{% if officialPublications is not empty %}
+			<h3 style="font-weight:300; margin-top:45px;">{{ i18n('resources.PublicDegreeInformation','public.degree.information.label.officialPublications') }}</h3>
+			<table class='tstyle8 thlight thleft'>
+			{% for publication in officialPublications %}
+				<tr >
+					<td style="vertical-align:top" align="left">{{ publication.newReference }}</td>
+					<td style="vertical-align:top" nowrap align="left">{{ publication.publication }}</td>
+					<td style="vertical-align:top" nowrap align="left"><a href="{{ publication.linkReference }}" target="_blank">{{ publication.linkReference }}</a></td>
+					<td style="vertical-align:top" align="left">{{publication.fetchSpecializationAreas(publication.degreeOfficialPublication)}}</td>
+				</tr>
+					
+			{% endfor %}
+			</table>
+		{% endif %}
 		
 		{% if 	degreeInfo.description is empty and
 				degreeInfo.history is empty and
