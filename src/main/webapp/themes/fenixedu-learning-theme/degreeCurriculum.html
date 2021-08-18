@@ -80,6 +80,9 @@
 	{% lazyFor courseGroup in courseGroups %}
 
 		<h4>{{ courseGroup.name.content }}</h4>
+		{% if courseGroup.description.content != "null" %}
+			<p>{{ courseGroup.description.content }}</p>
+		{% endif %}
 		<hr />
 		<div class="level">
 			<!-- RULES -->

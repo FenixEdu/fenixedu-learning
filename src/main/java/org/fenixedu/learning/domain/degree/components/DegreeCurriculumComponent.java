@@ -122,6 +122,10 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
             return courseGroup.getNameI18N();
         }
 
+        public LocalizedString getDescription() {
+            return courseGroup.getDescriptionI18n();
+        }
+
         public Stream<String> getRules() {
             return courseGroup.getVisibleCurricularRules(executionInterval).stream()
                     .filter(rule -> rule.appliesToContext(previous)).map(rule -> CurricularRuleLabelFormatter.getLabel(rule));
