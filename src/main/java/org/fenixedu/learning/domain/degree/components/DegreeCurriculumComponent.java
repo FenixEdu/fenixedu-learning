@@ -127,8 +127,9 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
         }
 
         public Stream<String> getRules() {
-            return courseGroup.getVisibleCurricularRules(executionInterval).stream()
-                    .filter(rule -> rule.appliesToContext(previous)).map(rule -> CurricularRuleLabelFormatter.getLabel(rule));
+			return courseGroup.getVisibleCurricularRules(executionInterval).stream()
+					.filter(rule -> rule.appliesToContext(previous)).map(rule -> CurricularRuleLabelFormatter
+							.getLabel(rule, executionInterval.getLastExecutionPeriod()));
         }
 
         public Stream<CurricularCourseWrap> getCurricularCourses() {
@@ -215,8 +216,9 @@ public class DegreeCurriculumComponent extends DegreeSiteComponent {
         }
 
         public Stream<String> getRules() {
-            return curricularCourse.getVisibleCurricularRules(executionInterval).stream()
-                    .filter(rule -> rule.appliesToContext(context)).map(rule -> CurricularRuleLabelFormatter.getLabel(rule));
+			return curricularCourse.getVisibleCurricularRules(executionInterval).stream()
+					.filter(rule -> rule.appliesToContext(context)).map(rule -> CurricularRuleLabelFormatter
+							.getLabel(rule, executionInterval.getLastExecutionPeriod()));
         }
 
         public CurricularPeriod getCurricularPeriod() {
