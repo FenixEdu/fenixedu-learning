@@ -133,10 +133,10 @@ public class ExecutionCourseSiteBuilder extends ExecutionCourseSiteBuilder_Base 
         Page.create(site, menu, null, ANNOUNCEMENTS_TITLE, true, "category", author, announcementsComponent);
         Page.create(site, menu, null, SUMMARIES_TITLE, true, "category", author, summariesComponent);
         Page.create(site, menu, null, PREREQUISITES_TITLE, true, "prerequisites", author, forType(ObjectivesComponent.class));
-        Page.create(site, menu, null, LABORATORIALCOMPONENT_TITLE, true, "laboratorialComponent", author, forType(ObjectivesComponent.class));
-        Page.create(site, menu, null, PROGRAMMINGANDCOMPUTINGCOMPONENT_TITLE, true, "programmingAndComputingComponent", author, forType(ObjectivesComponent.class));
-        Page.create(site, menu, null, CROSSCOMPETENCECOMPONENT_TITLE, true, "crossCompetenceComponent", author, forType(ObjectivesComponent.class));
-        Page.create(site, menu, null, ETHICALPRINCIPLES_TITLE, true, "ethicalPrinciples", author, forType(ObjectivesComponent.class));
+        Page.create(site, menu, null, LABORATORIALCOMPONENT_TITLE, true, "laboratorial-componente", author, forType(ObjectivesComponent.class));
+        Page.create(site, menu, null, PROGRAMMINGANDCOMPUTINGCOMPONENT_TITLE, true, "programming-and-computing-component", author, forType(ObjectivesComponent.class));
+        Page.create(site, menu, null, CROSSCOMPETENCECOMPONENT_TITLE, true, "cross-competence", author, forType(ObjectivesComponent.class));
+        Page.create(site, menu, null, ETHICALPRINCIPLES_TITLE, true, "ethical-principles", author, forType(ObjectivesComponent.class));
         
 
         final Page marks = Page.create(site, menu, null, MARKS_TITLE, true, "marks", author, forType(MarksComponent.class));
