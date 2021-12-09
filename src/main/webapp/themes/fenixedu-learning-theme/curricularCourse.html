@@ -46,12 +46,6 @@
 			<h3>{{ i18n(bolonhaBundle, 'weight') }}</h3>
 			<p>{{ curricularCourse.weight }} ({{ i18n(bolonhaBundle, 'for.average.grade.calculus') }})</p>
 		{% endif %}
-
-		<!-- PRE-REQUISITES -->
-		{% if curricularCourse.prerequisites is not empty and curricularCourse.prerequisites.content is not empty %}
-			<h3>{{ i18n(bolonhaBundle, 'prerequisites') }}</h3>
-			<p>{{ curricularCourse.prequisites.content }}</p>
-		{% endif %}
 		
 		<!-- OBJECTIVES -->
 		{% if curricularCourse.objectives is not empty and curricularCourse.objectives.content is not empty %}
@@ -69,6 +63,12 @@
 		{% if curricularCourse.evaluationMethod is not empty and curricularCourse.evaluationMethod.content is not empty %}
 			<h3>{{ i18n(bolonhaBundle, 'evaluationMethod') }}</h3>
 			<p>{{ curricularCourse.evaluationMethod.content | raw }}</p>
+		{% endif %}
+		
+		<!-- PRE-REQUISITES -->
+		{% if curricularCourse.prerequisites is not empty and curricularCourse.prerequisites.content is not empty %}
+			<h3>{{ i18n(bolonhaBundle, 'prerequisites') }}</h3>
+			<p>{{ curricularCourse.prerequisites.content }}</p>
 		{% endif %}
 		
 		<!-- CROSS COMPETENCE COMPONENT -->
