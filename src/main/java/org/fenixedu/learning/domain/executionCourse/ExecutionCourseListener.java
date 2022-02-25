@@ -41,6 +41,7 @@ public class ExecutionCourseListener {
     private static final Logger logger = LoggerFactory.getLogger(ExecutionCourseListener.class);
     
     public static Site create(ExecutionCourse executionCourse) {
+        if (executionCourse.getSite() == null) {
         Site newSite = ExecutionCourseSiteBuilder.getInstance().create(executionCourse);
         
         RoleTemplate defaultTemplate = newSite.getDefaultRoleTemplate();
@@ -57,15 +58,19 @@ public class ExecutionCourseListener {
                     group = group.revoke(user);
                 }
             }
-            teacherRole.setGroup(group);
+                teacherRole.setGroup(group);
+            } else {
+                throw new DomainException("no.default.role");
+            }
+            
+            logger.info("Created site for execution course " + executionCourse.getSigla());
+            return newSite;
         } else {
-            throw new DomainException("no.default.role");
+            executionCourse.getSite().setName(executionCourse.getNameI18N());
+            return executionCourse.getSite();
         }
 
-        logger.info("Created site for execution course " + executionCourse.getSigla());
-        return newSite;
     }
-    
 
     public static void updateSiteSlug(ExecutionCourse instance) {
         instance.getSite().setSlug(ExecutionCourseSiteBuilder.formatSlugForExecutionCourse(instance));
