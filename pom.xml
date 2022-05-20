@@ -18,7 +18,7 @@
     <inceptionYear>2015</inceptionYear>
 
     <properties>
-        <version.com.google.code.gson.gson>2.8.5</version.com.google.code.gson.gson>
+        <version.com.google.code.gson.gson>2.8.9</version.com.google.code.gson.gson>
         <version.com.google.guava.guava>27.0-jre</version.com.google.guava.guava>
         <version.javax.ws.rs.javax.ws.rs.api>2.0</version.javax.ws.rs.javax.ws.rs.api>
         <version.joda.time.joda.time>2.9.7</version.joda.time.joda.time>
