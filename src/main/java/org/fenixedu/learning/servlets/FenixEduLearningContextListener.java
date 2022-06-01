@@ -176,6 +176,7 @@ public class FenixEduLearningContextListener implements ServletContextListener {
             } else {
                 to.setSite(from.getSite());
                 from.setSite(null);
+                to.setSiteUrl(to.getSite().getFullUrl());
             }
         }
     }
